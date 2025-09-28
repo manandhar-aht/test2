@@ -1,0 +1,19 @@
+<layer>
+  <name>boreholes</name>
+  <id>LayerInfoImpl--44ec0058:19992864196:-7ffa</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--44ec0058:19992864196:-7fd2</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl--44ec0058:19992864196:-7ffb</id>
+  </resource>
+  <queryable>true</queryable>
+  <opaque>false</opaque>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2025-09-28 22:51:43.105 UTC</dateCreated>
+  <dateModified>2025-09-28 23:02:50.698 UTC</dateModified>
+</layer>

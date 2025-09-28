@@ -1,0 +1,36 @@
+<featureType>
+  <id>FeatureTypeInfoImpl--44ec0058:19992864196:-7fee</id>
+  <name>gadm41_TCD_0</name>
+  <nativeName>gadm41_TCD_0</nativeName>
+  <namespace>
+    <id>NamespaceInfoImpl--44ec0058:19992864196:-7ff6</id>
+  </namespace>
+  <srs>EPSG:4326</srs>
+  <nativeBoundingBox>
+    <minx>13.473475457000177</minx>
+    <maxx>24.002686000000097</maxx>
+    <miny>7.441069126000116</miny>
+    <maxy>23.45037079000008</maxy>
+    <crs>EPSG:4326</crs>
+  </nativeBoundingBox>
+  <latLonBoundingBox>
+    <minx>13.473475457000177</minx>
+    <maxx>24.002686000000097</maxx>
+    <miny>7.441069126000116</miny>
+    <maxy>23.45037079000008</maxy>
+    <crs>EPSG:4326</crs>
+  </latLonBoundingBox>
+  <projectionPolicy>FORCE_DECLARED</projectionPolicy>
+  <enabled>true</enabled>
+  <store class="dataStore">
+    <id>DataStoreInfoImpl--44ec0058:19992864196:-7fef</id>
+  </store>
+  <serviceConfiguration>false</serviceConfiguration>
+  <maxFeatures>0</maxFeatures>
+  <numDecimals>0</numDecimals>
+  <padWithZeros>false</padWithZeros>
+  <forcedDecimal>false</forcedDecimal>
+  <overridingServiceSRS>false</overridingServiceSRS>
+  <skipNumberMatched>false</skipNumberMatched>
+  <circularArcPresent>false</circularArcPresent>
+</featureType>

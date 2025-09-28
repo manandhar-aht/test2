@@ -1,0 +1,15 @@
+<dataStore>
+  <id>DataStoreInfoImpl--44ec0058:19992864196:-7ff3</id>
+  <name>land_cover</name>
+  <enabled>true</enabled>
+  <workspace>
+    <id>WorkspaceInfoImpl--44ec0058:19992864196:-7ff7</id>
+  </workspace>
+  <connectionParameters>
+    <entry key="namespace">chad</entry>
+    <entry key="url">file:/opt/geoserver_data/data/shapefiles/land_cover</entry>
+  </connectionParameters>
+  <__default>false</__default>
+  <dateCreated>2025-09-28 22:51:57.4 UTC</dateCreated>
+  <disableOnConnFailure>false</disableOnConnFailure>
+</dataStore>

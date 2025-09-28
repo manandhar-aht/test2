@@ -1,0 +1,16 @@
+<layer>
+  <name>gadm41_TCD_0</name>
+  <id>LayerInfoImpl--44ec0058:19992864196:-7fed</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl-2bfb7be2:1999235f5b9:-7ffe</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl--44ec0058:19992864196:-7fee</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2025-09-28 22:56:07.9 UTC</dateCreated>
+</layer>

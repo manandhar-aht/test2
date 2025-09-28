@@ -49,11 +49,21 @@
         .legend-item {
             display: flex;
             align-items: center;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            font-size: 14px;
         }
         .legend-symbol {
-            width: 20px;
-            height: 20px;
+            width: 16px;
+            height: 16px;
+            margin-right: 10px;
+            display: inline-block;
+        }
+        .legend-triangle {
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 14px solid #00AA88;
             margin-right: 10px;
         }
     </style>
@@ -96,16 +106,16 @@
             <hr>
             <h2>Legend</h2>
             <div class="legend-item">
-                <div class="legend-symbol" style="background-color: blue;"></div>
-                <span>Well</span>
+                <div class="legend-symbol" style="background-color: #0066CC; border: 2px solid #003366; border-radius: 50%; width: 12px; height: 12px;"></div>
+                <span>Wells (Blue Circles)</span>
             </div>
             <div class="legend-item">
-                <div class="legend-symbol" style="background-color: green;"></div>
-                <span>Borehole</span>
+                <div class="legend-symbol" style="background-color: #CC3300; border: 2px solid #660000; width: 12px; height: 12px;"></div>
+                <span>Boreholes (Red Squares)</span>
             </div>
             <div class="legend-item">
-                <div class="legend-symbol" style="background-color: red;"></div>
-                <span>Pond</span>
+                <div class="legend-symbol" style="background-color: #00AA88; border: 2px solid #004444; width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-bottom: 12px solid #00AA88; border-radius: 0;"></div>
+                <span>Ponds (Teal Triangles)</span>
             </div>
             <div class="legend-item">
                 <div class="legend-symbol" style="border: 1px solid #000; background-color: rgba(0, 0, 0, 0.1);"></div>
@@ -162,32 +172,32 @@
 
             const adminRegionsLayer0 = new ol.layer.Image({
                 source: new ol.source.ImageWMS({
-                    url: '/geoserver/sahel/wms',
-                    params: {'LAYERS': 'sahel:gadm41_TCD_0'},
+                    url: '/geoserver/chad/wms',
+                    params: {'LAYERS': 'chad:gadm41_TCD_0'},
                     serverType: 'geoserver'
                 }),
                 visible: true
             });
             const adminRegionsLayer1 = new ol.layer.Image({
                 source: new ol.source.ImageWMS({
-                    url: '/geoserver/sahel/wms',
-                    params: {'LAYERS': 'sahel:gadm41_TCD_1'},
+                    url: '/geoserver/chad/wms',
+                    params: {'LAYERS': 'chad:gadm41_TCD_1'},
                     serverType: 'geoserver'
                 }),
                 visible: true
             });
             const adminRegionsLayer2 = new ol.layer.Image({
                 source: new ol.source.ImageWMS({
-                    url: '/geoserver/sahel/wms',
-                    params: {'LAYERS': 'sahel:gadm41_TCD_2'},
+                    url: '/geoserver/chad/wms',
+                    params: {'LAYERS': 'chad:gadm41_TCD_2'},
                     serverType: 'geoserver'
                 }),
                 visible: true
             });
             const adminRegionsLayer3 = new ol.layer.Image({
                 source: new ol.source.ImageWMS({
-                    url: '/geoserver/sahel/wms',
-                    params: {'LAYERS': 'sahel:gadm41_TCD_3'},
+                    url: '/geoserver/chad/wms',
+                    params: {'LAYERS': 'chad:gadm41_TCD_3'},
                     serverType: 'geoserver'
                 }),
                 visible: true

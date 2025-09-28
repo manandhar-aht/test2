@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Infrastructure Styling Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .layer-test {
+            margin: 20px 0;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .wms-image {
+            display: block;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+        }
+        .legend {
+            display: flex;
+            gap: 20px;
+            margin: 10px 0;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .symbol {
+            width: 16px;
+            height: 16px;
+        }
+        .circle { border-radius: 50%; }
+        .square { border-radius: 0; }
+        .triangle { 
+            width: 0; 
+            height: 0; 
+            border-left: 8px solid transparent; 
+            border-right: 8px solid transparent; 
+            border-bottom: 14px solid #00AA88;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎨 Water Infrastructure Custom Styling Test</h1>
+    
+    <div class="legend">
+        <div class="legend-item">
+            <div class="symbol circle" style="background-color: #0066CC; border: 2px solid #003366;"></div>
+            <span>Wells (Blue Circles)</span>
+        </div>
+        <div class="legend-item">
+            <div class="symbol square" style="background-color: #CC3300; border: 2px solid #660000;"></div>
+            <span>Boreholes (Red Squares)</span>
+        </div>
+        <div class="legend-item">
+            <div class="triangle"></div>
+            <span>Ponds (Teal Triangles)</span>
+        </div>
+    </div>
+
+    <div class="layer-test">
+        <h2>🔵 Wells Layer</h2>
+        <p>Blue circles with labels</p>
+        <img class="wms-image" 
+             src="/geoserver/sahel/wms?service=WMS&version=1.1.0&request=GetMap&layers=sahel:wells&styles=wells_style&bbox=10,8,25,18&width=600&height=400&srs=EPSG:4326&format=image/png" 
+             alt="Wells Layer" />
+    </div>
+
+    <div class="layer-test">
+        <h2>🔴 Boreholes Layer</h2>
+        <p>Red squares with labels</p>
+        <img class="wms-image" 
+             src="/geoserver/sahel/wms?service=WMS&version=1.1.0&request=GetMap&layers=sahel:boreholes&styles=boreholes_style&bbox=10,8,25,18&width=600&height=400&srs=EPSG:4326&format=image/png" 
+             alt="Boreholes Layer" />
+    </div>
+
+    <div class="layer-test">
+        <h2>🔶 Ponds Layer</h2>
+        <p>Teal triangles with labels</p>
+        <img class="wms-image" 
+             src="/geoserver/sahel/wms?service=WMS&version=1.1.0&request=GetMap&layers=sahel:ponds&styles=ponds_style&bbox=10,8,25,18&width=600&height=400&srs=EPSG:4326&format=image/png" 
+             alt="Ponds Layer" />
+    </div>
+
+    <div class="layer-test">
+        <h2>🌍 Combined Water Infrastructure</h2>
+        <p>All layers together with custom styling</p>
+        <img class="wms-image" 
+             src="/geoserver/sahel/wms?service=WMS&version=1.1.0&request=GetMap&layers=sahel:wells,sahel:boreholes,sahel:ponds&styles=wells_style,boreholes_style,ponds_style&bbox=10,8,25,18&width=600&height=400&srs=EPSG:4326&format=image/png" 
+             alt="Combined Water Infrastructure" />
+    </div>
+
+    <div style="margin-top: 30px; padding: 15px; background-color: #f0f8ff; border-radius: 5px;">
+        <h3>✅ Styling Features Applied:</h3>
+        <ul>
+            <li><strong>Wells:</strong> Blue circles (#0066CC) with dark blue border</li>
+            <li><strong>Boreholes:</strong> Red squares (#CC3300) with dark red border</li>
+            <li><strong>Ponds:</strong> Teal triangles (#00AA88) with dark teal border</li>
+            <li><strong>Labels:</strong> Feature names displayed with white halos for better visibility</li>
+            <li><strong>Size:</strong> All symbols are 12px for consistent visibility</li>
+            <li><strong>Opacity:</strong> 80% fill opacity for subtle transparency</li>
+        </ul>
+        
+        <p><strong>Access the main interactive map:</strong> <a href="/">← Back to Main Map</a></p>
+    </div>
+</body>
+</html>

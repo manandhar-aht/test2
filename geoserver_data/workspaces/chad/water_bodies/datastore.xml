@@ -1,0 +1,15 @@
+<dataStore>
+  <id>DataStoreInfoImpl--44ec0058:19992864196:-7ff4</id>
+  <name>water_bodies</name>
+  <enabled>true</enabled>
+  <workspace>
+    <id>WorkspaceInfoImpl--44ec0058:19992864196:-7ff7</id>
+  </workspace>
+  <connectionParameters>
+    <entry key="namespace">chad</entry>
+    <entry key="url">file:/opt/geoserver_data/data/shapefiles/water_bodies</entry>
+  </connectionParameters>
+  <__default>false</__default>
+  <dateCreated>2025-09-28 22:51:56.972 UTC</dateCreated>
+  <disableOnConnFailure>false</disableOnConnFailure>
+</dataStore>

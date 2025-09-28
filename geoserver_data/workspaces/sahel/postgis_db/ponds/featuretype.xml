@@ -1,0 +1,42 @@
+<featureType>
+  <id>FeatureTypeInfoImpl--44ec0058:19992864196:-7ff9</id>
+  <name>ponds</name>
+  <nativeName>spatial_data</nativeName>
+  <namespace>
+    <id>NamespaceInfoImpl--44ec0058:19992864196:-7fff</id>
+  </namespace>
+  <title>spatial_data</title>
+  <keywords>
+    <string>features</string>
+    <string>spatial_data</string>
+  </keywords>
+  <srs>EPSG:4326</srs>
+  <nativeBoundingBox>
+    <minx>-4.5</minx>
+    <maxx>23.8229</maxx>
+    <miny>11.0036</miny>
+    <maxy>20.1531</maxy>
+    <crs>EPSG:4326</crs>
+  </nativeBoundingBox>
+  <latLonBoundingBox>
+    <minx>-4.5</minx>
+    <maxx>23.8229</maxx>
+    <miny>11.0036</miny>
+    <maxy>20.1531</maxy>
+    <crs>EPSG:4326</crs>
+  </latLonBoundingBox>
+  <projectionPolicy>FORCE_DECLARED</projectionPolicy>
+  <enabled>true</enabled>
+  <store class="dataStore">
+    <id>DataStoreInfoImpl--44ec0058:19992864196:-7ffe</id>
+  </store>
+  <serviceConfiguration>false</serviceConfiguration>
+  <cqlFilter>type = &apos;pond&apos;</cqlFilter>
+  <maxFeatures>0</maxFeatures>
+  <numDecimals>0</numDecimals>
+  <padWithZeros>false</padWithZeros>
+  <forcedDecimal>false</forcedDecimal>
+  <overridingServiceSRS>false</overridingServiceSRS>
+  <skipNumberMatched>false</skipNumberMatched>
+  <circularArcPresent>false</circularArcPresent>
+</featureType>
