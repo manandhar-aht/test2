@@ -28,9 +28,9 @@ services:
       GEOWEBCACHE_CACHE_DIR: /opt/geoserver_data/gwc
       GEOSERVER_CSRF_DISABLED: "true"
       CATALINA_OPTS: "-server -Xms1024m -Xmx2048m"
-      PROXY_BASE_URL: "http://localhost:8080/geoserver"
-      GEOSERVER_OPTS: "-Dgeoserver.baseUrl=http://localhost:8080/geoserver"
-      EXTRA_JAVA_OPTS: "-Djava.awt.headless=true -DGEOSERVER_BASE_URL=http://localhost:8080/geoserver"
+      PROXY_BASE_URL: "/geoserver"
+      GEOSERVER_OPTS: "-Dgeoserver.proxyBaseUrl=/geoserver"
+      EXTRA_JAVA_OPTS: "-Djava.awt.headless=true -Dorg.geotools.referencing.forceXY=true"
     volumes:
       - ./geoserver/global.xml:/opt/geoserver_data/global.xml
       - geoserver_data:/opt/geoserver_data
