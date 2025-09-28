@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  # PostgreSQL with PostGIS
+  postgres:
+    image: postgis/postgis:15-3.3
+    container_name: postgres
+    environment:
+      POSTGRES_DB: geodb
+      POSTGRES_USER: geouser
+      POSTGRES_PASSWORD: geopass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - geo-network
+
+  # GeoServer with PostGIS support
+  geoserver:
+    build: ./geoserver
+    container_name: geoserver
+    environment:
+      GEOSERVER_DATA_DIR: /opt/geoserver_data
+      GEOSERVER_ADMIN_USER: admin
+      GEOSERVER_ADMIN_PASSWORD: geoserver
+      GEOWEBCACHE_CACHE_DIR: /opt/geoserver_data/gwc
+      GEOSERVER_CSRF_DISABLED: "true"
+      CATALINA_OPTS: "-server -Xms1024m -Xmx2048m"
+      PROXY_BASE_URL: "http://localhost:8080/geoserver"
+      GEOSERVER_OPTS: "-Dgeoserver.baseUrl=http://localhost:8080/geoserver"
+      EXTRA_JAVA_OPTS: "-Djava.awt.headless=true -DGEOSERVER_BASE_URL=http://localhost:8080/geoserver"
+    volumes:
+      - ./geoserver/global.xml:/opt/geoserver_data/global.xml
+      - geoserver_data:/opt/geoserver_data
+      - ./shapefiles:/opt/geoserver_data/data/shapefiles
+    depends_on:
+      - postgres
+    networks:
+      - geo-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/geoserver/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Web Application (Nginx)
+  webapp:
+    build: ./webapp
+    container_name: webapp
+    ports:
+      - "8080:80"
+    depends_on:
+      - postgres
+      - geoserver
+    networks:
+      - geo-network
+
+volumes:
+  postgres_data:
+  geoserver_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${PWD}/geoserver_data
+
+networks:
+  geo-network:
+    driver: bridge
