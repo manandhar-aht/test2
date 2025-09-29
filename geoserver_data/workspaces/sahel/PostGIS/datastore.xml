@@ -1,0 +1,21 @@
+<dataStore>
+  <id>DataStoreInfoImpl-4f4f4aa9:199962eb3d4:-8000</id>
+  <name>PostGIS</name>
+  <type>PostGIS</type>
+  <enabled>true</enabled>
+  <workspace>
+    <id>WorkspaceInfoImpl--44ec0058:19992864196:-8000</id>
+  </workspace>
+  <connectionParameters>
+    <entry key="database">geodb</entry>
+    <entry key="port">5432</entry>
+    <entry key="passwd">crypt2:S3DSL1te4Q6BFR8mxfyfVW1yOgeTfoUBcMkH+h5kFMw=</entry>
+    <entry key="host">postgres</entry>
+    <entry key="dbtype">postgis</entry>
+    <entry key="namespace">http://sahel</entry>
+    <entry key="user">geouser</entry>
+  </connectionParameters>
+  <__default>false</__default>
+  <dateCreated>2025-09-29 15:54:27.92 UTC</dateCreated>
+  <disableOnConnFailure>false</disableOnConnFailure>
+</dataStore>

@@ -9,6 +9,8 @@ RUN mkdir -p /usr/share/nginx/html
 
 # Copy HTML files
 COPY index.html /usr/share/nginx/html/
+COPY complex-nested-features.html /usr/share/nginx/html/
+COPY html/styling-test.html /usr/share/nginx/html/
 COPY html/redirect.html /usr/share/nginx/html/
 
 # Copy Nginx configuration

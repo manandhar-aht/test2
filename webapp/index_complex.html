@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌊 Advanced Water Resources GIS Platform</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v9.1.0/ol.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+        
+        .hero-section {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .hero-section h1 {
+            margin: 0 0 1rem 0;
+            color: #2c3e50;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        
+        .hero-section p {
+            margin: 0 0 2rem 0;
+            color: #7f8c8d;
+            font-size: 1.2em;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+        }
+        
+        .feature-card h3 {
+            color: #2c3e50;
+            margin: 0 0 1rem 0;
+            font-size: 1.4em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .feature-card p {
+            color: #7f8c8d;
+            margin: 0 0 1rem 0;
+            line-height: 1.6;
+        }
+        
+        .feature-badge {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8em;
+            margin-top: 1rem;
+        }
+        
+        .feature-badge.advanced {
+            background: #9b59b6;
+        }
+        
+        .feature-badge.scientific {
+            background: #e67e22;
+        }
+        
+        .feature-badge.basic {
+            background: #27ae60;
+        }
+        
+        .management-dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .dashboard-section {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        
+        .dashboard-section h3 {
+            color: #2c3e50;
+            margin: 0 0 1.5rem 0;
+            font-size: 1.4em;
+            text-align: center;
+        }
+        
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 4px solid #3498db;
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .map-section {
+            margin-top: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        
+        .map-header {
+            background: #34495e;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .analysis-selector {
+            background: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-size: 0.9em;
+            color: #2c3e50;
+        }
+        
+        .report-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background 0.3s ease;
+        }
+        
+        .report-btn:hover {
+            background: #2980b9;
+        }
+        
+        .control-section {
+            margin-bottom: 2rem;
+        }
+        
+        .control-section h3 {
+            color: #2c3e50;
+            margin: 0 0 1rem 0;
+            font-size: 1.1em;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #ecf0f1;
+        }
+        
+        .layer-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+        
+        .layer-control {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .layer-control:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateX(2px);
+        }
+        
+        .layer-control input[type="checkbox"] {
+            display: none;
+        }
+        
+        .checkmark {
+            height: 18px;
+            width: 18px;
+            background-color: #eee;
+            border-radius: 4px;
+            margin-right: 12px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .layer-control input:checked ~ .checkmark {
+            background-color: #3498db;
+        }
+        
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+            left: 6px;
+            top: 2px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+        
+        .layer-control input:checked ~ .checkmark:after {
+            display: block;
+        }
+        
+        .layer-label {
+            flex: 1;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        
+        .layer-badge {
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.7em;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .layer-badge.hierarchical {
+            background: #9b59b6;
+            color: white;
+        }
+        
+        .layer-badge.unified {
+            background: #3498db;
+            color: white;
+        }
+        
+        .layer-badge.technical {
+            background: #e67e22;
+            color: white;
+        }
+        
+        .layer-badge.scientific {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .layer-badge.operational {
+            background: #f39c12;
+            color: white;
+        }
+        
+        .analysis-panel {
+            background: rgba(52, 73, 94, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+        
+        .analysis-panel h3 {
+            color: #2c3e50;
+            margin: 0 0 1rem 0;
+            font-size: 1.1em;
+        }
+        
+        .analysis-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .analysis-btn {
+            background: #34495e;
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: all 0.3s ease;
+        }
+        
+        .analysis-btn:hover {
+            background: #2c3e50;
+            transform: translateY(-1px);
+        }
+        
+        .feature-info {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+        
+        .feature-info h3 {
+            color: #2c3e50;
+            margin: 0 0 1rem 0;
+            font-size: 1.1em;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #ecf0f1;
+        }
+        
+        .info-placeholder {
+            color: #7f8c8d;
+            font-style: italic;
+            text-align: center;
+            padding: 1rem;
+            background: rgba(149, 165, 166, 0.1);
+            border-radius: 6px;
+            border: 1px dashed #bdc3c7;
+        }
+        
+        .layer-badge.primary {
+            background: #3498db;
+            color: white;
+        }
+        
+        .layer-badge.unified {
+            background: #9b59b6;
+            color: white;
+        }
+        
+        .layer-badge.administrative {
+            background: #95a5a6;
+            color: white;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .stat-card h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        .stat-card p {
+            margin: 0;
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .feature-info h3 {
+            color: #2c3e50;
+            margin: 0 0 1rem 0;
+            font-size: 1.1em;
+        }
+        
+        .info-placeholder {
+            color: #7f8c8d;
+            font-style: italic;
+            text-align: center;
+            margin: 0;
+        }
+        
+        .advanced-analysis {
+            margin-top: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #9b59b6;
+        }
+        
+        .analysis-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .analysis-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 0.6rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background 0.3s ease;
+        }
+        
+        .analysis-btn:hover {
+            opacity: 0.9;
+        }
+        
+        .analysis-btn.maintenance { background: #e67e22; }
+        .analysis-btn.geological { background: #9b59b6; }
+        .analysis-btn.detailed { background: #27ae60; }
+        
+        .data-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+        
+        .data-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.3rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .error-message {
+            background: #fff5f5;
+            color: #e53e3e;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #e53e3e;
+            margin: 1rem 0;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .feature-badge.operational { background: #27ae60; }
+        
+        .classic-map-section {
+            margin-top: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        
+        .map-header {
+            background: #34495e;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        #main {
+            display: flex;
+            height: 60vh;
+        }
+        #sidebar {
+            width: 280px;
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+        #map-container {
+            flex: 1;
+            position: relative;
+        }
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+        #popup {
+            position: absolute;
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: none;
+            max-width: 300px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .legend-symbol {
+            width: 16px;
+            height: 16px;
+            margin-right: 10px;
+            display: inline-block;
+        }
+        .legend-triangle {
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 14px solid #00AA88;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="hero-section">
+        <h1>💧 Water Resource Management Portal</h1>
+        <p>Integrated GIS platform for comprehensive water infrastructure monitoring, analysis, and management in the Sahel region.</p>
+        
+        <div class="management-dashboard">
+            <div class="dashboard-section">
+                <h3>🏗️ Infrastructure Management</h3>
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="total-infrastructure">17</div>
+                        <div class="stat-label">Total Infrastructure</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="water-zones">4</div>
+                        <div class="stat-label">Management Zones</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="active-wells">7</div>
+                        <div class="stat-label">Active Wells</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="operational-ponds">5</div>
+                        <div class="stat-label">Operational Ponds</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashboard-section">
+                <h3>� Quality & Maintenance</h3>
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="quality-reports">7</div>
+                        <div class="stat-label">Quality Reports</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="maintenance-activities">5</div>
+                        <div class="stat-label">Maintenance Tasks</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="geological-layers">12</div>
+                        <div class="stat-label">Geological Layers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="data-coverage">100%</div>
+                        <div class="stat-label">Data Coverage</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="map-section">
+        <div class="map-header">
+            <h2>🗺️ Water Resource Management Map</h2>
+            <div class="header-controls">
+                <select id="analysis-mode" class="analysis-selector">
+                    <option value="overview">Infrastructure Overview</option>
+                    <option value="quality">Water Quality Analysis</option>
+                    <option value="maintenance">Maintenance Management</option>
+                    <option value="geological">Geological Assessment</option>
+                </select>
+                <button id="generate-report" class="report-btn">📊 Generate Report</button>
+            </div>
+        </div>
+        
+        <div id="main">
+            <div id="sidebar">
+                <div class="control-section">
+                    <h3>🏗️ Infrastructure Layers</h3>
+                    <div class="layer-group">
+                        <label class="layer-control">
+                            <input type="checkbox" id="comprehensive-infrastructure-checkbox" checked>
+                            <span class="checkmark"></span>
+                            <span class="layer-label">All Infrastructure</span>
+                            <span class="layer-badge unified">Unified</span>
+                        </label>
+                        <label class="layer-control">
+                            <input type="checkbox" id="wells-checkbox" checked>
+                            <span class="checkmark"></span>
+                            <span class="layer-label">Wells Network</span>
+                            <span class="layer-badge primary">Primary</span>
+                        </label>
+                        <label class="layer-control">
+                            <input type="checkbox" id="boreholes-checkbox" checked>
+                            <span class="checkmark"></span>
+                            <span class="layer-label">Boreholes</span>
+                            <span class="layer-badge primary">Primary</span>
+                        </label>
+                        <label class="layer-control">
+                            <input type="checkbox" id="ponds-checkbox" checked>
+                            <span class="checkmark"></span>
+                            <span class="layer-label">Water Ponds</span>
+                            <span class="layer-badge primary">Primary</span>
+                        </label>
+                        <label class="layer-control">
+                            <input type="checkbox" id="admin-regions-checkbox" checked>
+                            <span class="checkmark"></span>
+                            <span class="layer-label">Admin Zones</span>
+                            <span class="layer-badge administrative">Admin</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="control-section">
+                    <h3>� Analysis Layers</h3>
+                    <div class="layer-group">
+                        <label class="layer-control">
+                            <input type="checkbox" id="water-quality-checkbox">
+                            <span class="checkmark"></span>
+                            <span class="layer-label">Water Quality</span>
+                            <span class="layer-badge scientific">Lab</span>
+                        </label>
+                        <label class="layer-control">
+                            <input type="checkbox" id="maintenance-checkbox">
+                            <span class="checkmark"></span>
+                            <span class="layer-label">Maintenance</span>
+                            <span class="layer-badge operational">Ops</span>
+                        </label>
+                        <label class="layer-control">
+                            <input type="checkbox" id="geological-checkbox">
+                            <span class="checkmark"></span>
+                            <span class="layer-label">Geological Data</span>
+                            <span class="layer-badge scientific">Geo</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="analysis-panel">
+                    <h3>� Quick Analysis</h3>
+                    <div class="analysis-buttons">
+                        <button class="analysis-btn" onclick="analyzeWaterQuality()">💧 Water Quality</button>
+                        <button class="analysis-btn" onclick="generateMaintenanceReport()">🔧 Maintenance</button>
+                        <button class="analysis-btn" onclick="geologicalSummary()">🏔️ Geological</button>
+                        <button class="analysis-btn" onclick="infrastructureOverview()">📊 Infrastructure</button>
+                    </div>
+                    
+                    <div id="analysis-results" style="margin-top: 1.5rem;"></div>
+                </div>
+                
+                <div class="feature-info">
+                    <h3>📋 Feature Details</h3>
+                    <div id="feature-details">
+                        <p class="info-placeholder">Click on any feature to view detailed information and analysis.</p>
+                    </div>
+                </div>
+            </div>
+            <div id="map-container">
+                <div id="map"></div>
+                <div id="popup"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/ol@v9.1.0/dist/ol.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const wellsLayer = new ol.layer.Image({
+                source: new ol.source.ImageWMS({
+                    url: '/geoserver/sahel/wms',
+                    params: {'LAYERS': 'sahel:wells'},
+                    serverType: 'geoserver'
+                }),
+                visible: true
+            });
+
+            const boreholesLayer = new ol.layer.Image({
+                source: new ol.source.ImageWMS({
+                    url: '/geoserver/sahel/wms',
+                    params: {'LAYERS': 'sahel:boreholes'},
+                    serverType: 'geoserver'
+                }),
+                visible: true
+            });
+
+            const pondsLayer = new ol.layer.Image({
+                source: new ol.source.ImageWMS({
+                    url: '/geoserver/sahel/wms',
+                    params: {'LAYERS': 'sahel:ponds'},
+                    serverType: 'geoserver'
+                }),
+                visible: true
+            });
+
+            // Advanced complex feature layers
+            const comprehensiveInfrastructureLayer = new ol.layer.Image({
+                source: new ol.source.ImageWMS({
+                    url: '/geoserver/sahel/wms',
+                    params: {'LAYERS': 'sahel:water_infrastructure_comprehensive'},
+                    serverType: 'geoserver'
+                }),
+                visible: false
+            });
+            
+            const waterQualityLayer = new ol.layer.Image({
+                source: new ol.source.ImageWMS({
+                    url: '/geoserver/sahel/wms',
+                    params: {'LAYERS': 'sahel:water_quality_reports'},
+                    serverType: 'geoserver'
+                }),
+                visible: false
+            });
+            
+            const maintenanceLayer = new ol.layer.Image({
+                source: new ol.source.ImageWMS({
+                    url: '/geoserver/sahel/wms',
+                    params: {'LAYERS': 'sahel:maintenance_activities'},
+                    serverType: 'geoserver'
+                }),
+                visible: false
+            });
+            
+            const geologicalLayer = new ol.layer.Image({
+                source: new ol.source.ImageWMS({
+                    url: '/geoserver/sahel/wms',
+                    params: {'LAYERS': 'sahel:geological_water_bearing_layers'},
+                    serverType: 'geoserver'
+                }),
+                visible: false
+            });
+
+            const adminRegionsLayer0 = new ol.layer.Image({
+                source: new ol.source.ImageWMS({
+                    url: '/geoserver/chad/wms',
+                    params: {'LAYERS': 'chad:gadm41_TCD_0'},
+                    serverType: 'geoserver'
+                }),
+                visible: true
+            });
+            const adminRegionsLayer1 = new ol.layer.Image({
+                source: new ol.source.ImageWMS({
+                    url: '/geoserver/chad/wms',
+                    params: {'LAYERS': 'chad:gadm41_TCD_1'},
+                    serverType: 'geoserver'
+                }),
+                visible: true
+            });
+            const adminRegionsLayer2 = new ol.layer.Image({
+                source: new ol.source.ImageWMS({
+                    url: '/geoserver/chad/wms',
+                    params: {'LAYERS': 'chad:gadm41_TCD_2'},
+                    serverType: 'geoserver'
+                }),
+                visible: true
+            });
+            const adminRegionsLayer3 = new ol.layer.Image({
+                source: new ol.source.ImageWMS({
+                    url: '/geoserver/chad/wms',
+                    params: {'LAYERS': 'chad:gadm41_TCD_3'},
+                    serverType: 'geoserver'
+                }),
+                visible: true
+            });
+
+
+            const map = new ol.Map({
+                target: 'map',
+                layers: [
+                    new ol.layer.Tile({
+                        source: new ol.source.OSM()
+                    }),
+                    adminRegionsLayer0,
+                    adminRegionsLayer1,
+                    adminRegionsLayer2,
+                    adminRegionsLayer3,
+                    wellsLayer,
+                    boreholesLayer,
+                    pondsLayer,
+                    comprehensiveInfrastructureLayer,
+                    waterQualityLayer,
+                    maintenanceLayer,
+                    geologicalLayer
+                ],
+                view: new ol.View({
+                    center: ol.proj.fromLonLat([18.5, 15.5]),
+                    zoom: 5
+                })
+            });
+
+            const popup = document.getElementById('popup');
+            const overlay = new ol.Overlay({
+                element: popup,
+                autoPan: true,
+                autoPanAnimation: {
+                    duration: 250
+                }
+            });
+            map.addOverlay(overlay);
+
+            map.on('singleclick', function (evt) {
+                const viewResolution = map.getView().getResolution();
+                const url = wellsLayer.getSource().getFeatureInfoUrl(
+                    evt.coordinate,
+                    viewResolution,
+                    'EPSG:3857',
+                    {'INFO_FORMAT': 'application/json'}
+                );
+                if (url) {
+                    fetch(url)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.features.length > 0) {
+                                const feature = data.features[0];
+                                const properties = feature.properties;
+                                const coordinate = evt.coordinate;
+                                overlay.setPosition(coordinate);
+                                popup.innerHTML = `<strong>Type:</strong> ${properties.type}<br><strong>Description:</strong> ${properties.description}`;
+                                popup.style.display = 'block';
+                            } else {
+                                popup.style.display = 'none';
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching feature info:', error);
+                            popup.style.display = 'none';
+                        });
+                }
+            });
+
+            document.getElementById('wells-checkbox').addEventListener('change', function(e) {
+                wellsLayer.setVisible(e.target.checked);
+            });
+            document.getElementById('boreholes-checkbox').addEventListener('change', function(e) {
+                boreholesLayer.setVisible(e.target.checked);
+            });
+            document.getElementById('ponds-checkbox').addEventListener('change', function(e) {
+                pondsLayer.setVisible(e.target.checked);
+            });
+            document.getElementById('admin-regions-checkbox').addEventListener('change', function(e) {
+                adminRegionsLayer0.setVisible(e.target.checked);
+                adminRegionsLayer1.setVisible(e.target.checked);
+                adminRegionsLayer2.setVisible(e.target.checked);
+                adminRegionsLayer3.setVisible(e.target.checked);
+            });
+
+            // Dummy handlers for other checkboxes
+            document.getElementById('water-bodies-checkbox').addEventListener('change', function(e) {
+                // Placeholder for water bodies layer visibility
+            });
+            document.getElementById('land-cover-checkbox').addEventListener('change', function(e) {
+                // Placeholder for land cover layer visibility
+            });
+            document.getElementById('climate-zones-checkbox').addEventListener('change', function(e) {
+                // Placeholder for climate zones layer visibility
+            });
+            
+            // Advanced layer controls
+            document.getElementById('comprehensive-infrastructure-checkbox').addEventListener('change', function(e) {
+                comprehensiveInfrastructureLayer.setVisible(e.target.checked);
+            });
+            
+            document.getElementById('water-quality-checkbox').addEventListener('change', function(e) {
+                waterQualityLayer.setVisible(e.target.checked);
+            });
+            
+            document.getElementById('maintenance-checkbox').addEventListener('change', function(e) {
+                maintenanceLayer.setVisible(e.target.checked);
+            });
+            
+            document.getElementById('geological-checkbox').addEventListener('change', function(e) {
+                geologicalLayer.setVisible(e.target.checked);
+            });
+            
+            // Add click event listeners for feature cards
+            document.querySelectorAll('.feature-card[href]').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    // Optional: Add analytics tracking here
+                    console.log('Navigating to:', this.href);
+                });
+            });
+            
+            console.log('🎉 Advanced Water Resources GIS Platform loaded successfully!');
+            console.log('📊 Features available:');
+            console.log('  • Complex Nested Water Resources Model');
+            console.log('  • Custom SLD Styling Engine');
+            console.log('  • GeoServer Administration Interface');
+            console.log('  • Classic Map with Layer Controls');
+            console.log('  • Scientific Data Analytics');
+            console.log('  • Enterprise Database Architecture');
+        });
+        
+        // Advanced Analysis Functions
+        async function analyzeWaterQuality() {
+            const resultsDiv = document.getElementById('analysis-results');
+            resultsDiv.innerHTML = '<div class="loading">🔬 Analyzing water quality data...</div>';
+            
+            try {
+                const response = await fetch('/geoserver/sahel/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=sahel:water_quality_reports&outputFormat=application/json&maxFeatures=50');
+                const data = await response.json();
+                
+                if (data.features && data.features.length > 0) {
+                    let html = '<h4>💧 Water Quality Analysis Report</h4>';
+                    
+                    // Analyze quality distribution
+                    const qualityStats = {};
+                    data.features.forEach(feature => {
+                        const quality = feature.properties.overall_quality || 'unknown';
+                        qualityStats[quality] = (qualityStats[quality] || 0) + 1;
+                    });
+                    
+                    html += '<h5>Quality Distribution:</h5>';
+                    Object.entries(qualityStats).forEach(([quality, count]) => {
+                        const color = getQualityColor(quality);
+                        html += `<p><span style="color: ${color}; font-weight: bold;">${quality.toUpperCase()}</span>: ${count} reports</p>`;
+                    });
+                    
+                    // Recent reports
+                    html += '<h5>Recent Quality Reports:</h5>';
+                    data.features.slice(0, 5).forEach(feature => {
+                        const props = feature.properties;
+                        html += `<div class="data-item">`;
+                        html += `<span><strong>${props.feature_id}</strong> (${props.feature_type})</span>`;
+                        html += `<span style="color: ${getQualityColor(props.overall_quality)}">${props.overall_quality}</span>`;
+                        html += `</div>`;
+                    });
+                    
+                    resultsDiv.innerHTML = html;
+                } else {
+                    resultsDiv.innerHTML = '<div class="error-message">No water quality data available.</div>';
+                }
+            } catch (error) {
+                console.error('Error fetching water quality data:', error);
+                resultsDiv.innerHTML = '<div class="error-message">Error loading water quality data.</div>';
+            }
+        }
+        
+        async function generateMaintenanceReport() {
+            const resultsDiv = document.getElementById('analysis-results');
+            resultsDiv.innerHTML = '<div class="loading">🔧 Generating maintenance report...</div>';
+            
+            try {
+                const response = await fetch('/geoserver/sahel/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=sahel:maintenance_activities&outputFormat=application/json&maxFeatures=50');
+                const data = await response.json();
+                
+                if (data.features && data.features.length > 0) {
+                    let html = '<h4>🔧 Maintenance Activities Report</h4>';
+                    
+                    // Calculate total costs and analyze activities
+                    let totalCost = 0;
+                    const activityTypes = {};
+                    const statusCount = {};
+                    
+                    data.features.forEach(feature => {
+                        const props = feature.properties;
+                        totalCost += props.cost || 0;
+                        activityTypes[props.activity_type] = (activityTypes[props.activity_type] || 0) + 1;
+                        statusCount[props.activity_status] = (statusCount[props.activity_status] || 0) + 1;
+                    });
+                    
+                    html += `<div class="data-grid">`;
+                    html += `<div class="data-item"><span>Total Maintenance Cost:</span><span><strong>$${totalCost.toLocaleString()}</strong></span></div>`;
+                    html += `<div class="data-item"><span>Total Activities:</span><span><strong>${data.features.length}</strong></span></div>`;
+                    html += `</div>`;
+                    
+                    html += '<h5>Activity Types:</h5>';
+                    Object.entries(activityTypes).forEach(([type, count]) => {
+                        html += `<div class="data-item"><span>${type.replace('_', ' ')}</span><span>${count} activities</span></div>`;
+                    });
+                    
+                    html += '<h5>Status Overview:</h5>';
+                    Object.entries(statusCount).forEach(([status, count]) => {
+                        const color = getMaintenanceColor(status);
+                        html += `<div class="data-item"><span style="color: ${color}">${status.replace('_', ' ')}</span><span>${count}</span></div>`;
+                    });
+                    
+                    resultsDiv.innerHTML = html;
+                } else {
+                    resultsDiv.innerHTML = '<div class="error-message">No maintenance data available.</div>';
+                }
+            } catch (error) {
+                console.error('Error fetching maintenance data:', error);
+                resultsDiv.innerHTML = '<div class="error-message">Error loading maintenance data.</div>';
+            }
+        }
+        
+        async function geologicalSummary() {
+            const resultsDiv = document.getElementById('analysis-results');
+            resultsDiv.innerHTML = '<div class="loading">🏔️ Analyzing geological data...</div>';
+            
+            try {
+                const response = await fetch('/geoserver/sahel/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=sahel:geological_water_bearing_layers&outputFormat=application/json&maxFeatures=50');
+                const data = await response.json();
+                
+                if (data.features && data.features.length > 0) {
+                    let html = '<h4>🏔️ Geological Summary Report</h4>';
+                    
+                    // Analyze rock formations and aquifer potential
+                    const formations = {};
+                    const aquiferPotential = {};
+                    let avgPorosity = 0;
+                    
+                    data.features.forEach(feature => {
+                        const props = feature.properties;
+                        formations[props.rock_formation] = (formations[props.rock_formation] || 0) + 1;
+                        aquiferPotential[props.overall_aquifer_potential] = (aquiferPotential[props.overall_aquifer_potential] || 0) + 1;
+                        avgPorosity += props.porosity_percentage || 0;
+                    });
+                    
+                    avgPorosity = avgPorosity / data.features.length;
+                    
+                    html += `<div class="data-grid">`;
+                    html += `<div class="data-item"><span>Geological Layers:</span><span><strong>${data.features.length}</strong></span></div>`;
+                    html += `<div class="data-item"><span>Average Porosity:</span><span><strong>${avgPorosity.toFixed(1)}%</strong></span></div>`;
+                    html += `</div>`;
+                    
+                    html += '<h5>Rock Formations:</h5>';
+                    Object.entries(formations).forEach(([formation, count]) => {
+                        html += `<div class="data-item"><span>${formation}</span><span>${count} layers</span></div>`;
+                    });
+                    
+                    html += '<h5>Aquifer Potential:</h5>';
+                    Object.entries(aquiferPotential).forEach(([potential, count]) => {
+                        const color = potential === 'high' ? '#27ae60' : potential === 'medium' ? '#f39c12' : '#e74c3c';
+                        html += `<div class="data-item"><span style="color: ${color}">${potential.toUpperCase()}</span><span>${count} locations</span></div>`;
+                    });
+                    
+                    // Show sample geotechnical data
+                    if (data.features[0].properties.geotechnical_data) {
+                        html += '<h5>Sample Geotechnical Data:</h5>';
+                        html += `<div class="json-data">${data.features[0].properties.geotechnical_data}</div>`;
+                    }
+                    
+                    resultsDiv.innerHTML = html;
+                } else {
+                    resultsDiv.innerHTML = '<div class="error-message">No geological data available.</div>';
+                }
+            } catch (error) {
+                console.error('Error fetching geological data:', error);
+                resultsDiv.innerHTML = '<div class="error-message">Error loading geological data.</div>';
+            }
+        }
+        
+        async function infrastructureOverview() {
+            const resultsDiv = document.getElementById('analysis-results');
+            resultsDiv.innerHTML = '<div class="loading">📊 Generating infrastructure overview...</div>';
+            
+            try {
+                const response = await fetch('/geoserver/sahel/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=sahel:water_infrastructure_comprehensive&outputFormat=application/json&maxFeatures=50');
+                const data = await response.json();
+                
+                if (data.features && data.features.length > 0) {
+                    let html = '<h4>📊 Infrastructure Overview Report</h4>';
+                    
+                    // Analyze infrastructure types and zones
+                    const featureTypes = {};
+                    const zones = {};
+                    const usageTypes = {};
+                    
+                    data.features.forEach(feature => {
+                        const props = feature.properties;
+                        featureTypes[props.feature_type] = (featureTypes[props.feature_type] || 0) + 1;
+                        zones[props.zone_name] = (zones[props.zone_name] || 0) + 1;
+                        if (props.usage_type) {
+                            usageTypes[props.usage_type] = (usageTypes[props.usage_type] || 0) + 1;
+                        }
+                    });
+                    
+                    html += `<div class="data-grid">`;
+                    html += `<div class="data-item"><span>Total Infrastructure:</span><span><strong>${data.features.length}</strong></span></div>`;
+                    html += `<div class="data-item"><span>Management Zones:</span><span><strong>${Object.keys(zones).length}</strong></span></div>`;
+                    html += `</div>`;
+                    
+                    html += '<h5>Infrastructure Types:</h5>';
+                    Object.entries(featureTypes).forEach(([type, count]) => {
+                        const icon = type === 'pond' ? '🏊' : type === 'well' ? '🕳️' : '🔧';
+                        html += `<div class="data-item"><span>${icon} ${type.toUpperCase()}</span><span>${count}</span></div>`;
+                    });
+                    
+                    html += '<h5>Zone Distribution:</h5>';
+                    Object.entries(zones).forEach(([zone, count]) => {
+                        html += `<div class="data-item"><span>${zone}</span><span>${count} features</span></div>`;
+                    });
+                    
+                    html += '<h5>Usage Types:</h5>';
+                    Object.entries(usageTypes).forEach(([usage, count]) => {
+                        html += `<div class="data-item"><span>${usage.replace('_', ' ')}</span><span>${count}</span></div>`;
+                    });
+                    
+                    resultsDiv.innerHTML = html;
+                } else {
+                    resultsDiv.innerHTML = '<div class="error-message">No infrastructure data available.</div>';
+                }
+            } catch (error) {
+                console.error('Error fetching infrastructure data:', error);
+                resultsDiv.innerHTML = '<div class="error-message">Error loading infrastructure data.</div>';
+            }
+        }
+        
+        function getQualityColor(quality) {
+            switch(quality.toLowerCase()) {
+                case 'excellent': return '#27ae60';
+                case 'good': return '#2ecc71';
+                case 'acceptable': return '#f39c12';
+                case 'poor': return '#e74c3c';
+                default: return '#7f8c8d';
+            }
+        }
+        
+        function getMaintenanceColor(status) {
+            switch(status.toLowerCase()) {
+                case 'completed': return '#27ae60';
+                case 'in_progress': return '#f39c12';
+                case 'scheduled': return '#3498db';
+                case 'overdue': return '#e74c3c';
+                default: return '#7f8c8d';
+            }
+        }
+    </script>
+    
+    <footer style="background: rgba(52, 73, 94, 0.95); color: #ecf0f1; padding: 2rem; text-align: center; margin-top: 2rem;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <h3 style="color: #3498db; margin-bottom: 1.5rem;">� Water Resource Management Portal</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                <div>
+                    <h4 style="color: #52c4e8; margin: 0.5rem 0;">🏗️ Infrastructure Management</h4>
+                    <p style="color: #bdc3c7; margin: 0; font-size: 0.9em;">Comprehensive tracking of wells, boreholes, water ponds, and distribution networks across administrative zones.</p>
+                </div>
+                <div>
+                    <h4 style="color: #46d699; margin: 0.5rem 0;">🔬 Scientific Analysis</h4>
+                    <p style="color: #bdc3c7; margin: 0; font-size: 0.9em;">Advanced water quality monitoring, geological assessment, and environmental impact analysis with laboratory integration.</p>
+                </div>
+                <div>
+                    <h4 style="color: #f39c12; margin: 0.5rem 0;">⚙️ Operations Management</h4>
+                    <p style="color: #bdc3c7; margin: 0; font-size: 0.9em;">Maintenance scheduling, asset lifecycle tracking, cost analysis, and operational efficiency monitoring.</p>
+                </div>
+                <div>
+                    <h4 style="color: #e74c3c; margin: 0.5rem 0;">📊 Data Intelligence</h4>
+                    <p style="color: #bdc3c7; margin: 0; font-size: 0.9em;">Real-time analytics, predictive modeling, resource optimization, and decision support for water management professionals.</p>
+                </div>
+            </div>
+            <div style="border-top: 1px solid #34495e; padding-top: 1rem;">
+                <p style="color: #95a5a6; margin: 0; font-size: 0.85em;">
+                    Professional Water Resource Management Platform • Enterprise GIS • Scientific Data Analytics
+                </p>
+                <p style="color: #7f8c8d; margin: 0.5rem 0 0 0; font-size: 0.8em;">
+                    Powered by OpenLayers, GeoServer, PostgreSQL/PostGIS • Containerized Architecture
+                </p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<featureType>
+  <id>FeatureTypeInfoImpl-4f4f4aa9:199962eb3d4:-7ff1</id>
+  <name>maintenance_activities</name>
+  <nativeName>maintenance_activities</nativeName>
+  <namespace>
+    <id>NamespaceInfoImpl--44ec0058:19992864196:-7fff</id>
+  </namespace>
+  <title>Infrastructure Maintenance Activities</title>
+  <keywords>
+    <string>features</string>
+    <string>maintenance_activities</string>
+  </keywords>
+  <srs>EPSG:4326</srs>
+  <nativeBoundingBox>
+    <minx>0.0</minx>
+    <maxx>-1.0</maxx>
+    <miny>0.0</miny>
+    <maxy>-1.0</maxy>
+  </nativeBoundingBox>
+  <latLonBoundingBox>
+    <minx>0.0</minx>
+    <maxx>-1.0</maxx>
+    <miny>0.0</miny>
+    <maxy>-1.0</maxy>
+    <crs>EPSG:4326</crs>
+  </latLonBoundingBox>
+  <projectionPolicy>FORCE_DECLARED</projectionPolicy>
+  <enabled>true</enabled>
+  <store class="dataStore">
+    <id>DataStoreInfoImpl-4f4f4aa9:199962eb3d4:-8000</id>
+  </store>
+  <serviceConfiguration>false</serviceConfiguration>
+  <maxFeatures>0</maxFeatures>
+  <numDecimals>0</numDecimals>
+  <padWithZeros>false</padWithZeros>
+  <forcedDecimal>false</forcedDecimal>
+  <overridingServiceSRS>false</overridingServiceSRS>
+  <skipNumberMatched>false</skipNumberMatched>
+  <circularArcPresent>false</circularArcPresent>
+</featureType>

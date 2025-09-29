@@ -3,294 +3,954 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Map of the Sahel Region</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v9.1.0/ol.css">
+    <title>🌊 Complex Water Resources Management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v9.1.0/ol.css" type="text/css">
     <style>
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
-            flex-direction: column;
             height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
-        #header {
-            background-color: #333;
-            color: white;
-            padding: 10px;
-            text-align: center;
-        }
-        #main {
-            display: flex;
-            flex: 1;
-        }
+
         #sidebar {
-            width: 250px;
-            background-color: #f4f4f4;
-            padding: 10px;
-            box-sizing: border-box;
+            width: 400px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            overflow-y: auto;
+            border-radius: 0 15px 15px 0;
         }
+
         #map-container {
             flex: 1;
             position: relative;
+            margin: 1rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            overflow: hidden;
         }
+
         #map {
             width: 100%;
             height: 100%;
         }
-        #popup {
-            position: absolute;
-            background-color: white;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            display: none;
+
+        .layer-control h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.3em;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 0.5rem;
         }
+
+        .feature-info h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.3em;
+            border-bottom: 2px solid #e67e22;
+            padding-bottom: 0.5rem;
+        }
+
+        .layer-control {
+            margin-bottom: 2rem;
+        }
+
+        .layer-item {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+
+        .layer-item input[type="checkbox"] {
+            margin-right: 0.8rem;
+            transform: scale(1.2);
+        }
+
+        .layer-item label {
+            font-weight: 500;
+            color: #2c3e50;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .layer-item small {
+            display: block;
+            color: #7f8c8d;
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+
+        .complex-feature-badge {
+            display: inline-block;
+            background: #9b59b6;
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin-left: 0.5rem;
+        }
+
+        .complex-feature-badge.hierarchical {
+            background: #3498db;
+        }
+
+        .complex-feature-badge.scientific {
+            background: #27ae60;
+        }
+
+        .complex-feature-badge.operational {
+            background: #e67e22;
+        }
+
+        .complex-feature-badge.nested {
+            background: #9b59b6;
+        }
+
+        .feature-info {
+            margin-top: 2rem;
+        }
+
+        .feature-details {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #e67e22;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 4px;
+        }
+
+        .stat-value {
+            font-weight: bold;
+            color: #27ae60;
+        }
+
+        .data-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.3rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .error-message {
+            background: #fff5f5;
+            color: #e53e3e;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #e53e3e;
+            margin: 1rem 0;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 1rem;
+            color: #7f8c8d;
+        }
+
+        .json-data {
+            background: #f8f9fa;
+            padding: 0.8rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            white-space: pre-wrap;
+            word-break: break-all;
+            border: 1px solid #e9ecef;
+        }
+
+        .geoserver-link {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-size: 14px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .geoserver-link:hover {
+            background: #2980b9;
+        }
+
         .legend-item {
             display: flex;
             align-items: center;
             margin-bottom: 8px;
-            font-size: 14px;
+            font-size: 13px;
         }
+
         .legend-symbol {
             width: 16px;
             height: 16px;
-            margin-right: 10px;
-            display: inline-block;
-        }
-        .legend-triangle {
-            width: 0;
-            height: 0;
-            border-left: 8px solid transparent;
-            border-right: 8px solid transparent;
-            border-bottom: 14px solid #00AA88;
-            margin-right: 10px;
+            margin-right: 8px;
+            border: 1px solid #333;
         }
     </style>
 </head>
 <body>
-    <div id="header">
-        <h1>Interactive Map of the Sahel Region</h1>
-    </div>
-    <div id="main">
-        <div id="sidebar">
-            <h2>Layers</h2>
-            <div>
-                <input type="checkbox" id="wells-checkbox" checked>
-                <label for="wells-checkbox">Wells</label>
+    <div id="sidebar">
+        <div class="layer-control">
+            <h3>�️ Complex Feature Layers</h3>
+            
+            <div class="layer-item">
+                <input type="checkbox" id="zones-layer" checked>
+                <label for="zones-layer">Water Management Zones</label>
+                <span class="complex-feature-badge hierarchical">Hierarchical</span>
+                <small>Zones with aggregated infrastructure statistics and density classification</small>
             </div>
-            <div>
-                <input type="checkbox" id="boreholes-checkbox" checked>
-                <label for="boreholes-checkbox">Boreholes</label>
+
+            <div class="layer-item">
+                <input type="checkbox" id="comprehensive-layer" checked>
+                <label for="comprehensive-layer">Comprehensive Infrastructure</label>
+                <span class="complex-feature-badge">Unified View</span>
+                <small>All water infrastructure types in one layer with maintenance status</small>
             </div>
-            <div>
-                <input type="checkbox" id="ponds-checkbox" checked>
-                <label for="ponds-checkbox">Ponds</label>
+
+            <div class="layer-item">
+                <input type="checkbox" id="ponds-layer">
+                <label for="ponds-layer">Water Ponds (Detailed)</label>
+                <span class="complex-feature-badge nested">Nested</span>
+                <small>Ponds with construction details, water quality reports, and maintenance activities</small>
             </div>
-            <div>
+
+            <div class="layer-item">
+                <input type="checkbox" id="wells-layer">
+                <label for="wells-layer">Water Wells (Detailed)</label>
+                <span class="complex-feature-badge nested">Nested</span>
+                <small>Wells with drilling information, water quality reports, and maintenance records</small>
+            </div>
+
+            <div class="layer-item">
+                <input type="checkbox" id="boreholes-layer">
+                <label for="boreholes-layer">Boreholes (Detailed)</label>
+                <span class="complex-feature-badge nested">Nested</span>
+                <small>Boreholes with geological logs, water quality testing, and maintenance activities</small>
+            </div>
+
+            <div class="layer-item">
                 <input type="checkbox" id="admin-regions-checkbox" checked>
                 <label for="admin-regions-checkbox">Admin Regions</label>
-            </div>
-            <div>
-                <input type="checkbox" id="water-bodies-checkbox" checked>
-                <label for="water-bodies-checkbox">Water Bodies</label>
-            </div>
-            <div>
-                <input type="checkbox" id="land-cover-checkbox" checked>
-                <label for="land-cover-checkbox">Land Cover</label>
-            </div>
-            <div>
-                <input type="checkbox" id="climate-zones-checkbox" checked>
-                <label for="climate-zones-checkbox">Climate Zones</label>
-            </div>
-            <hr>
-            <h2>Legend</h2>
-            <div class="legend-item">
-                <div class="legend-symbol" style="background-color: #0066CC; border: 2px solid #003366; border-radius: 50%; width: 12px; height: 12px;"></div>
-                <span>Wells (Blue Circles)</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-symbol" style="background-color: #CC3300; border: 2px solid #660000; width: 12px; height: 12px;"></div>
-                <span>Boreholes (Red Squares)</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-symbol" style="background-color: #00AA88; border: 2px solid #004444; width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-bottom: 12px solid #00AA88; border-radius: 0;"></div>
-                <span>Ponds (Teal Triangles)</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-symbol" style="border: 1px solid #000; background-color: rgba(0, 0, 0, 0.1);"></div>
-                <span>Admin Regions</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-symbol" style="background-color: #0000FF;"></div>
-                <span>Water Bodies</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-symbol" style="background-color: #8B4513;"></div>
-                <span>Land Cover</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-symbol" style="background-color: #FFD700;"></div>
-                <span>Climate Zones</span>
+                <span class="complex-feature-badge">Administrative</span>
+                <small>Administrative boundaries for regional management</small>
             </div>
         </div>
-        <div id="map-container">
-            <div id="map"></div>
-            <div id="popup"></div>
+
+        <div class="feature-info">
+            <h3>🔍 Feature Information</h3>
+            <div id="feature-details">
+                <p style="color: #7f8c8d; font-style: italic;">Click on any feature to view detailed information including nested attributes and complex relationships.</p>
+            </div>
+            
+            <div id="feature-action-buttons" style="margin-top: 1rem; display: none;">
+                <h4 style="color: #2c3e50; margin-bottom: 1rem;">� Feature Analysis</h4>
+                <button id="water-quality-btn" onclick="showWaterQualityReport()" style="background: #3498db; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; width: 100%; margin-bottom: 0.5rem; font-size: 0.9em;">💧 Water Quality Report</button>
+                <button id="maintenance-activities-btn" onclick="showMaintenanceActivities()" style="background: #e67e22; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; width: 100%; margin-bottom: 0.5rem; font-size: 0.9em;">🔧 Maintenance Activities</button>
+            </div>
         </div>
+
+        <a href="/geoserver/" class="geoserver-link" target="_blank">🌐 GeoServer Admin</a>
+    </div>
+
+    <div id="map-container">
+        <div id="map"></div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/ol@v9.1.0/dist/ol.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const wellsLayer = new ol.layer.Image({
-                source: new ol.source.ImageWMS({
-                    url: '/geoserver/sahel/wms',
-                    params: {'LAYERS': 'sahel:wells'},
-                    serverType: 'geoserver'
-                }),
-                visible: true
-            });
-
-            const boreholesLayer = new ol.layer.Image({
-                source: new ol.source.ImageWMS({
-                    url: '/geoserver/sahel/wms',
-                    params: {'LAYERS': 'sahel:boreholes'},
-                    serverType: 'geoserver'
-                }),
-                visible: true
-            });
-
-            const pondsLayer = new ol.layer.Image({
-                source: new ol.source.ImageWMS({
-                    url: '/geoserver/sahel/wms',
-                    params: {'LAYERS': 'sahel:ponds'},
-                    serverType: 'geoserver'
-                }),
-                visible: true
-            });
-
-            const adminRegionsLayer0 = new ol.layer.Image({
-                source: new ol.source.ImageWMS({
-                    url: '/geoserver/chad/wms',
-                    params: {'LAYERS': 'chad:gadm41_TCD_0'},
-                    serverType: 'geoserver'
-                }),
-                visible: true
-            });
-            const adminRegionsLayer1 = new ol.layer.Image({
-                source: new ol.source.ImageWMS({
-                    url: '/geoserver/chad/wms',
-                    params: {'LAYERS': 'chad:gadm41_TCD_1'},
-                    serverType: 'geoserver'
-                }),
-                visible: true
-            });
-            const adminRegionsLayer2 = new ol.layer.Image({
-                source: new ol.source.ImageWMS({
-                    url: '/geoserver/chad/wms',
-                    params: {'LAYERS': 'chad:gadm41_TCD_2'},
-                    serverType: 'geoserver'
-                }),
-                visible: true
-            });
-            const adminRegionsLayer3 = new ol.layer.Image({
-                source: new ol.source.ImageWMS({
-                    url: '/geoserver/chad/wms',
-                    params: {'LAYERS': 'chad:gadm41_TCD_3'},
-                    serverType: 'geoserver'
-                }),
-                visible: true
-            });
-
-
-            const map = new ol.Map({
-                target: 'map',
-                layers: [
-                    new ol.layer.Tile({
-                        source: new ol.source.OSM()
-                    }),
-                    adminRegionsLayer0,
-                    adminRegionsLayer1,
-                    adminRegionsLayer2,
-                    adminRegionsLayer3,
-                    wellsLayer,
-                    boreholesLayer,
-                    pondsLayer
-                ],
-                view: new ol.View({
-                    center: ol.proj.fromLonLat([18.5, 15.5]),
-                    zoom: 5
+        // Initialize the map
+        const map = new ol.Map({
+            target: 'map',
+            layers: [
+                new ol.layer.Tile({
+                    source: new ol.source.OSM()
                 })
-            });
+            ],
+            view: new ol.View({
+                center: ol.proj.fromLonLat([15.0, 15.0]),
+                zoom: 6
+            })
+        });
 
-            const popup = document.getElementById('popup');
-            const overlay = new ol.Overlay({
-                element: popup,
-                autoPan: true,
-                autoPanAnimation: {
-                    duration: 250
-                }
-            });
-            map.addOverlay(overlay);
+        // Define WMS layers for complex nested features
+        const layers = {
+            'zones-layer': new ol.layer.Tile({
+                source: new ol.source.TileWMS({
+                    url: '/geoserver/sahel/wms',
+                    params: {
+                        'LAYERS': 'sahel:water_management_zones_detailed',
+                        'TILED': true
+                    },
+                    serverType: 'geoserver'
+                }),
+                visible: true
+            }),
+            'comprehensive-layer': new ol.layer.Tile({
+                source: new ol.source.TileWMS({
+                    url: '/geoserver/sahel/wms',
+                    params: {
+                        'LAYERS': 'sahel:water_infrastructure_comprehensive',
+                        'TILED': true
+                    },
+                    serverType: 'geoserver'
+                }),
+                visible: true
+            }),
+            'geological-layer': new ol.layer.Tile({
+                source: new ol.source.TileWMS({
+                    url: '/geoserver/sahel/wms',
+                    params: {
+                        'LAYERS': 'sahel:geological_water_bearing_layers',
+                        'TILED': true
+                    },
+                    serverType: 'geoserver'
+                }),
+                visible: false
+            }),
+            'ponds-layer': new ol.layer.Tile({
+                source: new ol.source.TileWMS({
+                    url: '/geoserver/sahel/wms',
+                    params: {
+                        'LAYERS': 'sahel:nested_ponds_detailed',
+                        'TILED': true
+                    },
+                    serverType: 'geoserver'
+                }),
+                visible: false
+            }),
+            'wells-layer': new ol.layer.Tile({
+                source: new ol.source.TileWMS({
+                    url: '/geoserver/sahel/wms',
+                    params: {
+                        'LAYERS': 'sahel:nested_wells_detailed',
+                        'TILED': true
+                    },
+                    serverType: 'geoserver'
+                }),
+                visible: false
+            }),
+            'boreholes-layer': new ol.layer.Tile({
+                source: new ol.source.TileWMS({
+                    url: '/geoserver/sahel/wms',
+                    params: {
+                        'LAYERS': 'sahel:nested_boreholes_detailed',
+                        'TILED': true
+                    },
+                    serverType: 'geoserver'
+                }),
+                visible: false
+            }),
+            'admin-regions-checkbox': new ol.layer.Tile({
+                source: new ol.source.TileWMS({
+                    url: '/geoserver/chad/wms',
+                    params: {
+                        'LAYERS': 'chad:gadm41_TCD_1',
+                        'TILED': true
+                    },
+                    serverType: 'geoserver'
+                }),
+                visible: true
+            })
+        };
 
-            map.on('singleclick', function (evt) {
-                const viewResolution = map.getView().getResolution();
-                const url = wellsLayer.getSource().getFeatureInfoUrl(
-                    evt.coordinate,
-                    viewResolution,
-                    'EPSG:3857',
-                    {'INFO_FORMAT': 'application/json'}
-                );
-                if (url) {
-                    fetch(url)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.features.length > 0) {
-                                const feature = data.features[0];
-                                const properties = feature.properties;
-                                const coordinate = evt.coordinate;
-                                overlay.setPosition(coordinate);
-                                popup.innerHTML = `<strong>Type:</strong> ${properties.type}<br><strong>Description:</strong> ${properties.description}`;
-                                popup.style.display = 'block';
-                            } else {
-                                popup.style.display = 'none';
+        // Add all layers to map
+        Object.values(layers).forEach(layer => {
+            map.addLayer(layer);
+        });
+
+        // Add layer toggle functionality
+        Object.keys(layers).forEach(layerId => {
+            const checkbox = document.getElementById(layerId);
+            if (checkbox) {
+                checkbox.addEventListener('change', function(e) {
+                    layers[layerId].setVisible(e.target.checked);
+                });
+            }
+        });
+
+        // Helper functions for styling
+        function getQualityColor(quality) {
+            switch(quality?.toLowerCase()) {
+                case 'excellent': return '#27ae60';
+                case 'good': return '#2ecc71';
+                case 'fair': return '#f39c12';
+                case 'poor': return '#e74c3c';
+                default: return '#95a5a6';
+            }
+        }
+
+        function getMaintenanceColor(status) {
+            switch(status?.toLowerCase()) {
+                case 'completed': return '#27ae60';
+                case 'in_progress': return '#f39c12';
+                case 'planned': return '#3498db';
+                case 'overdue': return '#e74c3c';
+                default: return '#95a5a6';
+            }
+        }
+
+        // Click handler for features - Updated to work with WMS layers
+        map.on('click', function (evt) {
+            const coordinate = evt.coordinate;
+            const pixel = evt.pixel;
+            const detailsDiv = document.getElementById('feature-details');
+            
+            // Show loading state
+            detailsDiv.innerHTML = '<div class="loading" style="display: block;">🔍 Loading feature information...</div>';
+            
+            // Get map view resolution and projection
+            const view = map.getView();
+            const resolution = view.getResolution();
+            const projection = view.getProjection();
+            
+            // Check each visible layer for features at click point
+            let foundFeature = false;
+            
+            // Function to make GetFeatureInfo request
+            async function getFeatureInfo(layer, layerName, workspaceName = 'sahel') {
+                if (!layer.getVisible()) return null;
+                
+                const source = layer.getSource();
+                if (source instanceof ol.source.TileWMS || source instanceof ol.source.ImageWMS) {
+                    const url = source.getFeatureInfoUrl(
+                        coordinate,
+                        resolution,
+                        projection,
+                        {
+                            'INFO_FORMAT': 'application/json',
+                            'FEATURE_COUNT': 1,
+                            'QUERY_LAYERS': layerName
+                        }
+                    );
+                    
+                    if (url) {
+                        try {
+                            const response = await fetch(url);
+                            const data = await response.json();
+                            
+                            if (data.features && data.features.length > 0) {
+                                return {
+                                    feature: data.features[0],
+                                    layerName: layerName,
+                                    workspace: workspaceName
+                                };
                             }
-                        })
-                        .catch(error => {
+                        } catch (error) {
                             console.error('Error fetching feature info:', error);
-                            popup.style.display = 'none';
-                        });
+                        }
+                    }
                 }
-            });
-
-            document.getElementById('wells-checkbox').addEventListener('change', function(e) {
-                wellsLayer.setVisible(e.target.checked);
-            });
-            document.getElementById('boreholes-checkbox').addEventListener('change', function(e) {
-                boreholesLayer.setVisible(e.target.checked);
-            });
-            document.getElementById('ponds-checkbox').addEventListener('change', function(e) {
-                pondsLayer.setVisible(e.target.checked);
-            });
-            document.getElementById('admin-regions-checkbox').addEventListener('change', function(e) {
-                adminRegionsLayer0.setVisible(e.target.checked);
-                adminRegionsLayer1.setVisible(e.target.checked);
-                adminRegionsLayer2.setVisible(e.target.checked);
-                adminRegionsLayer3.setVisible(e.target.checked);
-            });
-
-            // Dummy handlers for other checkboxes
-            document.getElementById('water-bodies-checkbox').addEventListener('change', function(e) {
-                // Placeholder for water bodies layer visibility
-            });
-            document.getElementById('land-cover-checkbox').addEventListener('change', function(e) {
-                // Placeholder for land cover layer visibility
-            });
-            document.getElementById('climate-zones-checkbox').addEventListener('change', function(e) {
-                // Placeholder for climate zones layer visibility
+                return null;
+            }
+            
+            // Check all layers for features at click point
+            Promise.all([
+                getFeatureInfo(layers['zones-layer'], 'sahel:water_management_zones_detailed'),
+                getFeatureInfo(layers['comprehensive-layer'], 'sahel:water_infrastructure_comprehensive'),
+                getFeatureInfo(layers['ponds-layer'], 'sahel:nested_ponds_detailed'),
+                getFeatureInfo(layers['wells-layer'], 'sahel:nested_wells_detailed'),
+                getFeatureInfo(layers['boreholes-layer'], 'sahel:nested_boreholes_detailed'),
+                getFeatureInfo(layers['admin-regions-checkbox'], 'chad:gadm41_TCD_1', 'chad')
+            ]).then(results => {
+                // Find the first result with a feature
+                const result = results.find(r => r !== null);
+                
+                if (result) {
+                    foundFeature = true;
+                    displayFeatureInfo(result.feature, result.layerName, result.workspace);
+                } else {
+                    detailsDiv.innerHTML = '<p style="color: #7f8c8d; font-style: italic;">No features found at this location. Try clicking directly on visible features.</p>';
+                }
+            }).catch(error => {
+                console.error('Error in feature detection:', error);
+                detailsDiv.innerHTML = '<div class="error-message">Error detecting features at this location.</div>';
             });
         });
+        
+        // Function to display feature information in the side panel
+        function displayFeatureInfo(feature, layerName, workspace) {
+            const detailsDiv = document.getElementById('feature-details');
+            const actionButtonsDiv = document.getElementById('feature-action-buttons');
+            const properties = feature.properties;
+            
+            // Determine feature type from layer name
+            let featureType = 'Unknown';
+            let icon = '📍';
+            let isInfrastructure = false;
+            let isWaterManagementZone = false;
+            
+            if (layerName.includes('zones')) {
+                featureType = 'Water Management Zone';
+                icon = '🏗️';
+                isWaterManagementZone = true;
+            } else if (layerName.includes('comprehensive') || layerName.includes('infrastructure')) {
+                featureType = 'Water Infrastructure';
+                icon = '🚰';
+                isInfrastructure = true;
+            } else if (layerName.includes('pond')) {
+                featureType = 'Water Pond';
+                icon = '🌊';
+                isInfrastructure = true;
+            } else if (layerName.includes('well')) {
+                featureType = 'Water Well';
+                icon = '⚫';
+                isInfrastructure = true;
+            } else if (layerName.includes('borehole')) {
+                featureType = 'Borehole';
+                icon = '🔴';
+                isInfrastructure = true;
+            } else if (layerName.includes('gadm') || layerName.includes('admin')) {
+                featureType = 'Administrative Region';
+                icon = '🗺️';
+            }
+            
+            let html = '<div class="feature-details">';
+            html += `<h4>${icon} ${featureType} Details</h4>`;
+            
+            // Display basic information
+            if (properties.name || properties.NAME_1 || properties.NAME_0) {
+                const name = properties.name || properties.NAME_1 || properties.NAME_0;
+                html += `<div class="data-item"><span>Name:</span><span><strong>${name}</strong></span></div>`;
+            }
+            
+            if (properties.id || properties.gid || properties.feature_id) {
+                const id = properties.id || properties.gid || properties.feature_id;
+                html += `<div class="data-item"><span>ID:</span><span><strong>${id}</strong></span></div>`;
+            }
+            
+            // Display infrastructure-specific information
+            if (properties.type) {
+                html += `<div class="data-item"><span>Type:</span><span>${properties.type}</span></div>`;
+            }
+            
+            if (properties.status) {
+                html += `<div class="data-item"><span>Status:</span><span>${properties.status}</span></div>`;
+            }
+            
+            if (properties.depth) {
+                html += `<div class="data-item"><span>Depth:</span><span>${properties.depth}m</span></div>`;
+            }
+            
+            if (properties.capacity) {
+                html += `<div class="data-item"><span>Capacity:</span><span>${properties.capacity} liters</span></div>`;
+            }
+            
+            if (properties.construction_year) {
+                html += `<div class="data-item"><span>Construction Year:</span><span>${properties.construction_year}</span></div>`;
+            }
+            
+            // Display other properties
+            const excludeKeys = ['geom', 'geometry', 'the_geom', 'name', 'NAME_1', 'NAME_0', 'id', 'gid', 'feature_id', 'type', 'status', 'depth', 'capacity', 'construction_year'];
+            
+            Object.entries(properties).forEach(([key, value]) => {
+                if (!excludeKeys.includes(key) && value !== null && value !== undefined && value !== '') {
+                    const displayKey = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    html += `<div class="data-item"><span>${displayKey}:</span><span>${value}</span></div>`;
+                }
+            });
+            
+            html += '</div>';
+            detailsDiv.innerHTML = html;
+            
+            // Show/hide action buttons and store current feature info for button functions
+            if ((isInfrastructure || isWaterManagementZone) && (properties.id || properties.feature_id || properties.gid)) {
+                const featureId = properties.id || properties.feature_id || properties.gid;
+                
+                // Store current feature info globally for button functions
+                window.currentFeature = {
+                    id: featureId,
+                    type: featureType,
+                    properties: properties,
+                    isWaterManagementZone: isWaterManagementZone
+                };
+                
+                // Update button visibility based on feature type
+                const waterQualityBtn = document.getElementById('water-quality-btn');
+                const maintenanceBtn = document.getElementById('maintenance-activities-btn');
+                
+                if (isWaterManagementZone) {
+                    // For water management zones, show geological summary instead of quality/maintenance
+                    waterQualityBtn.style.display = 'none';
+                    maintenanceBtn.style.display = 'none';
+                    // Add geological summary button if it doesn't exist
+                    if (!document.getElementById('geological-summary-btn')) {
+                        const geologicalBtn = document.createElement('button');
+                        geologicalBtn.id = 'geological-summary-btn';
+                        geologicalBtn.onclick = showGeologicalSummary;
+                        geologicalBtn.style.cssText = 'background: #9b59b6; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; width: 100%; margin-bottom: 0.5rem; font-size: 0.9em;';
+                        geologicalBtn.innerHTML = '🏔️ Geological Summary';
+                        actionButtonsDiv.appendChild(geologicalBtn);
+                    } else {
+                        document.getElementById('geological-summary-btn').style.display = 'block';
+                    }
+                } else {
+                    // For infrastructure, show quality/maintenance buttons
+                    waterQualityBtn.style.display = 'block';
+                    maintenanceBtn.style.display = 'block';
+                    const geologicalBtn = document.getElementById('geological-summary-btn');
+                    if (geologicalBtn) geologicalBtn.style.display = 'none';
+                }
+                
+                actionButtonsDiv.style.display = 'block';
+            } else {
+                actionButtonsDiv.style.display = 'none';
+                window.currentFeature = null;
+            }
+        }
+        
+        // Button functions for feature-specific analysis
+        function showWaterQualityReport() {
+            if (!window.currentFeature) {
+                document.getElementById('feature-details').innerHTML = '<div class="error-message">No feature selected. Please click on a water infrastructure feature first.</div>';
+                return;
+            }
+            
+            getWaterQualityHistory(window.currentFeature.id);
+        }
+
+        function showMaintenanceActivities() {
+            if (!window.currentFeature) {
+                document.getElementById('feature-details').innerHTML = '<div class="error-message">No feature selected. Please click on a water infrastructure feature first.</div>';
+                return;
+            }
+            
+            getMaintenanceHistory(window.currentFeature.id);
+        }
+
+        function showGeologicalSummary() {
+            if (!window.currentFeature) {
+                document.getElementById('feature-details').innerHTML = '<div class="error-message">No feature selected. Please click on a water management zone first.</div>';
+                return;
+            }
+            
+            if (!window.currentFeature.isWaterManagementZone) {
+                document.getElementById('feature-details').innerHTML = '<div class="error-message">Geological summary is only available for water management zones.</div>';
+                return;
+            }
+            
+            getGeologicalSummaryForZone(window.currentFeature.id);
+        }
+
+        // Function to fetch and display geological summary for a water management zone
+        async function getGeologicalSummaryForZone(zoneId) {
+            const detailsDiv = document.getElementById('feature-details');
+            detailsDiv.innerHTML = '<div class="loading" style="display: block;">🏔️ Loading geological summary for zone...</div>';
+            
+            try {
+                // Fetch geological data for the zone from the geological layers within this zone
+                const response = await fetch(`/geoserver/sahel/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=sahel:geological_water_bearing_layers&outputFormat=application/json&maxFeatures=50`);
+                const data = await response.json();
+                
+                if (data.features && data.features.length > 0) {
+                    let html = '<div class="feature-details">';
+                    html += `<h4>🏔️ Geological Summary: Zone ${zoneId}</h4>`;
+                    
+                    // Analyze geological features in the area
+                    const rockFormations = {};
+                    const aquiferPotential = {};
+                    let totalPorosity = 0;
+                    let porosityCount = 0;
+                    
+                    data.features.forEach(feature => {
+                        const props = feature.properties;
+                        
+                        // Count rock formations
+                        if (props.rock_formation) {
+                            rockFormations[props.rock_formation] = (rockFormations[props.rock_formation] || 0) + 1;
+                        }
+                        
+                        // Count aquifer potential
+                        if (props.overall_aquifer_potential) {
+                            aquiferPotential[props.overall_aquifer_potential] = (aquiferPotential[props.overall_aquifer_potential] || 0) + 1;
+                        }
+                        
+                        // Calculate average porosity
+                        if (props.porosity_percentage) {
+                            totalPorosity += parseFloat(props.porosity_percentage);
+                            porosityCount++;
+                        }
+                    });
+                    
+                    // Display rock formations
+                    html += '<h5>🗻 Rock Formations in Zone:</h5>';
+                    Object.entries(rockFormations).forEach(([formation, count]) => {
+                        html += `<div class="data-item"><span>${formation}:</span><span>${count} formations</span></div>`;
+                    });
+                    
+                    // Display aquifer potential
+                    html += '<h5>💧 Aquifer Potential Distribution:</h5>';
+                    Object.entries(aquiferPotential).forEach(([potential, count]) => {
+                        const color = potential === 'high' ? '#27ae60' : potential === 'medium' ? '#f39c12' : '#e74c3c';
+                        html += `<div class="data-item"><span style="color: ${color}">${potential.toUpperCase()}</span><span>${count} locations</span></div>`;
+                    });
+                    
+                    // Display average porosity
+                    if (porosityCount > 0) {
+                        const avgPorosity = (totalPorosity / porosityCount).toFixed(2);
+                        html += '<h5>📊 Average Porosity:</h5>';
+                        html += `<div class="data-item"><span>Zone Average:</span><span>${avgPorosity}%</span></div>`;
+                    }
+                    
+                    // Display sample geotechnical data
+                    if (data.features[0].properties.geotechnical_data) {
+                        html += '<h5>🔬 Sample Geotechnical Data:</h5>';
+                        html += `<div class="json-data" style="background: #f8f9fa; padding: 0.8rem; border-radius: 4px; margin: 0.5rem 0; font-family: monospace; font-size: 0.85em;">${data.features[0].properties.geotechnical_data}</div>`;
+                    }
+                    
+                    // Summary assessment
+                    html += '<h5>📋 Zone Assessment:</h5>';
+                    const highPotentialCount = aquiferPotential.high || 0;
+                    const totalFormations = Object.values(rockFormations).reduce((a, b) => a + b, 0);
+                    
+                    if (highPotentialCount > totalFormations * 0.5) {
+                        html += '<div style="color: #27ae60; font-weight: bold; padding: 0.5rem; background: rgba(39, 174, 96, 0.1); border-radius: 4px;">🟢 Excellent water resource potential - Recommended for development</div>';
+                    } else if (highPotentialCount > totalFormations * 0.3) {
+                        html += '<div style="color: #f39c12; font-weight: bold; padding: 0.5rem; background: rgba(243, 156, 18, 0.1); border-radius: 4px;">🟡 Moderate water resource potential - Feasible with proper planning</div>';
+                    } else {
+                        html += '<div style="color: #e74c3c; font-weight: bold; padding: 0.5rem; background: rgba(231, 76, 60, 0.1); border-radius: 4px;">🔴 Limited water resource potential - Requires detailed assessment</div>';
+                    }
+                    
+                    html += '</div>';
+                    detailsDiv.innerHTML = html;
+                } else {
+                    detailsDiv.innerHTML = '<div class="error-message">No geological data available for this zone.</div>';
+                }
+            } catch (error) {
+                console.error('Error fetching geological summary:', error);
+                detailsDiv.innerHTML = '<div class="error-message">Error loading geological summary.</div>';
+            }
+        }
+
+        // Helper functions for color coding
+        function getQualityColor(quality) {
+            if (!quality) return '#7f8c8d';
+            switch(quality.toLowerCase()) {
+                case 'excellent': return '#27ae60';
+                case 'good': return '#2ecc71';
+                case 'fair': return '#f39c12';
+                case 'poor': return '#e67e22';
+                case 'unacceptable': return '#e74c3c';
+                default: return '#7f8c8d';
+            }
+        }
+
+        function getMaintenanceColor(status) {
+            if (!status) return '#7f8c8d';
+            switch(status.toLowerCase()) {
+                case 'completed': return '#27ae60';
+                case 'in_progress': return '#f39c12';
+                case 'scheduled': return '#3498db';
+                case 'overdue': return '#e74c3c';
+                default: return '#7f8c8d';
+            }
+        }
+
+        async function getDetailedReport(featureType, featureId) {
+            const detailsDiv = document.getElementById('feature-details');
+            detailsDiv.innerHTML = '<div class="loading" style="display: block;">📊 Loading detailed report...</div>';
+            
+            try {
+                // Determine the correct layer name based on feature type
+                let layerName = '';
+                if (featureType.includes('pond')) {
+                    layerName = 'sahel:nested_ponds_detailed';
+                } else if (featureType.includes('well')) {
+                    layerName = 'sahel:nested_wells_detailed';
+                } else if (featureType.includes('borehole')) {
+                    layerName = 'sahel:nested_boreholes_detailed';
+                } else if (featureType.includes('infrastructure')) {
+                    layerName = 'sahel:water_infrastructure_comprehensive';
+                } else if (featureType.includes('zone')) {
+                    layerName = 'sahel:water_management_zones_detailed';
+                } else {
+                    // Default fallback
+                    layerName = 'sahel:water_infrastructure_comprehensive';
+                }
+                
+                // Fetch detailed feature data
+                const response = await fetch(`/geoserver/sahel/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=${layerName}&CQL_FILTER=id='${featureId}' OR feature_id='${featureId}' OR gid='${featureId}'&outputFormat=application/json`);
+                const data = await response.json();
+                
+                if (data.features && data.features.length > 0) {
+                    const feature = data.features[0];
+                    const props = feature.properties;
+                    
+                    let html = '<div class="feature-details">';
+                    html += `<h4>📊 Detailed Report: ${featureId}</h4>`;
+                    
+                    // Display all available properties in a structured way
+                    const sections = {};
+                    Object.entries(props).forEach(([key, value]) => {
+                        if (value !== null && value !== undefined && key !== 'geom' && key !== 'geometry') {
+                            let section = 'General';
+                            
+                            if (key.includes('water') || key.includes('quality') || key.includes('ph') || key.includes('tds')) {
+                                section = 'Water Quality';
+                            } else if (key.includes('maintenance') || key.includes('cost') || key.includes('activity')) {
+                                section = 'Maintenance';
+                            } else if (key.includes('geological') || key.includes('rock') || key.includes('aquifer') || key.includes('porosity')) {
+                                section = 'Geological';
+                            } else if (key.includes('construction') || key.includes('depth') || key.includes('capacity')) {
+                                section = 'Technical';
+                            }
+                            
+                            if (!sections[section]) sections[section] = [];
+                            sections[section].push({key, value});
+                        }
+                    });
+                    
+                    // Display sections
+                    Object.entries(sections).forEach(([sectionName, items]) => {
+                        html += `<h5 style="color: #2c3e50; margin: 1rem 0 0.5rem 0; border-bottom: 1px solid #ddd; padding-bottom: 0.3rem;">${sectionName}</h5>`;
+                        items.forEach(({key, value}) => {
+                            html += `<div class="data-item"><span>${key.replace(/_/g, ' ').toUpperCase()}:</span><span><strong>${value}</strong></span></div>`;
+                        });
+                    });
+                    
+                    html += '</div>';
+                    detailsDiv.innerHTML = html;
+                } else {
+                    detailsDiv.innerHTML = '<div class="error-message">No detailed data available for this feature.</div>';
+                }
+            } catch (error) {
+                console.error('Error fetching detailed report:', error);
+                detailsDiv.innerHTML = '<div class="error-message">Error loading detailed report.</div>';
+            }
+        }
+
+        async function getWaterQualityHistory(featureId) {
+            const detailsDiv = document.getElementById('feature-details');
+            detailsDiv.innerHTML = '<div class="loading" style="display: block;">💧 Loading water quality history...</div>';
+            
+            try {
+                const response = await fetch(`/geoserver/sahel/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=sahel:water_quality_reports&CQL_FILTER=feature_id='${featureId}'&outputFormat=application/json&sortBy=test_date+D`);
+                const data = await response.json();
+                
+                if (data.features && data.features.length > 0) {
+                    let html = '<div class="feature-details">';
+                    html += `<h4>💧 Water Quality History: ${featureId}</h4>`;
+                    
+                    data.features.forEach((feature, index) => {
+                        const props = feature.properties;
+                        html += `<div style="border: 1px solid #ddd; padding: 1rem; margin: 0.5rem 0; border-radius: 4px; ${index === 0 ? 'border-left: 4px solid #3498db;' : ''}">`;
+                        html += `<h5 style="color: ${getQualityColor(props.overall_quality)}; margin: 0 0 0.5rem 0;">${props.test_date || 'Unknown Date'} - ${(props.overall_quality || 'Unknown').toUpperCase()}</h5>`;
+                        
+                        html += `<div class="data-grid">`;
+                        if (props.ph_level) html += `<div class="data-item"><span>pH Level:</span><span>${props.ph_level}</span></div>`;
+                        if (props.tds_ppm) html += `<div class="data-item"><span>TDS (ppm):</span><span>${props.tds_ppm}</span></div>`;
+                        if (props.testing_laboratory) html += `<div class="data-item"><span>Laboratory:</span><span>${props.testing_laboratory}</span></div>`;
+                        if (props.next_test_due_date) html += `<div class="data-item"><span>Next Test:</span><span>${props.next_test_due_date}</span></div>`;
+                        html += `</div>`;
+                        
+                        if (props.recommended_treatment) {
+                            html += `<p style="margin-top: 0.5rem;"><strong>Recommended Treatment:</strong> ${props.recommended_treatment}</p>`;
+                        }
+                        
+                        if (props.notes) {
+                            html += `<p style="margin-top: 0.5rem; font-style: italic; color: #7f8c8d;"><strong>Notes:</strong> ${props.notes}</p>`;
+                        }
+                        
+                        html += '</div>';
+                    });
+                    
+                    html += '</div>';
+                    detailsDiv.innerHTML = html;
+                } else {
+                    detailsDiv.innerHTML = '<div class="error-message">No water quality history available for this feature.</div>';
+                }
+            } catch (error) {
+                console.error('Error fetching water quality history:', error);
+                detailsDiv.innerHTML = '<div class="error-message">Error loading water quality history.</div>';
+            }
+        }
+
+        async function getMaintenanceHistory(featureId) {
+            const detailsDiv = document.getElementById('feature-details');
+            detailsDiv.innerHTML = '<div class="loading" style="display: block;">🔧 Loading maintenance history...</div>';
+            
+            try {
+                const response = await fetch(`/geoserver/sahel/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=sahel:maintenance_activities&CQL_FILTER=feature_id='${featureId}'&outputFormat=application/json&sortBy=activity_date+D`);
+                const data = await response.json();
+                
+                if (data.features && data.features.length > 0) {
+                    let html = '<div class="feature-details">';
+                    html += `<h4>🔧 Maintenance History: ${featureId}</h4>`;
+                    
+                    data.features.forEach((feature, index) => {
+                        const props = feature.properties;
+                        html += `<div style="border: 1px solid #ddd; padding: 1rem; margin: 0.5rem 0; border-radius: 4px; ${index === 0 ? 'border-left: 4px solid #e67e22;' : ''}">`;
+                        html += `<h5 style="color: ${getMaintenanceColor(props.activity_status)}; margin: 0 0 0.5rem 0;">${props.activity_date || 'Unknown Date'} - ${(props.activity_type || 'Maintenance').replace('_', ' ').toUpperCase()}</h5>`;
+                        
+                        html += `<div class="data-grid">`;
+                        if (props.activity_status) html += `<div class="data-item"><span>Status:</span><span style="color: ${getMaintenanceColor(props.activity_status)}">${props.activity_status.replace('_', ' ').toUpperCase()}</span></div>`;
+                        if (props.cost) html += `<div class="data-item"><span>Cost:</span><span>$${props.cost.toLocaleString()}</span></div>`;
+                        if (props.technician) html += `<div class="data-item"><span>Technician:</span><span>${props.technician}</span></div>`;
+                        if (props.next_maintenance_date) html += `<div class="data-item"><span>Next Maintenance:</span><span>${props.next_maintenance_date}</span></div>`;
+                        html += `</div>`;
+                        
+                        if (props.description) {
+                            html += `<p style="margin-top: 0.5rem;"><strong>Description:</strong> ${props.description}</p>`;
+                        }
+                        
+                        if (props.parts_replaced) {
+                            html += `<p style="margin-top: 0.5rem;"><strong>Parts Replaced:</strong> ${props.parts_replaced}</p>`;
+                        }
+                        
+                        if (props.notes) {
+                            html += `<p style="margin-top: 0.5rem; font-style: italic; color: #7f8c8d;"><strong>Notes:</strong> ${props.notes}</p>`;
+                        }
+                        
+                        html += '</div>';
+                    });
+                    
+                    html += '</div>';
+                    detailsDiv.innerHTML = html;
+                } else {
+                    detailsDiv.innerHTML = '<div class="error-message">No maintenance history available for this feature.</div>';
+                }
+            } catch (error) {
+                console.error('Error fetching maintenance history:', error);
+                detailsDiv.innerHTML = '<div class="error-message">Error loading maintenance history.</div>';
+            }
+        }
+
+        // Auto-zoom to data extent
+        setTimeout(() => {
+            const extent = [
+                7.5, 12.0,  // SW corner
+                77.7, 18.0  // NE corner
+            ];
+            const transformedExtent = ol.proj.transformExtent(extent, 'EPSG:4326', 'EPSG:3857');
+            map.getView().fit(transformedExtent, {padding: [50, 50, 50, 50]});
+        }, 1000);
+
+        console.log('🎉 Complex Nested Water Resources Model loaded successfully!');
+        console.log('📊 Features: Hierarchical zones, unified infrastructure view, geological layers');
+        console.log('🔬 Advanced: Water quality analytics, maintenance tracking, geotechnical data');
     </script>
 </body>
 </html>

@@ -33,7 +33,7 @@ services:
       EXTRA_JAVA_OPTS: "-Djava.awt.headless=true -Dorg.geotools.referencing.forceXY=true"
     volumes:
       - ./geoserver/global.xml:/opt/geoserver_data/global.xml
-      - geoserver_data:/opt/geoserver_data
+      - ./geoserver_data:/opt/geoserver_data
       - ./shapefiles:/opt/geoserver_data/data/shapefiles
     depends_on:
       - postgres
@@ -59,12 +59,6 @@ services:
 
 volumes:
   postgres_data:
-  geoserver_data:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ${PWD}/geoserver_data
 
 networks:
   geo-network:
