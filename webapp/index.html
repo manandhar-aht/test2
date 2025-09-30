@@ -1466,6 +1466,37 @@
             const detailsDiv = document.getElementById('feature-details');
             detailsDiv.innerHTML = '<div class="loading" style="display: block;">🔧 Loading maintenance history...</div>';
             
+            // Helper function to format dates from Unix timestamps
+            function formatDate(timestamp) {
+                if (!timestamp) return 'N/A';
+                
+                let date;
+                if (typeof timestamp === 'number') {
+                    date = new Date(timestamp);
+                } else if (typeof timestamp === 'string') {
+                    if (timestamp.includes('-')) {
+                        return timestamp;
+                    }
+                    date = new Date(parseInt(timestamp));
+                } else {
+                    return 'N/A';
+                }
+                
+                return date.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+            }
+            
+            // Helper function to format arrays or comma-separated strings
+            function formatList(list) {
+                if (!list) return [];
+                if (Array.isArray(list)) return list;
+                if (typeof list === 'string') return list.split(',').map(item => item.trim());
+                return [];
+            }
+            
             try {
                 // Add cache-busting parameter to prevent browser caching
                 const timestamp = Date.now();
@@ -1480,23 +1511,28 @@
                 
                 let html = '<div class="feature-details">';
                 html += `<h4>🔧 Maintenance History: ${featureId}</h4>`;
-                html += '<div style="background: #fff3cd; padding: 0.5rem; border-radius: 4px; margin-bottom: 1rem; font-size: 0.9em;">🛠️ Real database data</div>';
+                html += '<div style="background: #f3e5f5; padding: 0.5rem; border-radius: 4px; margin-bottom: 1rem; font-size: 0.9em;">🛠️ Real database data</div>';
                 
                 if (activities.length === 0) {
                     html += '<div style="padding: 1rem; text-align: center; color: #7f8c8d;">No maintenance activities found for this feature.</div>';
                 } else {
                     activities.forEach((activity, index) => {
+                        const activityDate = formatDate(activity.activity_date);
+                        const nextMaintenanceDate = formatDate(activity.next_maintenance_date);
+                        const partsReplaced = formatList(activity.parts_replaced);
+                        const equipmentUsed = formatList(activity.equipment_used);
+                        
                         html += `<div style="border: 1px solid #ddd; padding: 1rem; margin: 0.5rem 0; border-radius: 4px; ${index === 0 ? 'border-left: 4px solid #e67e22;' : ''}">`;
-                        html += `<h5 style="color: ${getMaintenanceColor(activity.activity_status)}; margin: 0 0 0.5rem 0;">${activity.activity_date} - ${activity.activity_type.replace('_', ' ').toUpperCase()}</h5>`;
+                        html += `<h5 style="color: ${getMaintenanceColor(activity.activity_status)}; margin: 0 0 0.5rem 0;">${activityDate} - ${(activity.activity_type || 'Unknown').replace('_', ' ').toUpperCase()}</h5>`;
                         
                         html += `<div class="data-grid">`;
-                        html += `<div class="data-item"><span>Status:</span><span style="color: ${getMaintenanceColor(activity.activity_status)}">${activity.activity_status.replace('_', ' ').toUpperCase()}</span></div>`;
-                        html += `<div class="data-item"><span>Cost:</span><span>$${parseFloat(activity.cost).toLocaleString()}</span></div>`;
-                        html += `<div class="data-item"><span>Technician:</span><span>${activity.technician}</span></div>`;
-                        html += `<div class="data-item"><span>Duration:</span><span>${activity.duration_hours} hours</span></div>`;
-                        html += `<div class="data-item"><span>Priority:</span><span style="color: ${activity.priority === 'high' ? '#e74c3c' : activity.priority === 'medium' ? '#f39c12' : '#27ae60'}">${activity.priority.toUpperCase()}</span></div>`;
-                        if (activity.next_maintenance_date) {
-                            html += `<div class="data-item"><span>Next Maintenance:</span><span>${activity.next_maintenance_date}</span></div>`;
+                        html += `<div class="data-item"><span>Status:</span><span style="color: ${getMaintenanceColor(activity.activity_status)}">${(activity.activity_status || 'unknown').replace('_', ' ').toUpperCase()}</span></div>`;
+                        html += `<div class="data-item"><span>Cost:</span><span>$${parseFloat(activity.cost || 0).toLocaleString()}</span></div>`;
+                        html += `<div class="data-item"><span>Technician:</span><span>${activity.technician || 'Unknown'}</span></div>`;
+                        html += `<div class="data-item"><span>Duration:</span><span>${activity.duration_hours || 'N/A'} hours</span></div>`;
+                        html += `<div class="data-item"><span>Priority:</span><span style="color: ${activity.priority === 'high' ? '#e74c3c' : activity.priority === 'medium' ? '#f39c12' : '#27ae60'}">${(activity.priority || 'unknown').toUpperCase()}</span></div>`;
+                        if (nextMaintenanceDate && nextMaintenanceDate !== 'N/A') {
+                            html += `<div class="data-item"><span>Next Maintenance:</span><span>${nextMaintenanceDate}</span></div>`;
                         }
                         html += `</div>`;
                         
@@ -1504,12 +1540,12 @@
                             html += `<p style="margin-top: 0.5rem;"><strong>Description:</strong> ${activity.description}</p>`;
                         }
                         
-                        if (activity.parts_replaced && activity.parts_replaced.length > 0) {
-                            html += `<p style="margin-top: 0.5rem;"><strong>Parts Replaced:</strong> ${activity.parts_replaced.join(', ')}</p>`;
+                        if (partsReplaced.length > 0) {
+                            html += `<p style="margin-top: 0.5rem;"><strong>Parts Replaced:</strong> ${partsReplaced.join(', ')}</p>`;
                         }
                         
-                        if (activity.equipment_used && activity.equipment_used.length > 0) {
-                            html += `<p style="margin-top: 0.5rem;"><strong>Equipment Used:</strong> ${activity.equipment_used.join(', ')}</p>`;
+                        if (equipmentUsed.length > 0) {
+                            html += `<p style="margin-top: 0.5rem;"><strong>Equipment Used:</strong> ${equipmentUsed.join(', ')}</p>`;
                         }
                         
                         if (activity.notes) {
@@ -1611,6 +1647,40 @@
         function displayConstructionData(construction, featureId, isSampleData) {
             const detailsDiv = document.getElementById('feature-details');
             
+            // Helper function to format dates from Unix timestamps
+            function formatDate(timestamp) {
+                if (!timestamp) return 'N/A';
+                
+                // Handle both timestamp (number) and date string formats
+                let date;
+                if (typeof timestamp === 'number') {
+                    date = new Date(timestamp);
+                } else if (typeof timestamp === 'string') {
+                    // Check if it's already a formatted date string
+                    if (timestamp.includes('-')) {
+                        return timestamp;
+                    }
+                    // Otherwise parse as timestamp
+                    date = new Date(parseInt(timestamp));
+                } else {
+                    return 'N/A';
+                }
+                
+                return date.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+            }
+            
+            // Helper function to format arrays or comma-separated strings
+            function formatList(list) {
+                if (!list) return [];
+                if (Array.isArray(list)) return list;
+                if (typeof list === 'string') return list.split(',').map(item => item.trim());
+                return [];
+            }
+            
             let html = '<div class="feature-details">';
             html += `<h4 style="color: #8e44ad; margin-bottom: 1rem;">🏗️ Construction Details: ${featureId}</h4>`;
             
@@ -1625,10 +1695,10 @@
             } else {
                 html += '<div style="border: 1px solid #ddd; padding: 1rem; margin: 0.5rem 0; border-radius: 4px; border-left: 4px solid #8e44ad;">';
                 
-                html += `<h5 style="color: #8e44ad; margin: 0 0 0.5rem 0;">Contractor: ${construction.contractor_name}</h5>`;
+                html += `<h5 style="color: #8e44ad; margin: 0 0 0.5rem 0;">Contractor: ${construction.contractor_name || 'Unknown'}</h5>`;
                 
                 html += `<div class="data-grid">`;
-                html += `<div class="data-item"><span>Construction Method:</span><span>${construction.construction_method}</span></div>`;
+                html += `<div class="data-item"><span>Construction Method:</span><span>${construction.construction_method || 'N/A'}</span></div>`;
                 if (construction.lining_material) {
                     html += `<div class="data-item"><span>Lining Material:</span><span>${construction.lining_material}</span></div>`;
                 }
@@ -1638,21 +1708,27 @@
                 if (construction.length_m && construction.width_m) {
                     html += `<div class="data-item"><span>Dimensions:</span><span>${construction.length_m}m × ${construction.width_m}m</span></div>`;
                 }
-                html += `<div class="data-item"><span>Depth:</span><span>${construction.depth_m} meters</span></div>`;
-                html += `<div class="data-item"><span>Construction Cost:</span><span>$${parseFloat(construction.construction_cost).toLocaleString()}</span></div>`;
-                html += `<div class="data-item"><span>Start Date:</span><span>${construction.construction_start_date}</span></div>`;
-                html += `<div class="data-item"><span>End Date:</span><span>${construction.construction_end_date}</span></div>`;
-                html += `<div class="data-item"><span>Duration:</span><span>${construction.construction_duration_days} days</span></div>`;
-                html += `<div class="data-item"><span>Warranty Period:</span><span>${construction.warranty_period_months} months</span></div>`;
-                html += `<div class="data-item"><span>Quality Certificate:</span><span>${construction.quality_certificate_number}</span></div>`;
+                if (construction.depth_m) {
+                    html += `<div class="data-item"><span>Depth:</span><span>${construction.depth_m} meters</span></div>`;
+                }
+                html += `<div class="data-item"><span>Construction Cost:</span><span>$${parseFloat(construction.construction_cost || 0).toLocaleString()}</span></div>`;
+                html += `<div class="data-item"><span>Start Date:</span><span>${formatDate(construction.construction_start_date)}</span></div>`;
+                html += `<div class="data-item"><span>End Date:</span><span>${formatDate(construction.construction_end_date)}</span></div>`;
+                html += `<div class="data-item"><span>Duration:</span><span>${construction.construction_duration_days || 'N/A'} days</span></div>`;
+                html += `<div class="data-item"><span>Warranty Period:</span><span>${construction.warranty_period_months || 'N/A'} months</span></div>`;
+                if (construction.quality_certificate_number) {
+                    html += `<div class="data-item"><span>Quality Certificate:</span><span>${construction.quality_certificate_number}</span></div>`;
+                }
                 html += `</div>`;
                 
-                if (construction.materials_used && construction.materials_used.length > 0) {
-                    html += `<p style="margin-top: 0.5rem;"><strong>Materials Used:</strong> ${construction.materials_used.join(', ')}</p>`;
+                const materialsUsed = formatList(construction.materials_used);
+                if (materialsUsed.length > 0) {
+                    html += `<p style="margin-top: 0.5rem;"><strong>Materials Used:</strong> ${materialsUsed.join(', ')}</p>`;
                 }
                 
-                if (construction.equipment_used && construction.equipment_used.length > 0) {
-                    html += `<p style="margin-top: 0.5rem;"><strong>Equipment Used:</strong> ${construction.equipment_used.join(', ')}</p>`;
+                const equipmentUsed = formatList(construction.equipment_used);
+                if (equipmentUsed.length > 0) {
+                    html += `<p style="margin-top: 0.5rem;"><strong>Equipment Used:</strong> ${equipmentUsed.join(', ')}</p>`;
                 }
                 
                 if (construction.environmental_compliance) {
@@ -1665,12 +1741,12 @@
                 
                 // Add project timeline
                 html += `<div style="margin-top: 0.5rem; padding: 0.5rem; background: #f8f9fa; border-radius: 4px;">`;
-                html += `<strong>Project Status:</strong> ${construction.project_status}<br>`;
+                html += `<strong>Project Status:</strong> ${construction.project_status || 'Unknown'}<br>`;
                 if (construction.quality_rating) {
                     html += `<strong>Quality Rating:</strong> ${construction.quality_rating}/5 stars<br>`;
                 }
                 if (construction.final_inspection_date) {
-                    html += `<strong>Final Inspection:</strong> ${construction.final_inspection_date}`;
+                    html += `<strong>Final Inspection:</strong> ${formatDate(construction.final_inspection_date)}`;
                 }
                 html += `</div>`;
                 
