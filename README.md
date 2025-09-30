@@ -32,10 +32,11 @@
 
 ## 🏗️ Architecture Overview
 
-- **PostgreSQL/PostGIS**: Spatial database storing wells, boreholes, and ponds data
-- **GeoServer**: Map server providing WMS/WFS services with custom styling
-- **Nginx Web App**: OpenLayers-based interactive web map interface
-- **Docker Compose**: Orchestrates all services with proper networking
+- **PostgreSQL/PostGIS**: Spatial database storing wells, boreholes, and ponds data with construction details, water quality reports, and maintenance activities
+- **GeoServer**: Map server providing WMS/WFS services with custom styling and optimized performance
+- **JavaEE REST API**: WildFly 26.1.3 application server with Jersey JAX-RS providing REST endpoints for feature analysis and infrastructure data
+- **Nginx Web App**: OpenLayers-based interactive web map interface with API proxy and CORS support
+- **Docker Compose**: Orchestrates all services with proper networking and health checks
 
 ## 📋 Prerequisites
 
@@ -98,8 +99,14 @@ docker exec webapp python3 /apply_styles.py
 | Service | URL | Credentials |
 |---------|-----|-------------|
 | **Main Web Map** | http://localhost:8080/ | - |
+| **JavaEE REST API** | http://localhost:8080/api/ | - |
+| **API Health Check** | http://localhost:8080/api/health | - |
+| **Construction Details** | http://localhost:8080/api/features/construction-details/{featureId} | - |
+| **Water Quality Reports** | http://localhost:8080/api/features/water-quality/{featureId} | - |
+| **Maintenance Activities** | http://localhost:8080/api/features/maintenance/{featureId} | - |
 | **Styling Test Page** | http://localhost:8080/styling-test.html | - |
 | **GeoServer Admin** | http://localhost:8080/geoserver/web/ | admin/geoserver |
+| **WildFly Management** | http://localhost:9990/ | - |
 | **PostgreSQL** | localhost:5432 | geouser/geopass |
 
 ## 🔍 Testing & Validation Commands
@@ -126,7 +133,43 @@ curl -I "http://localhost:8080/geoserver/chad/wms?service=WMS&version=1.1.0&requ
 # Reason: Confirms shapefile layers are properly rendered via WMS
 ```
 
-### Data Content Verification
+### JavaEE API Testing & Validation
+```bash
+# Test JavaEE API health endpoint
+curl "http://localhost:8080/api/health" | python3 -m json.tool
+# Purpose: Verify JavaEE application server is running and API is accessible
+# Expected Response: {"status":"UP","service":"Water Infrastructure API","timestamp":...}
+
+# Test construction details API endpoint
+curl "http://localhost:8080/api/features/construction-details/well_central_chad" | python3 -m json.tool
+# Purpose: Validate construction details API returns comprehensive infrastructure data
+# Returns: contractor info, construction method, costs, materials, equipment, quality ratings
+
+# Test water quality reports API
+curl "http://localhost:8080/api/features/water-quality/well_1" | python3 -m json.tool
+# Purpose: Verify water quality testing data with pH, turbidity, bacteria counts, laboratory results
+# Returns: Array of quality test results with dates, parameters, and recommendations
+
+# Test maintenance activities API
+curl "http://localhost:8080/api/features/maintenance/well_1" | python3 -m json.tool
+# Purpose: Confirm maintenance records API returns activity history and scheduling
+# Returns: Array of maintenance activities with costs, technicians, parts replaced, effectiveness ratings
+
+# Quick API validation with formatted output
+echo "=== Health Check ===" && curl -s http://localhost:8080/api/health | jq .
+echo "=== Construction Details ===" && curl -s http://localhost:8080/api/features/construction-details/well_central_chad | jq '{contractor: .contractor_name, method: .construction_method, cost: .construction_cost}'
+echo "=== Water Quality ===" && curl -s "http://localhost:8080/api/features/water-quality/well_1" | jq '.[0] | {quality: .overall_quality, ph: .ph_level, date: .test_date}'
+echo "=== Maintenance ===" && curl -s "http://localhost:8080/api/features/maintenance/well_1" | jq '.[0] | {type: .activity_type, status: .activity_status, cost: .cost}'
+# Purpose: Comprehensive API functionality test with formatted JSON output
+
+# Monitor JavaEE application logs
+docker compose logs -f javaee-api
+# Purpose: Debug JavaEE application issues and monitor API requests
+
+# Test API through nginx proxy (with CORS headers)
+curl -s http://localhost:8080/api/health | jq .
+# Purpose: Verify nginx reverse proxy routing and CORS configuration
+```
 ```bash
 # Check wells data from PostGIS
 curl -u admin:geoserver "http://localhost:8080/geoserver/sahel/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=sahel:wells&maxFeatures=5&outputFormat=application/json" | python3 -c "
@@ -226,13 +269,74 @@ All symbols include:
 - Server-side style caching for faster loading
 - Error handling with automatic retry logic
 
-## 🔄 Development Workflow
+## �️ JavaEE API Deployment
+
+### WildFly Application Server Features
+- **WildFly 26.1.3**: Modern Jakarta EE application server with full EE 8 support
+- **PostgreSQL Integration**: JNDI datasource with PostGIS spatial database connectivity
+- **Jersey JAX-RS**: REST API framework with JSON processing and error handling
+- **Docker Multi-stage Build**: Maven compilation + WildFly runtime optimization
+- **Health Monitoring**: Built-in health checks and service status endpoints
+
+### API Endpoint Documentation
+
+#### Health Check Endpoint
+```bash
+GET /api/health
+# Returns: {"status":"UP","service":"Water Infrastructure API","timestamp":1759253915240}
+```
+
+#### Construction Details Endpoint
+```bash
+GET /api/features/construction-details/{featureId}
+# Example: /api/features/construction-details/well_central_chad
+# Returns: Complete construction data including contractor, method, costs, materials, equipment
+```
+
+#### Water Quality Reports Endpoint
+```bash
+GET /api/features/water-quality/{featureId}
+# Example: /api/features/water-quality/well_1
+# Returns: Array of quality test results with pH, turbidity, bacteria counts, laboratory info
+```
+
+#### Maintenance Activities Endpoint
+```bash
+GET /api/features/maintenance/{featureId}
+# Example: /api/features/maintenance/well_1
+# Returns: Array of maintenance history with dates, costs, technicians, parts replaced
+```
+
+### JavaEE API Development Commands
+```bash
+# Build JavaEE API container
+docker compose build javaee-api
+# Purpose: Compiles Maven project and creates WildFly runtime image with PostgreSQL driver
+
+# Restart JavaEE service after code changes
+docker compose stop javaee-api && docker compose up -d javaee-api
+# Purpose: Applies Java code changes and restarts WildFly application server
+
+# Monitor JavaEE startup and deployment
+docker compose logs -f javaee-api
+# Purpose: Track WildFly startup, WAR deployment, and API request logging
+
+# Test database connectivity from JavaEE container
+docker exec javaee-api curl -s http://localhost:8080/api/health
+# Purpose: Verify internal API functionality and database connection
+```
+
+## �🔄 Development Workflow
 
 ### Making Changes
 ```bash
 # After modifying frontend code (HTML, CSS, JavaScript)
 docker compose build webapp && docker compose up -d webapp
 # Purpose: Rebuilds webapp container with latest changes and restarts it
+
+# After modifying JavaEE API code (Java, REST endpoints)
+docker compose build javaee-api && docker compose up -d javaee-api
+# Purpose: Recompiles Maven project and deploys updated WAR to WildFly
 
 # After modifying GeoServer configuration
 docker compose restart geoserver
@@ -250,10 +354,14 @@ docker compose down && docker compose up -d
 
 ## 🛠️ Configuration Files
 
-- `docker-compose.yml` - Service orchestration and networking
-- `webapp/nginx.conf` - Reverse proxy configuration with CSP headers
+- `docker-compose.yml` - Service orchestration and networking with JavaEE API service
+- `webapp/nginx.conf` - Reverse proxy configuration with CSP headers and `/api` routing
 - `webapp/index.html` - OpenLayers web map interface
-- `init-scripts/init-db.sql` - PostGIS database initialization
+- `javaee-api/Dockerfile` - Multi-stage Maven build with WildFly runtime
+- `javaee-api/pom.xml` - Maven dependencies including Jersey JAX-RS and PostgreSQL driver
+- `javaee-api/standalone-original.xml` - WildFly configuration with PostgreSQL datasource
+- `javaee-api/src/main/java/com/waterresources/api/` - REST API services and application configuration
+- `init-scripts/init-db.sql` - PostGIS database initialization with feature tables
 - `styles/*.sld` - Custom SLD styling definitions
 
 ## 📝 Notes
@@ -264,8 +372,18 @@ docker compose down && docker compose up -d
 - **Data Persistence**: Database data persists in Docker volumes across container restarts
 - **Port Mapping**: Only port 8080 is exposed to host, providing single entry point
 
-## 🔧 Recent Improvements (v2.0.2)
+## 🔧 Recent Improvements (v2.1.0)
 
+### JavaEE API Deployment (NEW)
+- ✅ **WildFly 26.1.3 Deployment**: Full Jakarta EE application server with PostgreSQL integration
+- ✅ **REST API Endpoints**: Construction details, water quality reports, and maintenance activities APIs
+- ✅ **PostgreSQL Array Handling**: Fixed JDBC type 2003 errors using `array_to_string()` for text[] columns
+- ✅ **EntityManager Integration**: Proper JPA/Hibernate configuration with JNDI datasource
+- ✅ **Docker Multi-stage Build**: Optimized Maven compilation with WildFly runtime
+- ✅ **Health Monitoring**: Built-in health checks and service status endpoints
+- ✅ **Nginx API Proxy**: CORS-enabled reverse proxy routing for `/api` endpoints
+
+### Previous Improvements (v2.0.2)
 - ✅ **API Cleanup**: Removed legacy `api.php` and `api.py` files and updated Dockerfile
 - ✅ **Browser Cache Detection**: Added automatic detection of old cached API calls with user alerts
 - ✅ **Layer Error Fixes**: Commented out non-existent `water_management_zones_detailed` layer to prevent XML parsing errors

@@ -3,6 +3,7 @@ package com.waterresources.api;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -18,7 +19,7 @@ import java.util.HashMap;
 @Consumes(MediaType.APPLICATION_JSON)
 public class WaterFeatureAnalysisService {
 
-    @Inject
+    @PersistenceContext(unitName = "waterResourcesPU")
     private EntityManager entityManager;
 
     @GET
@@ -30,7 +31,8 @@ public class WaterFeatureAnalysisService {
                 "contractor_name, construction_method, construction_start_date, " +
                 "construction_end_date, construction_duration_days, construction_cost, " +
                 "depth_m, diameter_m, length_m, width_m, lining_material, " +
-                "materials_used, equipment_used, warranty_period_months, " +
+                "array_to_string(materials_used, ',') as materials_used_str, " +
+                "array_to_string(equipment_used, ',') as equipment_used_str, warranty_period_months, " +
                 "quality_certificate_number, environmental_compliance, " +
                 "project_status, quality_rating, final_inspection_date, " +
                 "additional_notes, feature_type " +
@@ -131,7 +133,8 @@ public class WaterFeatureAnalysisService {
                 "SELECT " +
                 "activity_date, activity_type, activity_status, priority, " +
                 "cost, duration_hours, technician, description, " +
-                "parts_replaced, equipment_used, effectiveness_rating, " +
+                "array_to_string(parts_replaced, ',') as parts_replaced_str, " +
+                "array_to_string(equipment_used, ',') as equipment_used_str, effectiveness_rating, " +
                 "next_maintenance_date, notes " +
                 "FROM feature_maintenance_activities WHERE feature_id = ? " +
                 "ORDER BY activity_date DESC");
