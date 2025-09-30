@@ -230,8 +230,9 @@ All symbols include:
 
 ### Making Changes
 ```bash
-# After modifying frontend code
+# After modifying frontend code (HTML, CSS, JavaScript)
 docker compose build webapp && docker compose up -d webapp
+# Purpose: Rebuilds webapp container with latest changes and restarts it
 
 # After modifying GeoServer configuration
 docker compose restart geoserver
@@ -262,6 +263,15 @@ docker compose down && docker compose up -d
 - **Docker Networks**: All containers communicate via `geo-network` bridge network
 - **Data Persistence**: Database data persists in Docker volumes across container restarts
 - **Port Mapping**: Only port 8080 is exposed to host, providing single entry point
+
+## 🔧 Recent Improvements (v2.0.1)
+
+- ✅ **API Cleanup**: Removed legacy `api.php` and `api.py` files and updated Dockerfile
+- ✅ **Browser Cache Detection**: Added automatic detection of old cached API calls with user alerts
+- ✅ **Layer Error Fixes**: Commented out non-existent `water_management_zones_detailed` layer to prevent XML parsing errors
+- ✅ **Enhanced Sample Data**: Added wells and ponds at user-clicked coordinates for better testing
+- ✅ **Strong Cache Busting**: Implemented fetch override and cache-busting headers
+- ✅ **Improved Error Handling**: Better content-type checking and fallback mechanisms
 
 ## 🔗 Integration Details
 

@@ -11,7 +11,6 @@ RUN mkdir -p /usr/share/nginx/html
 COPY index.html /usr/share/nginx/html/
 COPY html/styling-test.html /usr/share/nginx/html/
 COPY html/redirect.html /usr/share/nginx/html/
-COPY api.py /usr/share/nginx/html/
 
 # Copy Nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf
