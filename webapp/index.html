@@ -385,7 +385,9 @@
                     params: {
                         'LAYERS': 'sahel:water_management_zones_detailed',
                         'TILED': true,
-                        'TILESORIGIN': '0,0'
+                        'TILESORIGIN': '0,0',
+                        'TRANSPARENT': true,
+                        'FORMAT': 'image/png'
                     },
                     serverType: 'geoserver',
                     // Reduce concurrent requests
@@ -396,6 +398,7 @@
                     cacheSize: 2048
                 }),
                 visible: true,
+                opacity: 0.7, // Semi-transparent to not block infrastructure features
                 // Set max resolution to reduce tile requests at low zoom
                 maxResolution: 40075.01683074552 / Math.pow(2, 3)
             }),
@@ -520,11 +523,21 @@
             loadTilesWhileInteracting: false
         });
 
-        // Add all layers to map with staggered loading to reduce server load
-        Object.values(layers).forEach((layer, index) => {
-            setTimeout(() => {
-                map.addLayer(layer);
-            }, index * 200); // 200ms delay between each layer
+        // Add layers to map in render order (bottom to top): admin regions → water management zones → water infrastructure
+        // Note: In OpenLayers, later-added layers appear on top, so we load in reverse visual order
+        const layerLoadOrder = [
+            'admin-regions-checkbox',    // Load admin regions first (bottom layer)
+            'zones-layer',              // Then water management zones (middle layer)
+            'all-water-infrastructure-layer'  // Finally water infrastructure (top layer - clickable)
+        ];
+        
+        layerLoadOrder.forEach((layerId, index) => {
+            if (layers[layerId]) {
+                setTimeout(() => {
+                    map.addLayer(layers[layerId]);
+                    console.log(`✅ Loaded layer ${index + 1}/3: ${layerId}`);
+                }, index * 300); // 300ms delay between each layer for better loading
+            }
         });
 
         // Add layer toggle functionality
@@ -728,9 +741,11 @@
                 console.log(`🌐 getFeatureInfoWFS called for: ${layerName}`);
                 try {
                     const lonLat = ol.proj.toLonLat(coordinate);
-                    const tolerance = 0.001; // Small tolerance for point features
+                    // Increased tolerance for easier clicking on point features
+                    const tolerance = layerName.includes('well') || layerName.includes('pond') || layerName.includes('borehole') ? 0.01 : 0.001;
                     
                     console.log(`   Coordinates: [${lonLat[0].toFixed(6)}, ${lonLat[1].toFixed(6)}]`);
+                    console.log(`   Tolerance: ${tolerance} (${layerName})`);
                     
                     const bbox = [
                         lonLat[0] - tolerance,
@@ -744,7 +759,8 @@
                         `typeName=${layerName}&` +
                         `bbox=${bbox}&` +
                         `outputFormat=application/json&` +
-                        `maxFeatures=5`;
+                        `maxFeatures=10&` +
+                        `srsName=EPSG:4326`;
                     
                     console.log(`   WFS URL: ${wfsUrl}`);
                     const response = await fetch(wfsUrl);
@@ -771,30 +787,31 @@
                 return null;
             }
             
-            // Check all layers for features at click point
+            // Check all layers for features at click point with priority for infrastructure
             Promise.all([
-                getFeatureInfo(layers['zones-layer'], 'sahel:water_management_zones_detailed'),
-                getFeatureInfo(layers['all-water-infrastructure-layer'], 'sahel:v_water_infrastructure_comprehensive'),
                 getFeatureInfoWFS('sahel:wells'),
                 getFeatureInfoWFS('sahel:ponds'),
                 getFeatureInfoWFS('sahel:boreholes'),
+                getFeatureInfo(layers['all-water-infrastructure-layer'], 'sahel:v_water_infrastructure_comprehensive'),
+                getFeatureInfo(layers['zones-layer'], 'sahel:water_management_zones_detailed'),
                 getFeatureInfo(layers['admin-regions-checkbox'], 'chad:gadm41_TCD_1', 'chad')
             ]).then(results => {
                 console.log('🔍 Feature detection results:', results);
                 console.log('📊 Results summary:');
                 results.forEach((result, index) => {
-                    const methods = ['zones', 'infrastructure', 'wells-WFS', 'ponds-WFS', 'boreholes-WFS', 'admin'];
+                    const methods = ['wells-WFS', 'ponds-WFS', 'boreholes-WFS', 'infrastructure', 'zones', 'admin'];
                     console.log(`  ${methods[index]}: ${result ? '✅ Found' : '❌ None'}`);
                 });
                 
                 // Add debugging info to UI
                 const debugInfo = results.map((result, index) => {
-                    const methods = ['zones', 'infrastructure', 'wells-WFS', 'ponds-WFS', 'boreholes-WFS', 'admin'];
+                    const methods = ['wells-WFS', 'ponds-WFS', 'boreholes-WFS', 'infrastructure', 'zones', 'admin'];
                     return `${methods[index]}: ${result ? '✅ Found' : '❌ None'}`;
                 }).join('<br>');
                 
-                // Find the first result with a feature
-                const result = results.find(r => r !== null);
+                // Prioritize infrastructure features over zones - find first infrastructure result
+                const infrastructureResult = results.slice(0, 4).find(r => r !== null); // First 4 are infrastructure
+                const result = infrastructureResult || results.find(r => r !== null); // Fallback to any result
                 
                 if (result) {
                     foundFeature = true;
