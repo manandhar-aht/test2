@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <!-- Strong cache busting -->
+    <meta name="cache-version" content="v2.0.1-20250930">
     <title>🌊 Complex Water Resources Management</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v9.1.0/ol.css" type="text/css">
     <script src="https://cdn.jsdelivr.net/npm/ol@v9.1.0/dist/ol.js"></script>
@@ -354,28 +359,47 @@
     </div>
 
     <script>
+        // Cache busting and version detection
+        window.APP_VERSION = "v2.0.1-20250930";
+        console.log(`🚀 Water Resources App ${window.APP_VERSION} loaded`);
+        
+        // Override fetch to detect old API calls
+        const originalFetch = window.fetch;
+        window.fetch = function(...args) {
+            const url = args[0];
+            if (typeof url === 'string' && url.includes('api.php?action=')) {
+                console.error('🚨 OLD API CALL DETECTED:', url);
+                console.error('� Hard refresh required: Ctrl+F5 (Windows) or Cmd+Shift+R (Mac)');
+                alert('⚠️ Old cached code detected!\\n\\nURL: ' + url + '\\n\\nPlease hard refresh the page:\\n• Windows/Linux: Ctrl+F5\\n• Mac: Cmd+Shift+R');
+                // Return a rejected promise to prevent the call
+                return Promise.reject(new Error('Old API call blocked - please refresh browser'));
+            }
+            return originalFetch.apply(this, args);
+        };
+
         const layers = {
             // Main layer controls
-            'zones-layer': new ol.layer.Tile({
-                source: new ol.source.TileWMS({
-                    url: '/geoserver/sahel/wms',
-                    params: {
-                        'LAYERS': 'sahel:water_management_zones_detailed',
-                        'TILED': true,
-                        'TILESORIGIN': '0,0'
-                    },
-                    serverType: 'geoserver',
-                    // Reduce concurrent requests
-                    tileLoadFunction: function(tile, src) {
-                        tile.getImage().src = src;
-                    },
-                    // Add cache control
-                    cacheSize: 2048
-                }),
-                visible: true,
-                // Set max resolution to reduce tile requests at low zoom
-                maxResolution: 40075.01683074552 / Math.pow(2, 3)
-            }),
+            // NOTE: zones-layer commented out because water_management_zones_detailed doesn't exist
+            // 'zones-layer': new ol.layer.Tile({
+            //     source: new ol.source.TileWMS({
+            //         url: '/geoserver/sahel/wms',
+            //         params: {
+            //             'LAYERS': 'sahel:water_management_zones_detailed',
+            //             'TILED': true,
+            //             'TILESORIGIN': '0,0'
+            //         },
+            //         serverType: 'geoserver',
+            //         // Reduce concurrent requests
+            //         tileLoadFunction: function(tile, src) {
+            //             tile.getImage().src = src;
+            //         },
+            //         // Add cache control
+            //         cacheSize: 2048
+            //     }),
+            //     visible: true,
+            //     // Set max resolution to reduce tile requests at low zoom
+            //     maxResolution: 40075.01683074552 / Math.pow(2, 3)
+            // }),
             'all-water-infrastructure-layer': new ol.layer.Tile({
                 source: new ol.source.TileWMS({
                     url: '/geoserver/sahel/wms',
@@ -670,15 +694,27 @@
                                 return null;
                             }
                             
-                            const data = await response.json();
-                            console.log(`Response for ${layerName}:`, data);
-                            
-                            if (data.features && data.features.length > 0) {
-                                return {
-                                    feature: data.features[0],
-                                    layerName: layerName,
-                                    workspace: workspaceName
-                                };
+                            // Check content type to avoid parsing XML as JSON
+                            const contentType = response.headers.get('content-type');
+                            if (contentType && contentType.includes('application/json')) {
+                                const data = await response.json();
+                                console.log(`Response for ${layerName}:`, data);
+                                
+                                if (data.features && data.features.length > 0) {
+                                    return {
+                                        feature: data.features[0],
+                                        layerName: layerName,
+                                        workspace: workspaceName
+                                    };
+                                }
+                            } else {
+                                console.warn(`Non-JSON response for ${layerName}, content-type: ${contentType}`);
+                                // Try to read as text to see the error
+                                const text = await response.text();
+                                if (text.includes('does not exist') || text.includes('ServiceException')) {
+                                    console.error(`Layer ${layerName} service error:`, text.substring(0, 200));
+                                }
+                                return null;
                             }
                         }
                     } catch (error) {
@@ -738,7 +774,7 @@
             
             // Check all layers for features at click point
             Promise.all([
-                getFeatureInfo(layers['zones-layer'], 'sahel:water_management_zones_detailed'),
+                // getFeatureInfo(layers['zones-layer'], 'sahel:water_management_zones_detailed'), // Layer doesn't exist
                 getFeatureInfo(layers['all-water-infrastructure-layer'], 'sahel:v_water_infrastructure_comprehensive'),
                 getFeatureInfoWFS('sahel:wells'),
                 getFeatureInfoWFS('sahel:ponds'),
@@ -1322,9 +1358,12 @@
             detailsDiv.innerHTML = '<div class="loading" style="display: block;">💧 Loading water quality history...</div>';
             
             try {
-                const response = await fetch(`api.php?action=water_quality&feature_id=${encodeURIComponent(featureId)}`);
+                // Add cache-busting parameter to prevent browser caching
+                const timestamp = Date.now();
+                const response = await fetch(`/api/features/water-quality/${encodeURIComponent(featureId)}?t=${timestamp}`);
                 
                 if (!response.ok) {
+                    console.warn(`JavaEE API not available (${response.status}), using sample data`);
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 
@@ -1385,9 +1424,12 @@
             detailsDiv.innerHTML = '<div class="loading" style="display: block;">🔧 Loading maintenance history...</div>';
             
             try {
-                const response = await fetch(`api.php?action=maintenance&feature_id=${encodeURIComponent(featureId)}`);
+                // Add cache-busting parameter to prevent browser caching
+                const timestamp = Date.now();
+                const response = await fetch(`/api/features/maintenance/${encodeURIComponent(featureId)}?t=${timestamp}`);
                 
                 if (!response.ok) {
+                    console.warn(`JavaEE API not available (${response.status}), using sample data`);
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 
@@ -1456,9 +1498,12 @@
             detailsDiv.innerHTML = '<div class="loading">🏗️ Loading construction details...</div>';
             
             try {
-                const response = await fetch(`/api/features/construction-details/${encodeURIComponent(featureId)}`);
+                // Add cache-busting parameter to prevent browser caching
+                const timestamp = Date.now();
+                const response = await fetch(`/api/features/construction-details/${encodeURIComponent(featureId)}?t=${timestamp}`);
                 
                 if (!response.ok) {
+                    console.warn(`JavaEE API not available (${response.status}), using sample data`);
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 
