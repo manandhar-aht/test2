@@ -784,13 +784,13 @@
                 console.log('🔍 Feature detection results:', results);
                 console.log('📊 Results summary:');
                 results.forEach((result, index) => {
-                    const methods = ['zones', 'infrastructure', 'wells-WFS', 'ponds-WFS', 'boreholes-WFS', 'admin'];
+                    const methods = ['infrastructure', 'wells-WFS', 'ponds-WFS', 'boreholes-WFS', 'admin'];
                     console.log(`  ${methods[index]}: ${result ? '✅ Found' : '❌ None'}`);
                 });
                 
                 // Add debugging info to UI
                 const debugInfo = results.map((result, index) => {
-                    const methods = ['zones', 'infrastructure', 'wells-WFS', 'ponds-WFS', 'boreholes-WFS', 'admin'];
+                    const methods = ['infrastructure', 'wells-WFS', 'ponds-WFS', 'boreholes-WFS', 'admin'];
                     return `${methods[index]}: ${result ? '✅ Found' : '❌ None'}`;
                 }).join('<br>');
                 
@@ -1415,7 +1415,50 @@
                 
             } catch (error) {
                 console.error('Error fetching water quality data:', error);
-                detailsDiv.innerHTML = '<div class="error-message">Error loading water quality data. Please try again.</div>';
+                console.log('🔄 Generating fallback sample data for water quality...');
+                
+                // Generate fallback sample data
+                const sampleReports = [
+                    {
+                        test_date: '2024-09-15',
+                        ph_level: 7.2,
+                        turbidity: 3.5,
+                        overall_quality: 'Good',
+                        notes: 'Sample data - JavaEE API not available'
+                    },
+                    {
+                        test_date: '2024-08-20',
+                        ph_level: 7.0,
+                        turbidity: 4.1,
+                        overall_quality: 'Fair',
+                        notes: 'Sample data - JavaEE API not available'
+                    }
+                ];
+                
+                let html = '<div class="feature-details">';
+                html += `<h4 style="color: #27ae60; margin-bottom: 1rem;">💧 Water Quality History: ${featureId}</h4>`;
+                html += '<div style="background: #fff3cd; padding: 0.5rem; border-radius: 4px; margin-bottom: 1rem; font-size: 0.9em;">⚠️ Sample data - JavaEE API not deployed</div>';
+                
+                if (sampleReports.length === 0) {
+                    html += '<div style="padding: 1rem; text-align: center; color: #7f8c8d;">No water quality reports found for this feature.</div>';
+                } else {
+                    sampleReports.forEach((report, index) => {
+                        html += '<div style="border: 1px solid #ddd; padding: 1rem; margin: 0.5rem 0; border-radius: 4px; border-left: 4px solid #27ae60;">';
+                        html += `<div style="font-weight: bold; margin-bottom: 0.5rem;">Report ${index + 1} - ${report.test_date}</div>`;
+                        html += '<div class="data-grid">';
+                        html += `<div class="data-item"><span>pH Level:</span><span>${report.ph_level}</span></div>`;
+                        html += `<div class="data-item"><span>Turbidity:</span><span>${report.turbidity} NTU</span></div>`;
+                        html += `<div class="data-item"><span>Overall Quality:</span><span style="color: ${report.overall_quality === 'Good' ? '#27ae60' : '#f39c12'};">${report.overall_quality}</span></div>`;
+                        html += '</div>';
+                        if (report.notes) {
+                            html += `<p style="margin-top: 0.5rem; font-style: italic; color: #7f8c8d;">${report.notes}</p>`;
+                        }
+                        html += '</div>';
+                    });
+                }
+                
+                html += '</div>';
+                detailsDiv.innerHTML = html;
             }
         }
 
@@ -1489,7 +1532,53 @@
                 
             } catch (error) {
                 console.error('Error fetching maintenance data:', error);
-                detailsDiv.innerHTML = '<div class="error-message">Error loading maintenance data. Please try again.</div>';
+                console.log('🔄 Generating fallback sample data for maintenance...');
+                
+                // Generate fallback sample data
+                const sampleActivities = [
+                    {
+                        activity_date: '2024-09-10',
+                        activity_type: 'Routine Maintenance',
+                        description: 'Pump cleaning and inspection',
+                        cost: 250.00,
+                        technician: 'Sample Technician',
+                        notes: 'Sample data - JavaEE API not available'
+                    },
+                    {
+                        activity_date: '2024-07-15',
+                        activity_type: 'Repair',
+                        description: 'Motor replacement',
+                        cost: 850.00,
+                        technician: 'Sample Repair Team',
+                        notes: 'Sample data - JavaEE API not available'
+                    }
+                ];
+                
+                let html = '<div class="feature-details">';
+                html += `<h4 style="color: #e67e22; margin-bottom: 1rem;">🔧 Maintenance History: ${featureId}</h4>`;
+                html += '<div style="background: #fff3cd; padding: 0.5rem; border-radius: 4px; margin-bottom: 1rem; font-size: 0.9em;">⚠️ Sample data - JavaEE API not deployed</div>';
+                
+                if (sampleActivities.length === 0) {
+                    html += '<div style="padding: 1rem; text-align: center; color: #7f8c8d;">No maintenance activities found for this feature.</div>';
+                } else {
+                    sampleActivities.forEach((activity, index) => {
+                        html += '<div style="border: 1px solid #ddd; padding: 1rem; margin: 0.5rem 0; border-radius: 4px; border-left: 4px solid #e67e22;">';
+                        html += `<div style="font-weight: bold; margin-bottom: 0.5rem;">Activity ${index + 1} - ${activity.activity_date}</div>`;
+                        html += '<div class="data-grid">';
+                        html += `<div class="data-item"><span>Type:</span><span>${activity.activity_type}</span></div>`;
+                        html += `<div class="data-item"><span>Cost:</span><span>$${activity.cost}</span></div>`;
+                        html += `<div class="data-item"><span>Technician:</span><span>${activity.technician}</span></div>`;
+                        html += '</div>';
+                        html += `<p style="margin-top: 0.5rem;"><strong>Description:</strong> ${activity.description}</p>`;
+                        if (activity.notes) {
+                            html += `<p style="margin-top: 0.5rem; font-style: italic; color: #7f8c8d;">${activity.notes}</p>`;
+                        }
+                        html += '</div>';
+                    });
+                }
+                
+                html += '</div>';
+                detailsDiv.innerHTML = html;
             }
         }
 
