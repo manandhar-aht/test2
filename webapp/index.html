@@ -1451,13 +1451,12 @@
             }
         }
 
-        // Function to fetch and display construction details for all infrastructure types
         async function getConstructionDetails(featureId) {
             const detailsDiv = document.getElementById('feature-details');
             detailsDiv.innerHTML = '<div class="loading">🏗️ Loading construction details...</div>';
             
             try {
-                const response = await fetch(`api.php?action=construction_details&feature_id=${encodeURIComponent(featureId)}`);
+                const response = await fetch(`/api/features/construction-details/${encodeURIComponent(featureId)}`);
                 
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -1469,64 +1468,75 @@
                 html += `<h4 style="color: #8e44ad; margin-bottom: 1rem;">🏗️ Construction Details: ${featureId}</h4>`;
                 html += '<div style="background: #f3e5f5; padding: 0.5rem; border-radius: 4px; margin-bottom: 1rem; font-size: 0.9em;">🏗️ Real database data</div>';
                 
-                html += '<div style="border: 1px solid #ddd; padding: 1rem; margin: 0.5rem 0; border-radius: 4px; border-left: 4px solid #8e44ad;">';
-                
-                html += `<h5 style="color: #8e44ad; margin: 0 0 0.5rem 0;">Contractor: ${construction.contractor_name}</h5>`;
-                
-                html += `<div class="data-grid">`;
-                html += `<div class="data-item"><span>Construction Method:</span><span>${construction.construction_method}</span></div>`;
-                if (construction.lining_material) {
-                    html += `<div class="data-item"><span>Lining Material:</span><span>${construction.lining_material}</span></div>`;
+                if (construction.error) {
+                    html += `<div class="error-message">${construction.error}</div>`;
+                } else {
+                    html += '<div style="border: 1px solid #ddd; padding: 1rem; margin: 0.5rem 0; border-radius: 4px; border-left: 4px solid #8e44ad;">';
+                    
+                    html += `<h5 style="color: #8e44ad; margin: 0 0 0.5rem 0;">Contractor: ${construction.contractor_name}</h5>`;
+                    
+                    html += `<div class="data-grid">`;
+                    html += `<div class="data-item"><span>Construction Method:</span><span>${construction.construction_method}</span></div>`;
+                    if (construction.lining_material) {
+                        html += `<div class="data-item"><span>Lining Material:</span><span>${construction.lining_material}</span></div>`;
+                    }
+                    if (construction.diameter_m) {
+                        html += `<div class="data-item"><span>Diameter:</span><span>${construction.diameter_m} meters</span></div>`;
+                    }
+                    if (construction.length_m && construction.width_m) {
+                        html += `<div class="data-item"><span>Dimensions:</span><span>${construction.length_m}m × ${construction.width_m}m</span></div>`;
+                    }
+                    html += `<div class="data-item"><span>Depth:</span><span>${construction.depth_m} meters</span></div>`;
+                    html += `<div class="data-item"><span>Construction Cost:</span><span>$${parseFloat(construction.construction_cost).toLocaleString()}</span></div>`;
+                    html += `<div class="data-item"><span>Start Date:</span><span>${construction.construction_start_date}</span></div>`;
+                    html += `<div class="data-item"><span>End Date:</span><span>${construction.construction_end_date}</span></div>`;
+                    html += `<div class="data-item"><span>Duration:</span><span>${construction.construction_duration_days} days</span></div>`;
+                    html += `<div class="data-item"><span>Warranty Period:</span><span>${construction.warranty_period_months} months</span></div>`;
+                    html += `<div class="data-item"><span>Quality Certificate:</span><span>${construction.quality_certificate_number}</span></div>`;
+                    html += `</div>`;
+                    
+                    if (construction.materials_used && construction.materials_used.length > 0) {
+                        html += `<p style="margin-top: 0.5rem;"><strong>Materials Used:</strong> ${construction.materials_used.join(', ')}</p>`;
+                    }
+                    
+                    if (construction.equipment_used && construction.equipment_used.length > 0) {
+                        html += `<p style="margin-top: 0.5rem;"><strong>Equipment Used:</strong> ${construction.equipment_used.join(', ')}</p>`;
+                    }
+                    
+                    if (construction.environmental_compliance) {
+                        html += `<p style="margin-top: 0.5rem;"><strong>Environmental Compliance:</strong> ${construction.environmental_compliance}</p>`;
+                    }
+                    
+                    if (construction.additional_notes) {
+                        html += `<p style="margin-top: 0.5rem; font-style: italic; color: #7f8c8d;"><strong>Notes:</strong> ${construction.additional_notes}</p>`;
+                    }
+                    
+                    // Add project timeline
+                    html += `<div style="margin-top: 0.5rem; padding: 0.5rem; background: #f8f9fa; border-radius: 4px;">`;
+                    html += `<strong>Project Status:</strong> ${construction.project_status}<br>`;
+                    if (construction.quality_rating) {
+                        html += `<strong>Quality Rating:</strong> ${construction.quality_rating}/5 stars<br>`;
+                    }
+                    if (construction.final_inspection_date) {
+                        html += `<strong>Final Inspection:</strong> ${construction.final_inspection_date}`;
+                    }
+                    html += `</div>`;
+                    
+                    html += '</div>';
                 }
-                if (construction.diameter_m) {
-                    html += `<div class="data-item"><span>Diameter:</span><span>${construction.diameter_m} meters</span></div>`;
-                }
-                if (construction.length_m && construction.width_m) {
-                    html += `<div class="data-item"><span>Dimensions:</span><span>${construction.length_m}m × ${construction.width_m}m</span></div>`;
-                }
-                html += `<div class="data-item"><span>Depth:</span><span>${construction.depth_m} meters</span></div>`;
-                html += `<div class="data-item"><span>Construction Cost:</span><span>$${parseFloat(construction.construction_cost).toLocaleString()}</span></div>`;
-                html += `<div class="data-item"><span>Start Date:</span><span>${construction.construction_start_date}</span></div>`;
-                html += `<div class="data-item"><span>End Date:</span><span>${construction.construction_end_date}</span></div>`;
-                html += `<div class="data-item"><span>Duration:</span><span>${construction.construction_duration_days} days</span></div>`;
-                html += `<div class="data-item"><span>Warranty Period:</span><span>${construction.warranty_period_months} months</span></div>`;
-                html += `<div class="data-item"><span>Quality Certificate:</span><span>${construction.quality_certificate_number}</span></div>`;
-                html += `</div>`;
-                
-                if (construction.materials_used && construction.materials_used.length > 0) {
-                    html += `<p style="margin-top: 0.5rem;"><strong>Materials Used:</strong> ${construction.materials_used.join(', ')}</p>`;
-                }
-                
-                if (construction.equipment_used && construction.equipment_used.length > 0) {
-                    html += `<p style="margin-top: 0.5rem;"><strong>Equipment Used:</strong> ${construction.equipment_used.join(', ')}</p>`;
-                }
-                
-                if (construction.environmental_compliance) {
-                    html += `<p style="margin-top: 0.5rem;"><strong>Environmental Compliance:</strong> ${construction.environmental_compliance}</p>`;
-                }
-                
-                if (construction.additional_notes) {
-                    html += `<p style="margin-top: 0.5rem; font-style: italic; color: #7f8c8d;"><strong>Notes:</strong> ${construction.additional_notes}</p>`;
-                }
-                
-                // Add project timeline
-                html += `<div style="margin-top: 0.5rem; padding: 0.5rem; background: #f8f9fa; border-radius: 4px;">`;
-                html += `<strong>Project Status:</strong> ${construction.project_status}<br>`;
-                if (construction.quality_rating) {
-                    html += `<strong>Quality Rating:</strong> ${construction.quality_rating}/5 stars<br>`;
-                }
-                if (construction.final_inspection_date) {
-                    html += `<strong>Final Inspection:</strong> ${construction.final_inspection_date}`;
-                }
-                html += `</div>`;
-                
-                html += '</div>';
                 html += '</div>';
                 detailsDiv.innerHTML = html;
                 
             } catch (error) {
                 console.error('Error fetching construction data:', error);
-                detailsDiv.innerHTML = '<div class="error-message">Error loading construction details. Please try again.</div>';
+                // Fallback to sample data if API fails
+                detailsDiv.innerHTML = '<div class="error-message">Database connection unavailable. Showing sample data...</div>';
+                // Generate sample data as fallback
+                setTimeout(() => {
+                    const featureType = window.currentFeature?.feature_type || 'well';
+                    const sampleData = generateConstructionData(featureId, featureType);
+                    showConstructionDetails(sampleData);
+                }, 500);
             }
         }
 
