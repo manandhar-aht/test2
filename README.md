@@ -4,29 +4,10 @@
 
 ## 🚀 Platform Capabilities
 
-### 🏗️ Complex Nested Features
-- **Hierarchical Data Model**: Water Management Zones containing nested infrastructure
-- **Scientific Analytics**: Geological data with stratigraphic layers and geotechnical properties
-- **Advanced Relationships**: 9 interconnected database tables with complex views
-- **Real-time Monitoring**: Water quality testing and maintenance activity tracking
-
-### 🎯 Multiple Specialized Interfaces
-1. **[Complex Nested Features](http://localhost:8080/complex-nested-features.html)** - Advanced hierarchical data visualization
-2. **[Classic Map Interface](http://localhost:8080/)** - Traditional GIS with layer controls
-3. **[Custom Styling Test](http://localhost:8080/styling-test.html)** - SLD styling demonstration
-4. **[GeoServer Admin](http://localhost:8080/geoserver/)** - Full server management
-
-### 🔬 Scientific Data Features
-- **Geological Analysis**: Rock formations, aquifer potential, fossil records
-- **Water Quality Reports**: Multi-parameter testing with lab certification
-- **Infrastructure Tracking**: Construction costs, maintenance schedules, effectiveness ratings
-- **Geotechnical Properties**: JSONB storage for flexible scientific data
 
 ---
 
-# �🌍 Sahel Region GIS Web Application
 
-A comprehensive Docker-based GIS web application for visualizing water infrastructure and administrative boundaries in the Sahel region, featuring PostGIS, GeoServer, and OpenLayers integration.
 
 ## 🏗️ Architecture Overview
 
@@ -198,11 +179,7 @@ docker exec webapp curl -I "http://geoserver:8080/geoserver/"
 
 Each water infrastructure type has distinct visual characteristics:
 
-| Type | Symbol | Color | Border |
-|------|--------|-------|---------|
-| Wells | Circle | Blue (#0066CC) | Dark Blue (#003366) |
-| Boreholes | Square | Red (#CC3300) | Dark Red (#660000) |
-| Ponds | Triangle | Teal (#00AA88) | Dark Teal (#004444) |
+
 
 All symbols include:
 - 12px size for consistent visibility
