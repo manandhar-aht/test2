@@ -11,10 +11,9 @@
 - **Real-time Monitoring**: Water quality testing and maintenance activity tracking
 
 ### 🎯 Multiple Specialized Interfaces
-1. **[Complex Nested Features](http://localhost:8080/complex-nested-features.html)** - Advanced hierarchical data visualization
-2. **[Classic Map Interface](http://localhost:8080/)** - Traditional GIS with layer controls
-3. **[Custom Styling Test](http://localhost:8080/styling-test.html)** - SLD styling demonstration
-4. **[GeoServer Admin](http://localhost:8080/geoserver/)** - Full server management
+1. **[Main Water Management Interface](http://localhost:8080/)** - Advanced hierarchical data visualization with layer controls
+2. **[Custom Styling Test](http://localhost:8080/styling-test.html)** - SLD styling demonstration
+3. **[GeoServer Admin](http://localhost:8080/geoserver/)** - Full server management
 
 ### 🔬 Scientific Data Features
 - **Geological Analysis**: Rock formations, aquifer potential, fossil records

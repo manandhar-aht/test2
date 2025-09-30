@@ -10,17 +10,6 @@
   </mimeFormats>
   <gridSubsets>
     <gridSubset>
-      <gridSetName>EPSG:4326</gridSetName>
-      <extent>
-        <coords>
-          <double>15.1165</double>
-          <double>10.0036</double>
-          <double>32.525</double>
-          <double>19.1531</double>
-        </coords>
-      </extent>
-    </gridSubset>
-    <gridSubset>
       <gridSetName>EPSG:900913</gridSetName>
       <extent>
         <coords>
@@ -28,6 +17,17 @@
           <double>1119296.9094965782</double>
           <double>3620666.438051223</double>
           <double>2172969.2779883086</double>
+        </coords>
+      </extent>
+    </gridSubset>
+    <gridSubset>
+      <gridSetName>EPSG:4326</gridSetName>
+      <extent>
+        <coords>
+          <double>15.1165</double>
+          <double>10.0036</double>
+          <double>32.525</double>
+          <double>19.1531</double>
         </coords>
       </extent>
     </gridSubset>
@@ -65,7 +65,7 @@
       <key>STYLES</key>
       <defaultValue></defaultValue>
       <availableStyles class="sorted-set"/>
-      <defaultStyle>boreholes_style</defaultStyle>
+      <defaultStyle>point</defaultStyle>
     </styleParameterFilter>
   </parameterFilters>
   <gutter>0</gutter>

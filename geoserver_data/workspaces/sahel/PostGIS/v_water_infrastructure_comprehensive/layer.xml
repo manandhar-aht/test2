@@ -1,0 +1,19 @@
+<layer>
+  <name>v_water_infrastructure_comprehensive</name>
+  <id>LayerInfoImpl-6962d267:19999a3b9fc:-7fec</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl-2bfb7be2:1999235f5b9:-8000</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl-6962d267:19999a3b9fc:-7fed</id>
+  </resource>
+  <queryable>true</queryable>
+  <opaque>false</opaque>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2025-09-30 08:15:12.671 UTC</dateCreated>
+  <dateModified>2025-09-30 08:18:48.179 UTC</dateModified>
+</layer>

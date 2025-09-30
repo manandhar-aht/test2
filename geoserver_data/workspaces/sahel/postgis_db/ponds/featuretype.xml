@@ -1,14 +1,14 @@
 <featureType>
   <id>FeatureTypeInfoImpl--44ec0058:19992864196:-7ff9</id>
   <name>ponds</name>
-  <nativeName>spatial_data</nativeName>
+  <nativeName>ponds</nativeName>
   <namespace>
     <id>NamespaceInfoImpl--44ec0058:19992864196:-7fff</id>
   </namespace>
-  <title>spatial_data</title>
+  <title>Ponds Water Infrastructure</title>
   <keywords>
     <string>features</string>
-    <string>spatial_data</string>
+    <string>ponds</string>
   </keywords>
   <srs>EPSG:4326</srs>
   <nativeBoundingBox>
@@ -31,7 +31,7 @@
     <id>DataStoreInfoImpl--44ec0058:19992864196:-7ffe</id>
   </store>
   <serviceConfiguration>false</serviceConfiguration>
-  <cqlFilter>type = &apos;pond&apos;</cqlFilter>
+
   <maxFeatures>0</maxFeatures>
   <numDecimals>0</numDecimals>
   <padWithZeros>false</padWithZeros>

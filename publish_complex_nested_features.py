@@ -358,21 +358,22 @@ def main():
             "table_name": "v_geological_features",
             "title": "Geological Water-Bearing Layers"
         },
-        {
-            "layer_name": "nested_ponds_detailed",
-            "table_name": "nested_ponds",
-            "title": "Nested Ponds (Detailed Attributes)"
-        },
-        {
-            "layer_name": "nested_wells_detailed", 
-            "table_name": "nested_wells",
-            "title": "Nested Wells (Detailed Attributes)"
-        },
-        {
-            "layer_name": "nested_boreholes_detailed",
-            "table_name": "nested_boreholes",
-            "title": "Nested Boreholes (Detailed Attributes)"
-        },
+        # NOTE: Nested layer references disabled to prevent JavaScript errors
+        # {
+        #     "layer_name": "nested_ponds_detailed",
+        #     "table_name": "nested_ponds",
+        #     "title": "Nested Ponds (Detailed Attributes)"
+        # },
+        # {
+        #     "layer_name": "nested_wells_detailed", 
+        #     "table_name": "nested_wells",
+        #     "title": "Nested Wells (Detailed Attributes)"
+        # },
+        # {
+        #     "layer_name": "nested_boreholes_detailed",
+        #     "table_name": "nested_boreholes",
+        #     "title": "Nested Boreholes (Detailed Attributes)"
+        # },
         {
             "layer_name": "water_quality_reports",
             "table_name": "water_quality_reports",
@@ -382,6 +383,11 @@ def main():
             "layer_name": "maintenance_activities",
             "table_name": "maintenance_activities", 
             "title": "Infrastructure Maintenance Activities"
+        },
+        {
+            "layer_name": "pond_construction_details",
+            "table_name": "pond_construction_details",
+            "title": "Pond Construction Details"
         }
     ]
     

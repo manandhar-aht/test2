@@ -10,6 +10,17 @@
   </mimeFormats>
   <gridSubsets>
     <gridSubset>
+      <gridSetName>WebMercatorQuadx2</gridSetName>
+      <extent>
+        <coords>
+          <double>-8238310.235647004</double>
+          <double>1162763.4668620403</double>
+          <double>2460750.7398325503</double>
+          <double>4970071.579142425</double>
+        </coords>
+      </extent>
+    </gridSubset>
+    <gridSubset>
       <gridSetName>EPSG:4326</gridSetName>
       <extent>
         <coords>
@@ -42,17 +53,6 @@
         </coords>
       </extent>
     </gridSubset>
-    <gridSubset>
-      <gridSetName>WebMercatorQuadx2</gridSetName>
-      <extent>
-        <coords>
-          <double>-8238310.235647004</double>
-          <double>1162763.4668620403</double>
-          <double>2460750.7398325503</double>
-          <double>4970071.579142425</double>
-        </coords>
-      </extent>
-    </gridSubset>
   </gridSubsets>
   <metaWidthHeight>
     <int>4</int>
@@ -65,7 +65,7 @@
       <key>STYLES</key>
       <defaultValue></defaultValue>
       <availableStyles class="sorted-set"/>
-      <defaultStyle>wells_style</defaultStyle>
+      <defaultStyle>point</defaultStyle>
     </styleParameterFilter>
   </parameterFilters>
   <gutter>0</gutter>

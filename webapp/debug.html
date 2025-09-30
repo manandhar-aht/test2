@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Feature Detection</title>
+    <script src="https://cdn.jsdelivr.net/npm/ol@v9.1.0/dist/ol.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v9.1.0/ol.css" type="text/css">
+    <style>
+        #map { width: 600px; height: 400px; }
+        #debug { margin-top: 20px; padding: 10px; background: #f0f0f0; }
+    </style>
+</head>
+<body>
+    <h1>Debug Feature Detection</h1>
+    <div id="map"></div>
+    <div id="debug">
+        <h3>Debug Output:</h3>
+        <div id="output"></div>
+        <button onclick="testWFS()">Test WFS Query</button>
+    </div>
+
+    <script>
+        const outputDiv = document.getElementById('output');
+        
+        function log(message) {
+            console.log(message);
+            outputDiv.innerHTML += '<p>' + message + '</p>';
+        }
+
+        // Test the exact coordinates we know have a feature
+        async function testWFS() {
+            log('Testing WFS query...');
+            
+            const coordinate = [77.592, 13.042]; // Lon/Lat
+            const tolerance = 0.001;
+            
+            const bbox = [
+                coordinate[0] - tolerance,
+                coordinate[1] - tolerance,
+                coordinate[0] + tolerance,
+                coordinate[1] + tolerance
+            ].join(',');
+            
+            const wfsUrl = `/geoserver/sahel/wfs?` +
+                `service=WFS&version=1.0.0&request=GetFeature&` +
+                `typeName=sahel:wells&` +
+                `bbox=${bbox}&` +
+                `outputFormat=application/json&` +
+                `maxFeatures=5`;
+            
+            log(`WFS URL: ${wfsUrl}`);
+            
+            try {
+                const response = await fetch(wfsUrl);
+                log(`Response status: ${response.status}`);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    log(`Features found: ${data.features ? data.features.length : 0}`);
+                    if (data.features && data.features.length > 0) {
+                        log(`First feature ID: ${data.features[0].properties.well_id}`);
+                        log(`Coordinates: [${data.features[0].geometry.coordinates.join(', ')}]`);
+                    }
+                } else {
+                    log(`HTTP error: ${response.status}`);
+                }
+            } catch (error) {
+                log(`Error: ${error.message}`);
+            }
+        }
+
+        // Initialize basic map
+        const map = new ol.Map({
+            target: 'map',
+            layers: [
+                new ol.layer.Tile({
+                    source: new ol.source.OSM()
+                })
+            ],
+            view: new ol.View({
+                center: ol.proj.fromLonLat([77.0, 13.0]),
+                zoom: 10
+            })
+        });
+
+        log('Map initialized');
+        
+        // Add click handler
+        map.on('click', function(evt) {
+            const coordinate = evt.coordinate;
+            const lonLat = ol.proj.toLonLat(coordinate);
+            log(`Map clicked at: [${lonLat[0].toFixed(6)}, ${lonLat[1].toFixed(6)}]`);
+            
+            // Test WFS query with clicked coordinates
+            testWFSAtCoordinate(lonLat);
+        });
+
+        async function testWFSAtCoordinate(lonLat) {
+            log(`Testing WFS at clicked coordinates...`);
+            
+            const tolerance = 0.001;
+            const bbox = [
+                lonLat[0] - tolerance,
+                lonLat[1] - tolerance,
+                lonLat[0] + tolerance,
+                lonLat[1] + tolerance
+            ].join(',');
+            
+            const wfsUrl = `/geoserver/sahel/wfs?` +
+                `service=WFS&version=1.0.0&request=GetFeature&` +
+                `typeName=sahel:wells&` +
+                `bbox=${bbox}&` +
+                `outputFormat=application/json&` +
+                `maxFeatures=5`;
+            
+            try {
+                const response = await fetch(wfsUrl);
+                if (response.ok) {
+                    const data = await response.json();
+                    log(`WFS result: ${data.features ? data.features.length : 0} features found`);
+                } else {
+                    log(`WFS error: ${response.status}`);
+                }
+            } catch (error) {
+                log(`WFS exception: ${error.message}`);
+            }
+        }
+    </script>
+</body>
+</html>

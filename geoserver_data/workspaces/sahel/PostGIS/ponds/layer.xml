@@ -1,0 +1,17 @@
+<layer>
+  <name>ponds</name>
+  <id>LayerInfoImpl-4f4f4aa9_199962eb3d4_-7ff3</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <name>ponds_style</name>
+    <workspace>sahel</workspace>
+  </defaultStyle>
+  <resource class="featureType">
+    <name>ponds</name>
+    <workspace>sahel</workspace>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>

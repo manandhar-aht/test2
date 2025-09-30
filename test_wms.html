@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WMS Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test { margin: 20px 0; padding: 10px; border: 1px solid #ccc; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        img { border: 1px solid #000; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>WMS Layer Tests</h1>
+    
+    <div class="test">
+        <h2>Test 1: Basic Layer (without SLD)</h2>
+        <p>This should work and show a simple PNG image:</p>
+        <img src="/geoserver/sahel/wms?REQUEST=GetMap&VERSION=1.1.1&SERVICE=WMS&LAYERS=sahel:v_water_infrastructure_comprehensive&STYLES=&SRS=EPSG:3857&BBOX=1300000,1300000,1400000,1400000&WIDTH=256&HEIGHT=256&FORMAT=image/png&CQL_FILTER=feature_type%20%3D%20%27well%27%20OR%20feature_type%20%3D%20%27pond%27%20OR%20feature_type%20%3D%20%27borehole%27" 
+             alt="Basic WMS Layer" 
+             onload="this.parentNode.className += ' success'"
+             onerror="this.parentNode.className += ' error'">
+    </div>
+
+    <div class="test">
+        <h2>Test 2: Chad Background</h2>
+        <p>Chad region map for context:</p>
+        <img src="/geoserver/chad/wms?REQUEST=GetMap&VERSION=1.1.1&SERVICE=WMS&LAYERS=chad:gadm41_TCD_1&STYLES=&SRS=EPSG:3857&BBOX=1300000,1300000,1400000,1400000&WIDTH=256&HEIGHT=256&FORMAT=image/png" 
+             alt="Chad Admin Regions" 
+             onload="this.parentNode.className += ' success'"
+             onerror="this.parentNode.className += ' error'">
+    </div>
+
+    <script>
+        // Test Console Messages
+        console.log('=== WMS TESTS ===');
+        
+        // Test the WMS URL that was causing 400 errors
+        fetch('/geoserver/sahel/wms?REQUEST=GetMap&VERSION=1.1.1&SERVICE=WMS&LAYERS=sahel:v_water_infrastructure_comprehensive&STYLES=&SRS=EPSG:3857&BBOX=1300000,1300000,1400000,1400000&WIDTH=256&HEIGHT=256&FORMAT=image/png&CQL_FILTER=feature_type%20%3D%20%27well%27%20OR%20feature_type%20%3D%20%27pond%27%20OR%20feature_type%20%3D%20%27borehole%27')
+        .then(response => {
+            console.log('✅ WMS Request Status:', response.status);
+            if (response.ok) {
+                console.log('✅ SUCCESS: No more 400 errors!');
+            } else {
+                console.log('❌ ERROR: Still getting', response.status);
+            }
+        })
+        .catch(error => {
+            console.log('❌ NETWORK ERROR:', error);
+        });
+    </script>
+</body>
+</html>

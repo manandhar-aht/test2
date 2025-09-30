@@ -1,0 +1,44 @@
+<featureType>
+  <id>FeatureTypeInfoImpl-4f4f4aa9_199962eb3d4_-7ff5</id>
+  <name>wells</name>
+  <nativeName>wells</nativeName>
+  <namespace>
+    <id>NamespaceInfoImpl-4f4f4aa9_199962eb3d4_-7ffe</id>
+  </namespace>
+  <title>Water Wells</title>
+  <abstract>Unified table containing all water wells data with spatial location information</abstract>
+  <keywords>
+    <string>wells</string>
+    <string>water</string>
+    <string>infrastructure</string>
+  </keywords>
+  <nativeCRS>EPSG:4326</nativeCRS>
+  <srs>EPSG:4326</srs>
+  <nativeBoundingBox>
+    <minx>-180.0</minx>
+    <maxx>180.0</maxx>
+    <miny>-90.0</miny>
+    <maxy>90.0</maxy>
+    <crs>EPSG:4326</crs>
+  </nativeBoundingBox>
+  <latLonBoundingBox>
+    <minx>-180.0</minx>
+    <maxx>180.0</maxx>
+    <miny>-90.0</miny>
+    <maxy>90.0</maxy>
+    <crs>EPSG:4326</crs>
+  </latLonBoundingBox>
+  <projectionPolicy>FORCE_DECLARED</projectionPolicy>
+  <enabled>true</enabled>
+  <store class="dataStore">
+    <id>DataStoreInfoImpl-4f4f4aa9_199962eb3d4_-7fff</id>
+  </store>
+  <serviceConfiguration>false</serviceConfiguration>
+  <maxFeatures>0</maxFeatures>
+  <numDecimals>0</numDecimals>
+  <padWithZeros>false</padWithZeros>
+  <forcedDecimal>false</forcedDecimal>
+  <overridingServiceSRS>false</overridingServiceSRS>
+  <skipNumberMatched>false</skipNumberMatched>
+  <circularArcPresent>false</circularArcPresent>
+</featureType>

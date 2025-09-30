@@ -10,13 +10,13 @@
   </mimeFormats>
   <gridSubsets>
     <gridSubset>
-      <gridSetName>EPSG:4326</gridSetName>
+      <gridSetName>WebMercatorQuadx2</gridSetName>
       <extent>
         <coords>
-          <double>-4.5</double>
-          <double>11.0036</double>
-          <double>23.8229</double>
-          <double>20.1531</double>
+          <double>-500937.70856973104</double>
+          <double>1232515.0552755706</double>
+          <double>2651953.097219077</double>
+          <double>2291176.5706401505</double>
         </coords>
       </extent>
     </gridSubset>
@@ -32,18 +32,18 @@
       </extent>
     </gridSubset>
     <gridSubset>
-      <gridSetName>WebMercatorQuad</gridSetName>
+      <gridSetName>EPSG:4326</gridSetName>
       <extent>
         <coords>
-          <double>-500937.70856973104</double>
-          <double>1232515.0552755706</double>
-          <double>2651953.097219077</double>
-          <double>2291176.5706401505</double>
+          <double>-4.5</double>
+          <double>11.0036</double>
+          <double>23.8229</double>
+          <double>20.1531</double>
         </coords>
       </extent>
     </gridSubset>
     <gridSubset>
-      <gridSetName>WebMercatorQuadx2</gridSetName>
+      <gridSetName>WebMercatorQuad</gridSetName>
       <extent>
         <coords>
           <double>-500937.70856973104</double>
@@ -65,7 +65,7 @@
       <key>STYLES</key>
       <defaultValue></defaultValue>
       <availableStyles class="sorted-set"/>
-      <defaultStyle>ponds_style</defaultStyle>
+      <defaultStyle>point</defaultStyle>
     </styleParameterFilter>
   </parameterFilters>
   <gutter>0</gutter>

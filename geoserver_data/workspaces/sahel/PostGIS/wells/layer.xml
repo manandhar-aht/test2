@@ -1,0 +1,17 @@
+<layer>
+  <name>wells</name>
+  <id>LayerInfoImpl-4f4f4aa9_199962eb3d4_-7ff5</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <name>wells_style</name>
+    <workspace>sahel</workspace>
+  </defaultStyle>
+  <resource class="featureType">
+    <name>wells</name>
+    <workspace>sahel</workspace>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>

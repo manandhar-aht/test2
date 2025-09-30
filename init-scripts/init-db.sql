@@ -1,322 +1,71 @@
-CREATE EXTENSION IF NOT EXISTS postgis;
-CREATE TABLE public.spatial_data (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(100),
-    type VARCHAR(50),
-    description TEXT,
-    geom GEOMETRY(GEOMETRY, 4326)
-);
-INSERT INTO spatial_data (name, type, description, geom) VALUES (
-    'Sample Point',
-    'well',
-    'This is a sample well.',
-    ST_GeomFromText('POINT(-74.006 40.7128)', 4326)
-);
--- Add more data for wells, boreholes, and ponds
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well in Mali', 'well', 'A traditional well in a village near Timbuktu.', ST_GeomFromText('POINT(-3.9962 17.5707)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well in Niger', 'well', 'A community well in the Agadez region.', ST_GeomFromText('POINT(8.0817 17.6078)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole in Chad', 'borehole', 'A deep borehole providing water for agriculture.', ST_GeomFromText('POINT(18.7322 15.4542)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole in Sudan', 'borehole', 'A borehole with a hand pump.', ST_GeomFromText('POINT(32.525 15.369)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond in Nigeria', 'pond', 'A natural pond used for livestock.', ST_GeomFromText('POINT(7.7 11.39)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Seasonal Pond in Mali', 'pond', 'A seasonal pond that fills during the rainy season.', ST_GeomFromText('POINT(-4.5 17.0)', 4326));
--- Add sample data for Chad
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 1', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.9284 13.0103)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 2', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(17.4353 10.9248)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 3', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(15.1531 19.1165)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 4', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(15.0134 11.5532)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 5', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(22.1053 13.8229)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 6', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(16.3439 13.3103)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 7', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.3406 12.1451)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 8', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.3833 12.9351)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 9', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(19.5186 10.3879)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 10', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.8199 12.3758)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 11', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(19.8957 13.3533)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 12', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.4293 12.9234)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 13', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(17.0036 10.8839)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 14', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(15.1959 12.3949)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 15', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.2984 13.3941)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 16', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(17.5332 12.4018)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 17', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.0009 13.0314)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 18', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.4286 12.8093)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 19', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.2125 12.9933)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 20', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.5212 13.2433)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 21', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.1123 12.5534)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 22', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.5896 13.2934)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 23', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.6333 13.1234)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 24', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.3324 12.9934)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 25', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.4423 13.0034)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 26', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.5323 13.1534)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 27', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.2423 12.8834)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 28', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.3323 12.9934)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 29', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.4223 13.0034)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 30', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.5123 13.1534)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 31', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.2323 12.8834)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 32', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.3223 12.9934)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 33', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.4123 13.0034)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 34', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.5023 13.1534)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 35', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.2223 12.8834)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 36', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.3123 12.9934)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 37', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.4023 13.0034)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 38', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.4923 13.1534)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 39', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.2123 12.8834)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 40', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.3023 12.9934)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 41', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.3923 13.0034)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 42', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.4823 13.1534)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 43', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.2023 12.8834)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 44', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.2923 12.9934)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 45', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.3823 13.0034)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 46', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.4723 13.1534)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 47', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.1923 12.8834)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 48', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.2823 12.9934)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 49', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.3723 13.0034)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 50', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.4623 13.1534)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 51', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.1823 12.8834)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 52', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.2723 12.9934)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 53', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.3623 13.0034)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 54', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.4523 13.1534)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 55', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.1723 12.8834)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 56', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.2623 12.9934)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 57', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.3523 13.0034)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 58', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.4423 13.1534)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 59', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.1623 12.8834)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 60', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.2523 12.9934)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 61', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.3423 13.0034)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 62', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.4323 13.1534)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 63', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.1523 12.8834)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 64', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.2423 12.9934)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 65', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.3323 13.0034)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 66', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.4223 13.1534)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 67', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.1423 12.8834)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 68', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.2323 12.9934)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 69', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.3223 13.0034)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 70', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.4123 13.1534)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 71', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.1323 12.8834)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 72', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.2223 12.9934)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 73', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.3123 13.0034)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 74', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.4023 13.1534)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 75', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.1223 12.8834)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 76', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.2123 12.9934)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 77', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.3023 13.0034)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 78', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.3923 13.1534)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 79', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.1123 12.8834)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 80', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.2023 12.9934)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 81', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.2923 13.0034)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 82', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.3823 13.1534)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 83', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.1023 12.8834)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 84', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.1923 12.9934)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 85', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.2823 13.0034)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 86', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.3723 13.1534)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 87', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.0923 12.8834)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 88', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.1823 12.9934)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 89', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.2723 13.0034)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 90', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.3623 13.1534)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 91', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.0823 12.8834)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 92', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.1723 12.9934)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 93', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.2623 13.0034)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 94', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.3523 13.1534)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 95', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.0723 12.8834)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 96', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.1623 12.9934)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 97', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.2523 13.0034)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 98', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.3423 13.1534)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 99', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.0623 12.8834)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Well Chad 100', 'well', 'A sample well in Chad.', ST_GeomFromText('POINT(18.1523 12.9934)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 1', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(19.0103 13.9284)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 2', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(17.9248 11.4353)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 3', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(15.1165 19.1531)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 4', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(15.5532 11.0134)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 5', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(22.8229 13.1053)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 6', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(16.3103 13.3439)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 7', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.1451 12.3406)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 8', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.9351 12.3833)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 9', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(19.3879 10.5186)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 10', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.3758 12.8199)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 11', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(19.3533 13.8957)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 12', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.9234 12.4293)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 13', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(17.8839 10.0036)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 14', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(15.3949 12.1959)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 15', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.3941 13.2984)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 16', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(17.4018 12.5332)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 17', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.0314 13.0009)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 18', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.8093 12.4286)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 19', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.9933 12.2125)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 20', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.2433 13.5212)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 21', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.5534 12.1123)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 22', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.2934 13.5896)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 23', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.1234 13.6333)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 24', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.9934 12.3324)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 25', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.0034 13.4423)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 26', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.1534 13.5323)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 27', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.8834 12.2423)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 28', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.9934 12.3323)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 29', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.0034 13.4223)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 30', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.1534 13.5123)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 31', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.8834 12.2323)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 32', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.9934 12.3223)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 33', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.0034 13.4123)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 34', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.1534 13.5023)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 35', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.8834 12.2223)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 36', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.9934 12.3123)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 37', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.0034 13.4023)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 38', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.1534 13.4923)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 39', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.8834 12.2123)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 40', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.9934 12.3023)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 41', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.0034 13.3923)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 42', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.1534 13.4823)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 43', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.8834 12.2023)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 44', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.9934 12.2923)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 45', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.0034 13.3823)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 46', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.1534 13.4723)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 47', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.8834 12.1923)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 48', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.9934 12.2823)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 49', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.0034 13.3723)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 50', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.1534 13.4623)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 51', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.8834 12.1823)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 52', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.9934 12.2723)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 53', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.0034 13.3623)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 54', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.1534 13.4523)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 55', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.8834 12.1723)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 56', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.9934 12.2623)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 57', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.0034 13.3523)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 58', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.1534 13.4423)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 59', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.8834 12.1623)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 60', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.9934 12.2523)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 61', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.0034 13.3423)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 62', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.1534 13.4323)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 63', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.8834 12.1523)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 64', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.9934 12.2423)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 65', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.0034 13.3323)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 66', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.1534 13.4223)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 67', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.8834 12.1423)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 68', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.9934 12.2323)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 69', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.0034 13.3223)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 70', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.1534 13.4123)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 71', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.8834 12.1323)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 72', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.9934 12.2223)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 73', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.0034 13.3123)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 74', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.1534 13.4023)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 75', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.8834 12.1223)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 76', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.9934 12.2123)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 77', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.0034 13.3023)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 78', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.1534 13.3923)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 79', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.8834 12.1123)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 80', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.9934 12.2023)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 81', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.0034 13.2923)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 82', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.1534 13.3823)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 83', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.8834 12.1023)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 84', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.9934 12.1923)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 85', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.0034 13.2823)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 86', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.1534 13.3723)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 87', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.8834 12.0923)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 88', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.9934 12.1823)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 89', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.0034 13.2723)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 90', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.1534 13.3623)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 91', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.8834 12.0823)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 92', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.9934 12.1723)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 93', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.0034 13.2623)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 94', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.1534 13.3523)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 95', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.8834 12.0723)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 96', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.9934 12.1623)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 97', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.0034 13.2523)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 98', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.1534 13.3423)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 99', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.8834 12.0623)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Borehole Chad 100', 'borehole', 'A sample borehole in Chad.', ST_GeomFromText('POINT(18.9934 12.1523)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 1', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(20.0103 14.9284)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 2', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(18.9248 12.4353)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 3', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(16.1165 20.1531)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 4', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(16.5532 12.0134)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 5', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(23.8229 14.1053)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 6', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(17.3103 14.3439)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 7', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.1451 13.3406)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 8', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.9351 13.3833)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 9', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(20.3879 11.5186)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 10', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.3758 13.8199)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 11', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(20.3533 14.8957)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 12', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.9234 13.4293)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 13', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(18.8839 11.0036)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 14', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(16.3949 13.1959)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 15', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.3941 14.2984)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 16', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(18.4018 13.5332)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 17', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.0314 14.0009)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 18', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.8093 13.4286)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 19', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.9933 13.2125)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 20', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.2433 14.5212)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 21', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.5534 13.1123)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 22', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.2934 14.5896)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 23', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.1234 14.6333)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 24', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.9934 13.3324)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 25', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.0034 14.4423)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 26', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.1534 14.5323)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 27', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.8834 13.2423)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 28', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.9934 13.3323)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 29', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.0034 14.4223)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 30', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.1534 14.5123)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 31', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.8834 13.2323)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 32', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.9934 13.3223)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 33', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.0034 14.4123)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 34', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.1534 14.5023)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 35', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.8834 13.2223)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 36', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.9934 13.3123)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 37', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.0034 14.4023)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 38', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.1534 14.4923)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 39', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.8834 13.2123)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 40', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.9934 13.3023)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 41', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.0034 14.3923)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 42', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.1534 14.4823)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 43', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.8834 13.2023)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 44', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.9934 13.2923)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 45', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.0034 14.3823)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 46', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.1534 14.4723)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 47', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.8834 13.1923)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 48', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.9934 13.2823)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 49', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.0034 14.3723)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 50', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.1534 14.4623)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 51', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.8834 13.1823)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 52', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.9934 13.2723)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 53', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.0034 14.3623)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 54', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.1534 14.4523)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 55', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.8834 13.1723)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 56', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.9934 13.2623)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 57', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.0034 14.3523)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 58', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.1534 14.4423)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 59', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.8834 13.1623)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 60', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.9934 13.2523)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 61', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.0034 14.3423)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 62', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.1534 14.4323)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 63', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.8834 13.1523)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 64', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.9934 13.2423)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 65', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.0034 14.3323)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 66', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.1534 14.4223)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 67', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.8834 13.1423)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 68', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.9934 13.2323)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 69', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.0034 14.3223)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 70', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.1534 14.4123)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 71', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.8834 13.1323)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 72', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.9934 13.2223)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 73', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.0034 14.3123)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 74', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.1534 14.4023)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 75', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.8834 13.1223)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 76', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.9934 13.2123)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 77', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.0034 14.3023)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 78', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.1534 14.3923)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 79', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.8834 13.1123)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 80', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.9934 13.2023)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 81', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.0034 14.2923)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 82', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.1534 14.3823)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 83', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.8834 13.1023)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 84', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.9934 13.1923)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 85', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.0034 14.2823)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 86', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.1534 14.3723)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 87', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.8834 13.0923)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 88', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.9934 13.1823)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 89', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.0034 14.2723)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 90', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.1534 14.3623)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 91', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.8834 13.0823)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 92', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.9934 13.1723)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 93', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.0034 14.2623)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 94', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.1534 14.3523)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 95', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.8834 13.0723)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 96', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.9934 13.1623)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 97', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.0034 14.2523)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 98', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.1534 14.3423)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 99', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.8834 13.0623)', 4326));
-INSERT INTO spatial_data (name, type, description, geom) VALUES ('Pond Chad 100', 'pond', 'A sample pond in Chad.', ST_GeomFromText('POINT(19.9934 13.1523)', 4326));
+-- Chad sample wells (adding new wells that don't conflict with existing ones)
+INSERT INTO wells (well_id, owner, well_type, depth_m, static_water_level_m, yield_liters_per_hour, status, geom) VALUES 
+('WELL_NYC_001', 'Sample Owner', 'tube_well', 25.0, 8.0, 1200, 'active', ST_GeomFromText('POINT(-74.006 40.7128)', 4326)),
+('WELL_MALI_001', 'Village Community', 'traditional', 15.0, 5.0, 800, 'active', ST_GeomFromText('POINT(-3.9962 17.5707)', 4326)),
+('WELL_NIGER_001', 'Agadez Community', 'community', 20.0, 7.0, 1000, 'active', ST_GeomFromText('POINT(8.0817 17.6078)', 4326)),
+('WELL_CHAD_002', 'Chad Community 2', 'tube_well', 28.0, 9.0, 1400, 'active', ST_GeomFromText('POINT(17.4353 10.9248)', 4326)),
+('WELL_CHAD_003', 'Chad Community 3', 'tube_well', 32.0, 11.0, 1600, 'active', ST_GeomFromText('POINT(15.1531 19.1165)', 4326)),
+('WELL_CHAD_004', 'Chad Community 4', 'tube_well', 27.0, 8.5, 1300, 'active', ST_GeomFromText('POINT(15.0134 11.5532)', 4326)),
+('WELL_CHAD_005', 'Chad Community 5', 'tube_well', 35.0, 12.0, 1800, 'active', ST_GeomFromText('POINT(22.1053 13.8229)', 4326)),
+('WELL_CHAD_006', 'Chad Community 6', 'tube_well', 29.0, 9.5, 1450, 'active', ST_GeomFromText('POINT(16.3439 13.3103)', 4326)),
+('WELL_CHAD_007', 'Chad Community 7', 'tube_well', 31.0, 10.5, 1550, 'active', ST_GeomFromText('POINT(18.3406 12.1451)', 4326)),
+('WELL_CHAD_008', 'Chad Community 8', 'tube_well', 26.0, 8.0, 1250, 'active', ST_GeomFromText('POINT(18.3833 12.9351)', 4326)),
+('WELL_CHAD_009', 'Chad Community 9', 'tube_well', 33.0, 11.5, 1650, 'active', ST_GeomFromText('POINT(19.5186 10.3879)', 4326)),
+('WELL_CHAD_010', 'Chad Community 10', 'tube_well', 30.0, 10.0, 1500, 'active', ST_GeomFromText('POINT(18.8199 12.3758)', 4326)),
+('WELL_CHAD_011', 'Chad Community 11', 'tube_well', 34.0, 12.0, 1700, 'active', ST_GeomFromText('POINT(19.8957 13.3533)', 4326)),
+('WELL_CHAD_012', 'Chad Community 12', 'tube_well', 28.0, 9.0, 1400, 'active', ST_GeomFromText('POINT(18.4293 12.9234)', 4326)),
+('WELL_CHAD_013', 'Chad Community 13', 'tube_well', 25.0, 7.5, 1200, 'active', ST_GeomFromText('POINT(17.0036 10.8839)', 4326)),
+('WELL_CHAD_014', 'Chad Community 14', 'tube_well', 29.0, 9.5, 1450, 'active', ST_GeomFromText('POINT(15.1959 12.3949)', 4326)),
+('WELL_CHAD_015', 'Chad Community 15', 'tube_well', 31.0, 10.5, 1550, 'active', ST_GeomFromText('POINT(18.2984 13.3941)', 4326)),
+('WELL_CHAD_016', 'Chad Community 16', 'tube_well', 27.0, 8.5, 1300, 'active', ST_GeomFromText('POINT(17.5332 12.4018)', 4326)),
+('WELL_CHAD_017', 'Chad Community 17', 'tube_well', 30.0, 10.0, 1500, 'active', ST_GeomFromText('POINT(18.0009 13.0314)', 4326)),
+('WELL_CHAD_018', 'Chad Community 18', 'tube_well', 28.0, 9.0, 1400, 'active', ST_GeomFromText('POINT(18.4286 12.8093)', 4326)),
+('WELL_CHAD_019', 'Chad Community 19', 'tube_well', 32.0, 11.0, 1600, 'active', ST_GeomFromText('POINT(18.2125 12.9933)', 4326)),
+('WELL_CHAD_020', 'Chad Community 20', 'tube_well', 29.0, 9.5, 1450, 'active', ST_GeomFromText('POINT(18.5212 13.2433)', 4326)),
+('WELL_CHAD_021', 'Chad Community 21', 'tube_well', 26.0, 8.0, 1250, 'active', ST_GeomFromText('POINT(18.1123 12.5534)', 4326)),
+('WELL_CHAD_022', 'Chad Community 22', 'tube_well', 33.0, 11.5, 1650, 'active', ST_GeomFromText('POINT(18.5896 13.2934)', 4326)),
+('WELL_CHAD_023', 'Chad Community 23', 'tube_well', 31.0, 10.5, 1550, 'active', ST_GeomFromText('POINT(18.6333 13.1234)', 4326)),
+('WELL_CHAD_024', 'Chad Community 24', 'tube_well', 28.0, 9.0, 1400, 'active', ST_GeomFromText('POINT(18.3324 12.9934)', 4326)),
+('WELL_CHAD_025', 'Chad Community 25', 'tube_well', 30.0, 10.0, 1500, 'active', ST_GeomFromText('POINT(18.4423 13.0034)', 4326));
+
+-- Chad sample boreholes (without status field)
+INSERT INTO boreholes (borehole_id, drilling_company, total_depth_m, pump_capacity_lph, geom) VALUES
+('BH_CHAD_002', 'Chad Drilling Co.', 75.0, 1800, ST_GeomFromText('POINT(19.0103 13.9284)', 4326)),
+('BH_CHAD_003', 'Chad Drilling Co.', 85.0, 2200, ST_GeomFromText('POINT(17.9248 11.4353)', 4326)),
+('BH_CHAD_004', 'Chad Drilling Co.', 70.0, 1600, ST_GeomFromText('POINT(15.1165 19.1531)', 4326)),
+('BH_CHAD_005', 'Chad Drilling Co.', 78.0, 1900, ST_GeomFromText('POINT(15.5532 11.0134)', 4326)),
+('BH_CHAD_006', 'Chad Drilling Co.', 82.0, 2100, ST_GeomFromText('POINT(22.8229 13.1053)', 4326)),
+('BH_CHAD_007', 'Chad Drilling Co.', 77.0, 1850, ST_GeomFromText('POINT(16.3103 13.3439)', 4326)),
+('BH_CHAD_008', 'Chad Drilling Co.', 73.0, 1700, ST_GeomFromText('POINT(18.1451 12.3406)', 4326)),
+('BH_CHAD_009', 'Chad Drilling Co.', 79.0, 1950, ST_GeomFromText('POINT(18.9351 12.3833)', 4326)),
+('BH_CHAD_010', 'Chad Drilling Co.', 76.0, 1800, ST_GeomFromText('POINT(19.3879 10.5186)', 4326)),
+('BH_CHAD_011', 'Chad Drilling Co.', 81.0, 2050, ST_GeomFromText('POINT(18.3758 12.8199)', 4326)),
+('BH_CHAD_012', 'Chad Drilling Co.', 74.0, 1750, ST_GeomFromText('POINT(19.3533 13.8957)', 4326)),
+('BH_CHAD_013', 'Chad Drilling Co.', 83.0, 2150, ST_GeomFromText('POINT(18.9234 12.4293)', 4326)),
+('BH_CHAD_014', 'Chad Drilling Co.', 72.0, 1650, ST_GeomFromText('POINT(17.8839 10.0036)', 4326)),
+('BH_CHAD_015', 'Chad Drilling Co.', 78.0, 1900, ST_GeomFromText('POINT(15.3949 12.1959)', 4326)),
+('BH_CHAD_016', 'Chad Drilling Co.', 80.0, 2000, ST_GeomFromText('POINT(18.3941 13.2984)', 4326)),
+('BH_CHAD_017', 'Chad Drilling Co.', 75.0, 1800, ST_GeomFromText('POINT(17.4018 12.5332)', 4326)),
+('BH_CHAD_018', 'Chad Drilling Co.', 77.0, 1850, ST_GeomFromText('POINT(18.0314 13.0009)', 4326)),
+('BH_CHAD_019', 'Chad Drilling Co.', 84.0, 2200, ST_GeomFromText('POINT(18.8093 12.4286)', 4326)),
+('BH_CHAD_020', 'Chad Drilling Co.', 71.0, 1600, ST_GeomFromText('POINT(18.9933 12.2125)', 4326)),
+('BH_CHAD_021', 'Chad Drilling Co.', 79.0, 1950, ST_GeomFromText('POINT(18.2433 13.5212)', 4326)),
+('BH_CHAD_022', 'Chad Drilling Co.', 76.0, 1800, ST_GeomFromText('POINT(18.5534 12.1123)', 4326)),
+('BH_CHAD_023', 'Chad Drilling Co.', 82.0, 2100, ST_GeomFromText('POINT(18.2934 13.5896)', 4326)),
+('BH_CHAD_024', 'Chad Drilling Co.', 73.0, 1700, ST_GeomFromText('POINT(18.1234 13.6333)', 4326)),
+('BH_CHAD_025', 'Chad Drilling Co.', 78.0, 1900, ST_GeomFromText('POINT(18.9934 12.3324)', 4326));
+
+-- Chad sample ponds (using polygon geometry for water bodies)
+INSERT INTO ponds (pond_id, name, is_perennial, capacity_liters, maximum_depth_m, geom) VALUES
+('POND_NIGERIA_001', 'Pond in Nigeria', true, 150000, 4.5, ST_GeomFromText('POLYGON((7.69 11.38, 7.71 11.38, 7.71 11.40, 7.69 11.40, 7.69 11.38))', 4326)),
+('POND_MALI_SEASONAL_001', 'Seasonal Pond in Mali', false, 80000, 3.2, ST_GeomFromText('POLYGON((-4.51 16.99, -4.49 16.99, -4.49 17.01, -4.51 17.01, -4.51 16.99))', 4326)),
+('POND_CHAD_001', 'Chad Pond 1', true, 200000, 5.0, ST_GeomFromText('POLYGON((19.99 14.92, 20.02 14.92, 20.02 14.94, 19.99 14.94, 19.99 14.92))', 4326)),
+('POND_CHAD_002', 'Chad Pond 2', false, 120000, 3.8, ST_GeomFromText('POLYGON((18.91 12.43, 18.94 12.43, 18.94 12.45, 18.91 12.45, 18.91 12.43))', 4326)),
+('POND_CHAD_003', 'Chad Pond 3', true, 180000, 4.7, ST_GeomFromText('POLYGON((16.10 20.14, 16.13 20.14, 16.13 20.17, 16.10 20.17, 16.10 20.14))', 4326)),
+('POND_CHAD_004', 'Chad Pond 4', false, 100000, 3.5, ST_GeomFromText('POLYGON((16.54 12.00, 16.57 12.00, 16.57 12.03, 16.54 12.03, 16.54 12.00))', 4326)),
+('POND_CHAD_005', 'Chad Pond 5', true, 250000, 5.5, ST_GeomFromText('POLYGON((23.81 14.10, 23.84 14.10, 23.84 14.12, 23.81 14.12, 23.81 14.10))', 4326)),
+('POND_CHAD_006', 'Chad Pond 6', false, 90000, 3.3, ST_GeomFromText('POLYGON((17.30 14.33, 17.33 14.33, 17.33 14.35, 17.30 14.35, 17.30 14.33))', 4326)),
+('POND_CHAD_007', 'Chad Pond 7', true, 170000, 4.5, ST_GeomFromText('POLYGON((19.13 13.33, 19.16 13.33, 19.16 13.35, 19.13 13.35, 19.13 13.33))', 4326)),
+('POND_CHAD_008', 'Chad Pond 8', false, 110000, 3.6, ST_GeomFromText('POLYGON((19.92 13.37, 19.95 13.37, 19.95 13.39, 19.92 13.39, 19.92 13.37))', 4326)),
+('POND_CHAD_009', 'Chad Pond 9', true, 190000, 4.8, ST_GeomFromText('POLYGON((20.37 11.51, 20.40 11.51, 20.40 11.53, 20.37 11.53, 20.37 11.51))', 4326)),
+('POND_CHAD_010', 'Chad Pond 10', false, 130000, 3.9, ST_GeomFromText('POLYGON((19.36 13.81, 19.39 13.81, 19.39 13.83, 19.36 13.83, 19.36 13.81))', 4326));

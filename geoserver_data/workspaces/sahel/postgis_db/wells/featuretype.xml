@@ -1,14 +1,14 @@
 <featureType>
   <id>FeatureTypeInfoImpl--44ec0058:19992864196:-7ffd</id>
   <name>wells</name>
-  <nativeName>spatial_data</nativeName>
+  <nativeName>wells</nativeName>
   <namespace>
     <id>NamespaceInfoImpl--44ec0058:19992864196:-7fff</id>
   </namespace>
-  <title>spatial_data</title>
+  <title>Wells Water Infrastructure</title>
   <keywords>
     <string>features</string>
-    <string>spatial_data</string>
+    <string>wells</string>
   </keywords>
   <srs>EPSG:4326</srs>
   <nativeBoundingBox>
@@ -31,7 +31,7 @@
     <id>DataStoreInfoImpl--44ec0058:19992864196:-7ffe</id>
   </store>
   <serviceConfiguration>false</serviceConfiguration>
-  <cqlFilter>type = &apos;well&apos;</cqlFilter>
+
   <maxFeatures>0</maxFeatures>
   <numDecimals>0</numDecimals>
   <padWithZeros>false</padWithZeros>

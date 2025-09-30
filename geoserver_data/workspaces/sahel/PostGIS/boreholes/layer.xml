@@ -1,0 +1,17 @@
+<layer>
+  <name>boreholes</name>
+  <id>LayerInfoImpl-4f4f4aa9_199962eb3d4_-7ff1</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <name>boreholes_style</name>
+    <workspace>sahel</workspace>
+  </defaultStyle>
+  <resource class="featureType">
+    <name>boreholes</name>
+    <workspace>sahel</workspace>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>

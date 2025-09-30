@@ -234,74 +234,77 @@ FROM boreholes;
 -- STEP 8: Create detailed nested views for GeoServer
 -- ============================================
 
--- Nested Wells Detailed (only wells within zones)
-CREATE VIEW nested_wells_detailed AS
-SELECT 
-    w.*,
-    wmz.name as zone_name,
-    wmz.administrative_region,
-    cd.contractor_name,
-    cd.construction_method,
-    cd.casing_material,
-    cd.construction_cost,
-    wq.test_date as latest_water_test_date,
-    wq.ph_level,
-    wq.tds_ppm,
-    wq.overall_quality
-FROM wells w
-INNER JOIN water_management_zones wmz ON w.zone_id = wmz.zone_id
-LEFT JOIN construction_details cd ON w.well_id = cd.well_id
-LEFT JOIN (
-    SELECT DISTINCT ON (feature_id) 
-        feature_id, test_date, ph_level, tds_ppm, overall_quality
-    FROM water_quality_reports 
-    WHERE feature_type = 'well'
-    ORDER BY feature_id, test_date DESC
-) wq ON w.well_id = wq.feature_id;
+-- NOTE: Nested views disabled to simplify layer management
+-- These were causing JavaScript layer errors in the webapp
+-- 
+-- -- Nested Wells Detailed (only wells within zones)
+-- CREATE VIEW nested_wells_detailed AS
+-- SELECT 
+--     w.*,
+--     wmz.name as zone_name,
+--     wmz.administrative_region,
+--     cd.contractor_name,
+--     cd.construction_method,
+--     cd.casing_material,
+--     cd.construction_cost,
+--     wq.test_date as latest_water_test_date,
+--     wq.ph_level,
+--     wq.tds_ppm,
+--     wq.overall_quality
+-- FROM wells w
+-- INNER JOIN water_management_zones wmz ON w.zone_id = wmz.zone_id
+-- LEFT JOIN construction_details cd ON w.well_id = cd.well_id
+-- LEFT JOIN (
+--     SELECT DISTINCT ON (feature_id) 
+--         feature_id, test_date, ph_level, tds_ppm, overall_quality
+--     FROM water_quality_reports 
+--     WHERE feature_type = 'well'
+--     ORDER BY feature_id, test_date DESC
+-- ) wq ON w.well_id = wq.feature_id;
 
--- Nested Ponds Detailed (only ponds within zones)
-CREATE VIEW nested_ponds_detailed AS
-SELECT 
-    p.*,
-    wmz.name as zone_name,
-    wmz.administrative_region,
-    wq.test_date as latest_water_test_date,
-    wq.ph_level,
-    wq.tds_ppm,
-    wq.overall_quality
-FROM ponds p
-INNER JOIN water_management_zones wmz ON p.zone_id = wmz.zone_id
-LEFT JOIN (
-    SELECT DISTINCT ON (feature_id) 
-        feature_id, test_date, ph_level, tds_ppm, overall_quality
-    FROM water_quality_reports 
-    WHERE feature_type = 'pond'
-    ORDER BY feature_id, test_date DESC
-) wq ON p.pond_id = wq.feature_id;
+-- -- Nested Ponds Detailed (only ponds within zones)
+-- CREATE VIEW nested_ponds_detailed AS
+-- SELECT 
+--     p.*,
+--     wmz.name as zone_name,
+--     wmz.administrative_region,
+--     wq.test_date as latest_water_test_date,
+--     wq.ph_level,
+--     wq.tds_ppm,
+--     wq.overall_quality
+-- FROM ponds p
+-- INNER JOIN water_management_zones wmz ON p.zone_id = wmz.zone_id
+-- LEFT JOIN (
+--     SELECT DISTINCT ON (feature_id) 
+--         feature_id, test_date, ph_level, tds_ppm, overall_quality
+--     FROM water_quality_reports 
+--     WHERE feature_type = 'pond'
+--     ORDER BY feature_id, test_date DESC
+-- ) wq ON p.pond_id = wq.feature_id;
 
--- Nested Boreholes Detailed (only boreholes within zones)  
-CREATE VIEW nested_boreholes_detailed AS
-SELECT 
-    b.*,
-    wmz.name as zone_name,
-    wmz.administrative_region,
-    gl.geologist_name,
-    gl.rock_formation,
-    gl.overall_aquifer_potential,
-    wq.test_date as latest_water_test_date,
-    wq.ph_level,
-    wq.tds_ppm,
-    wq.overall_quality
-FROM boreholes b
-INNER JOIN water_management_zones wmz ON b.zone_id = wmz.zone_id
-LEFT JOIN geological_logs gl ON b.borehole_id = gl.borehole_id
-LEFT JOIN (
-    SELECT DISTINCT ON (feature_id) 
-        feature_id, test_date, ph_level, tds_ppm, overall_quality
-    FROM water_quality_reports 
-    WHERE feature_type = 'borehole'
-    ORDER BY feature_id, test_date DESC
-) wq ON b.borehole_id = wq.feature_id;
+-- -- Nested Boreholes Detailed (only boreholes within zones)  
+-- CREATE VIEW nested_boreholes_detailed AS
+-- SELECT 
+--     b.*,
+--     wmz.name as zone_name,
+--     wmz.administrative_region,
+--     gl.geologist_name,
+--     gl.rock_formation,
+--     gl.overall_aquifer_potential,
+--     wq.test_date as latest_water_test_date,
+--     wq.ph_level,
+--     wq.tds_ppm,
+--     wq.overall_quality
+-- FROM boreholes b
+-- INNER JOIN water_management_zones wmz ON b.zone_id = wmz.zone_id
+-- LEFT JOIN geological_logs gl ON b.borehole_id = gl.borehole_id
+-- LEFT JOIN (
+--     SELECT DISTINCT ON (feature_id) 
+--         feature_id, test_date, ph_level, tds_ppm, overall_quality
+--     FROM water_quality_reports 
+--     WHERE feature_type = 'borehole'
+--     ORDER BY feature_id, test_date DESC
+-- ) wq ON b.borehole_id = wq.feature_id;
 
 -- ============================================
 -- STEP 9: Update water management zones view
@@ -358,9 +361,9 @@ GRANT SELECT ON boreholes TO geouser;
 GRANT SELECT ON complete_wells TO geouser;
 GRANT SELECT ON complete_ponds TO geouser;
 GRANT SELECT ON complete_boreholes TO geouser;
-GRANT SELECT ON nested_wells_detailed TO geouser;
-GRANT SELECT ON nested_ponds_detailed TO geouser;
-GRANT SELECT ON nested_boreholes_detailed TO geouser;
+-- GRANT SELECT ON nested_wells_detailed TO geouser;
+-- GRANT SELECT ON nested_ponds_detailed TO geouser;
+-- GRANT SELECT ON nested_boreholes_detailed TO geouser;
 GRANT SELECT ON v_water_infrastructure_comprehensive TO geouser;
 GRANT SELECT ON v_water_management_zones_detailed TO geouser;
 
@@ -370,6 +373,6 @@ COMMIT;
 SELECT 'Wells table renamed successfully' as status, COUNT(*) as record_count FROM wells;
 SELECT 'Ponds table renamed successfully' as status, COUNT(*) as record_count FROM ponds;
 SELECT 'Boreholes table renamed successfully' as status, COUNT(*) as record_count FROM boreholes;
-SELECT 'Nested wells view created' as status, COUNT(*) as record_count FROM nested_wells_detailed;
-SELECT 'Nested ponds view created' as status, COUNT(*) as record_count FROM nested_ponds_detailed;
-SELECT 'Nested boreholes view created' as status, COUNT(*) as record_count FROM nested_boreholes_detailed;
+-- SELECT 'Nested wells view created' as status, COUNT(*) as record_count FROM nested_wells_detailed;
+-- SELECT 'Nested ponds view created' as status, COUNT(*) as record_count FROM nested_ponds_detailed;
+-- SELECT 'Nested boreholes view created' as status, COUNT(*) as record_count FROM nested_boreholes_detailed;
