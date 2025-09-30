@@ -379,27 +379,26 @@
 
         const layers = {
             // Main layer controls
-            // NOTE: zones-layer commented out because water_management_zones_detailed doesn't exist
-            // 'zones-layer': new ol.layer.Tile({
-            //     source: new ol.source.TileWMS({
-            //         url: '/geoserver/sahel/wms',
-            //         params: {
-            //             'LAYERS': 'sahel:water_management_zones_detailed',
-            //             'TILED': true,
-            //             'TILESORIGIN': '0,0'
-            //         },
-            //         serverType: 'geoserver',
-            //         // Reduce concurrent requests
-            //         tileLoadFunction: function(tile, src) {
-            //             tile.getImage().src = src;
-            //         },
-            //         // Add cache control
-            //         cacheSize: 2048
-            //     }),
-            //     visible: true,
-            //     // Set max resolution to reduce tile requests at low zoom
-            //     maxResolution: 40075.01683074552 / Math.pow(2, 3)
-            // }),
+            'zones-layer': new ol.layer.Tile({
+                source: new ol.source.TileWMS({
+                    url: '/geoserver/sahel/wms',
+                    params: {
+                        'LAYERS': 'sahel:water_management_zones_detailed',
+                        'TILED': true,
+                        'TILESORIGIN': '0,0'
+                    },
+                    serverType: 'geoserver',
+                    // Reduce concurrent requests
+                    tileLoadFunction: function(tile, src) {
+                        tile.getImage().src = src;
+                    },
+                    // Add cache control
+                    cacheSize: 2048
+                }),
+                visible: true,
+                // Set max resolution to reduce tile requests at low zoom
+                maxResolution: 40075.01683074552 / Math.pow(2, 3)
+            }),
             'all-water-infrastructure-layer': new ol.layer.Tile({
                 source: new ol.source.TileWMS({
                     url: '/geoserver/sahel/wms',
@@ -774,7 +773,7 @@
             
             // Check all layers for features at click point
             Promise.all([
-                // getFeatureInfo(layers['zones-layer'], 'sahel:water_management_zones_detailed'), // Layer doesn't exist
+                getFeatureInfo(layers['zones-layer'], 'sahel:water_management_zones_detailed'),
                 getFeatureInfo(layers['all-water-infrastructure-layer'], 'sahel:v_water_infrastructure_comprehensive'),
                 getFeatureInfoWFS('sahel:wells'),
                 getFeatureInfoWFS('sahel:ponds'),
@@ -784,13 +783,13 @@
                 console.log('🔍 Feature detection results:', results);
                 console.log('📊 Results summary:');
                 results.forEach((result, index) => {
-                    const methods = ['infrastructure', 'wells-WFS', 'ponds-WFS', 'boreholes-WFS', 'admin'];
+                    const methods = ['zones', 'infrastructure', 'wells-WFS', 'ponds-WFS', 'boreholes-WFS', 'admin'];
                     console.log(`  ${methods[index]}: ${result ? '✅ Found' : '❌ None'}`);
                 });
                 
                 // Add debugging info to UI
                 const debugInfo = results.map((result, index) => {
-                    const methods = ['infrastructure', 'wells-WFS', 'ponds-WFS', 'boreholes-WFS', 'admin'];
+                    const methods = ['zones', 'infrastructure', 'wells-WFS', 'ponds-WFS', 'boreholes-WFS', 'admin'];
                     return `${methods[index]}: ${result ? '✅ Found' : '❌ None'}`;
                 }).join('<br>');
                 
