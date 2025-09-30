@@ -264,7 +264,7 @@ docker compose down && docker compose up -d
 - **Data Persistence**: Database data persists in Docker volumes across container restarts
 - **Port Mapping**: Only port 8080 is exposed to host, providing single entry point
 
-## 🔧 Recent Improvements (v2.0.1)
+## 🔧 Recent Improvements (v2.0.2)
 
 - ✅ **API Cleanup**: Removed legacy `api.php` and `api.py` files and updated Dockerfile
 - ✅ **Browser Cache Detection**: Added automatic detection of old cached API calls with user alerts
@@ -272,6 +272,8 @@ docker compose down && docker compose up -d
 - ✅ **Enhanced Sample Data**: Added wells and ponds at user-clicked coordinates for better testing
 - ✅ **Strong Cache Busting**: Implemented fetch override and cache-busting headers
 - ✅ **Improved Error Handling**: Better content-type checking and fallback mechanisms
+- ✅ **Infinite Retry Loop Fix**: Fixed construction details API retry mechanism that was causing console spam
+- ✅ **Feature Detection Mapping**: Corrected array mapping to show proper infrastructure labels
 
 ## 🔗 Integration Details
 
