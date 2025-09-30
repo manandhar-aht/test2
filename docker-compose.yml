@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: geopass
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./init-scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+      # - ./init-scripts:/docker-entrypoint-initdb.d
     ports:
       - "5432:5432"
     networks:

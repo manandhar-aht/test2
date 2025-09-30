@@ -1,53 +1,15 @@
--- Chad sample wells (adding new wells that don't conflict with existing ones)
-INSERT INTO wells (well_id, owner, well_type, depth_m, static_water_level_m, yield_liters_per_hour, status, geom) VALUES 
-('WELL_NYC_001', 'Sample Owner', 'tube_well', 25.0, 8.0, 1200, 'active', ST_GeomFromText('POINT(-74.006 40.7128)', 4326)),
-('WELL_MALI_001', 'Village Community', 'traditional', 15.0, 5.0, 800, 'active', ST_GeomFromText('POINT(-3.9962 17.5707)', 4326)),
-('WELL_NIGER_001', 'Agadez Community', 'community', 20.0, 7.0, 1000, 'active', ST_GeomFromText('POINT(8.0817 17.6078)', 4326)),
-('WELL_CHAD_002', 'Chad Community 2', 'tube_well', 28.0, 9.0, 1400, 'active', ST_GeomFromText('POINT(17.4353 10.9248)', 4326)),
-('WELL_CHAD_003', 'Chad Community 3', 'tube_well', 32.0, 11.0, 1600, 'active', ST_GeomFromText('POINT(15.1531 19.1165)', 4326)),
-('WELL_CHAD_004', 'Chad Community 4', 'tube_well', 27.0, 8.5, 1300, 'active', ST_GeomFromText('POINT(15.0134 11.5532)', 4326)),
-('WELL_CHAD_005', 'Chad Community 5', 'tube_well', 35.0, 12.0, 1800, 'active', ST_GeomFromText('POINT(22.1053 13.8229)', 4326)),
-('WELL_CHAD_006', 'Chad Community 6', 'tube_well', 29.0, 9.5, 1450, 'active', ST_GeomFromText('POINT(16.3439 13.3103)', 4326)),
-('WELL_CHAD_007', 'Chad Community 7', 'tube_well', 31.0, 10.5, 1550, 'active', ST_GeomFromText('POINT(18.3406 12.1451)', 4326)),
-('WELL_CHAD_008', 'Chad Community 8', 'tube_well', 26.0, 8.0, 1250, 'active', ST_GeomFromText('POINT(18.3833 12.9351)', 4326)),
-('WELL_CHAD_009', 'Chad Community 9', 'tube_well', 33.0, 11.5, 1650, 'active', ST_GeomFromText('POINT(19.5186 10.3879)', 4326)),
-('WELL_CHAD_010', 'Chad Community 10', 'tube_well', 30.0, 10.0, 1500, 'active', ST_GeomFromText('POINT(18.8199 12.3758)', 4326)),
-('WELL_CHAD_011', 'Chad Community 11', 'tube_well', 34.0, 12.0, 1700, 'active', ST_GeomFromText('POINT(19.8957 13.3533)', 4326)),
-('WELL_CHAD_012', 'Chad Community 12', 'tube_well', 28.0, 9.0, 1400, 'active', ST_GeomFromText('POINT(18.4293 12.9234)', 4326)),
-('WELL_CHAD_013', 'Chad Community 13', 'tube_well', 25.0, 7.5, 1200, 'active', ST_GeomFromText('POINT(17.0036 10.8839)', 4326)),
-('WELL_CHAD_014', 'Chad Community 14', 'tube_well', 29.0, 9.5, 1450, 'active', ST_GeomFromText('POINT(15.1959 12.3949)', 4326)),
-('WELL_CHAD_015', 'Chad Community 15', 'tube_well', 31.0, 10.5, 1550, 'active', ST_GeomFromText('POINT(18.2984 13.3941)', 4326)),
-('WELL_CHAD_016', 'Chad Community 16', 'tube_well', 27.0, 8.5, 1300, 'active', ST_GeomFromText('POINT(17.5332 12.4018)', 4326)),
-('WELL_CHAD_017', 'Chad Community 17', 'tube_well', 30.0, 10.0, 1500, 'active', ST_GeomFromText('POINT(18.0009 13.0314)', 4326)),
-('WELL_CHAD_018', 'Chad Community 18', 'tube_well', 28.0, 9.0, 1400, 'active', ST_GeomFromText('POINT(18.4286 12.8093)', 4326)),
-('WELL_CHAD_019', 'Chad Community 19', 'tube_well', 32.0, 11.0, 1600, 'active', ST_GeomFromText('POINT(18.2125 12.9933)', 4326)),
-('WELL_CHAD_020', 'Chad Community 20', 'tube_well', 29.0, 9.5, 1450, 'active', ST_GeomFromText('POINT(18.5212 13.2433)', 4326)),
-('WELL_CHAD_021', 'Chad Community 21', 'tube_well', 26.0, 8.0, 1250, 'active', ST_GeomFromText('POINT(18.1123 12.5534)', 4326)),
-('WELL_CHAD_022', 'Chad Community 22', 'tube_well', 33.0, 11.5, 1650, 'active', ST_GeomFromText('POINT(18.5896 13.2934)', 4326)),
-('WELL_CHAD_023', 'Chad Community 23', 'tube_well', 31.0, 10.5, 1550, 'active', ST_GeomFromText('POINT(18.6333 13.1234)', 4326)),
-('WELL_CHAD_024', 'Chad Community 24', 'tube_well', 28.0, 9.0, 1400, 'active', ST_GeomFromText('POINT(18.3324 12.9934)', 4326)),
-('WELL_CHAD_025', 'Chad Community 25', 'tube_well', 30.0, 10.0, 1500, 'active', ST_GeomFromText('POINT(18.4423 13.0034)', 4326));
+-- Simple initialization for feature analysis functionality
+-- Load only the essential schema and data for the API
 
--- Chad sample boreholes (without status field)
-INSERT INTO boreholes (borehole_id, drilling_company, total_depth_m, pump_capacity_lph, geom) VALUES
-('BH_CHAD_002', 'Chad Drilling Co.', 75.0, 1800, ST_GeomFromText('POINT(19.0103 13.9284)', 4326)),
-('BH_CHAD_003', 'Chad Drilling Co.', 85.0, 2200, ST_GeomFromText('POINT(17.9248 11.4353)', 4326)),
-('BH_CHAD_004', 'Chad Drilling Co.', 70.0, 1600, ST_GeomFromText('POINT(15.1165 19.1531)', 4326)),
-('BH_CHAD_005', 'Chad Drilling Co.', 78.0, 1900, ST_GeomFromText('POINT(15.5532 11.0134)', 4326)),
-('BH_CHAD_006', 'Chad Drilling Co.', 82.0, 2100, ST_GeomFromText('POINT(22.8229 13.1053)', 4326)),
-('BH_CHAD_007', 'Chad Drilling Co.', 77.0, 1850, ST_GeomFromText('POINT(16.3103 13.3439)', 4326)),
-('BH_CHAD_008', 'Chad Drilling Co.', 73.0, 1700, ST_GeomFromText('POINT(18.1451 12.3406)', 4326)),
-('BH_CHAD_009', 'Chad Drilling Co.', 79.0, 1950, ST_GeomFromText('POINT(18.9351 12.3833)', 4326)),
-('BH_CHAD_010', 'Chad Drilling Co.', 76.0, 1800, ST_GeomFromText('POINT(19.3879 10.5186)', 4326)),
-('BH_CHAD_011', 'Chad Drilling Co.', 81.0, 2050, ST_GeomFromText('POINT(18.3758 12.8199)', 4326)),
-('BH_CHAD_012', 'Chad Drilling Co.', 74.0, 1750, ST_GeomFromText('POINT(19.3533 13.8957)', 4326)),
-('BH_CHAD_013', 'Chad Drilling Co.', 83.0, 2150, ST_GeomFromText('POINT(18.9234 12.4293)', 4326)),
-('BH_CHAD_014', 'Chad Drilling Co.', 72.0, 1650, ST_GeomFromText('POINT(17.8839 10.0036)', 4326)),
-('BH_CHAD_015', 'Chad Drilling Co.', 78.0, 1900, ST_GeomFromText('POINT(15.3949 12.1959)', 4326)),
-('BH_CHAD_016', 'Chad Drilling Co.', 80.0, 2000, ST_GeomFromText('POINT(18.3941 13.2984)', 4326)),
-('BH_CHAD_017', 'Chad Drilling Co.', 75.0, 1800, ST_GeomFromText('POINT(17.4018 12.5332)', 4326)),
-('BH_CHAD_018', 'Chad Drilling Co.', 77.0, 1850, ST_GeomFromText('POINT(18.0314 13.0009)', 4326)),
-('BH_CHAD_019', 'Chad Drilling Co.', 84.0, 2200, ST_GeomFromText('POINT(18.8093 12.4286)', 4326)),
+-- Create feature analysis schema
+\i /docker-entrypoint-initdb.d/simple-feature-schema.sql
+
+-- Insert sample data
+\i /docker-entrypoint-initdb.d/simple-feature-data.sql
+
+-- Grant permissions
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO geouser;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO geouser;
 ('BH_CHAD_020', 'Chad Drilling Co.', 71.0, 1600, ST_GeomFromText('POINT(18.9933 12.2125)', 4326)),
 ('BH_CHAD_021', 'Chad Drilling Co.', 79.0, 1950, ST_GeomFromText('POINT(18.2433 13.5212)', 4326)),
 ('BH_CHAD_022', 'Chad Drilling Co.', 76.0, 1800, ST_GeomFromText('POINT(18.5534 12.1123)', 4326)),

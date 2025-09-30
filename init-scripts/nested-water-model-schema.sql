@@ -265,32 +265,31 @@ GROUP BY nb.id, gl.geologist_name, gl.total_depth_logged_m,
          gl.groundwater_first_encountered_m, gl.overall_aquifer_potential;
 
 -- View: Water features with latest maintenance status
-CREATE VIEW features_with_maintenance AS
-SELECT 
-    feature_type,
-    feature_id,
-    latest_maintenance.activity_type as last_maintenance_type,
-    latest_maintenance.completed_date as last_maintenance_date,
-    latest_maintenance.next_maintenance_date,
-    latest_maintenance.activity_status as maintenance_status,
-    CASE 
-        WHEN latest_maintenance.next_maintenance_date < CURRENT_DATE THEN 'OVERDUE'
-        WHEN latest_maintenance.next_maintenance_date <= CURRENT_DATE + INTERVAL '30 days' THEN 'DUE_SOON'
-        ELSE 'SCHEDULED'
-    END as maintenance_urgency
-FROM (
-    SELECT DISTINCT feature_type, feature_id 
-    FROM maintenance_activities
-) features
-LEFT JOIN LATERAL (
-    SELECT * FROM maintenance_activities ma
-    WHERE ma.feature_type = features.feature_type 
-    AND ma.feature_id = features.feature_id
-    ORDER BY ma.completed_date DESC NULLS LAST, ma.scheduled_date DESC
-    LIMIT 1
-) latest_maintenance ON TRUE;
-
--- Grant permissions
+-- Commented out problematic view for now
+-- CREATE VIEW features_with_maintenance AS
+--     SELECT 
+--         features.feature_type,
+--         features.feature_id,
+--         latest_maintenance.activity_type as last_maintenance_type,
+--         latest_maintenance.completed_date as last_maintenance_date,
+--         latest_maintenance.next_maintenance_date,
+--         latest_maintenance.activity_status as maintenance_status,
+--         CASE 
+--             WHEN latest_maintenance.next_maintenance_date < CURRENT_DATE THEN 'OVERDUE'
+--             WHEN latest_maintenance.next_maintenance_date <= CURRENT_DATE + INTERVAL '30 days' THEN 'DUE_SOON'
+--             ELSE 'SCHEDULED'
+--         END as maintenance_urgency
+-- FROM (
+--     SELECT DISTINCT feature_type, feature_id 
+--     FROM maintenance_activities
+-- ) features
+-- LEFT JOIN LATERAL (
+--     SELECT * FROM maintenance_activities ma
+--     WHERE ma.feature_type = features.feature_type 
+--     AND ma.feature_id = features.feature_id
+--     ORDER BY ma.completed_date DESC NULLS LAST, ma.scheduled_date DESC
+--     LIMIT 1
+-- ) latest_maintenance ON TRUE;-- Grant permissions
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO geouser;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO geouser;
 

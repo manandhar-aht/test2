@@ -1321,176 +1321,213 @@
             const detailsDiv = document.getElementById('feature-details');
             detailsDiv.innerHTML = '<div class="loading" style="display: block;">💧 Loading water quality history...</div>';
             
-            // Simulate loading delay for realism
-            setTimeout(() => {
-                // Generate sample water quality data based on feature type
-                const featureType = window.currentFeature?.feature_type || 'well';
-                const sampleData = generateWaterQualityData(featureId, featureType);
+            try {
+                const response = await fetch(`api.php?action=water_quality&feature_id=${encodeURIComponent(featureId)}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const reports = await response.json();
                 
                 let html = '<div class="feature-details">';
                 html += `<h4>💧 Water Quality History: ${featureId}</h4>`;
-                html += '<div style="background: #e8f5e8; padding: 0.5rem; border-radius: 4px; margin-bottom: 1rem; font-size: 0.9em;">📊 Sample data for demonstration purposes</div>';
+                html += '<div style="background: #e8f5e8; padding: 0.5rem; border-radius: 4px; margin-bottom: 1rem; font-size: 0.9em;">📊 Real database data</div>';
                 
-                sampleData.forEach((report, index) => {
-                    html += `<div style="border: 1px solid #ddd; padding: 1rem; margin: 0.5rem 0; border-radius: 4px; ${index === 0 ? 'border-left: 4px solid #3498db;' : ''}">`;
-                    html += `<h5 style="color: ${getQualityColor(report.overall_quality)}; margin: 0 0 0.5rem 0;">${report.test_date} - ${report.overall_quality.toUpperCase()}</h5>`;
-                    
-                    html += `<div class="data-grid">`;
-                    html += `<div class="data-item"><span>pH Level:</span><span>${report.ph_level}</span></div>`;
-                    html += `<div class="data-item"><span>TDS (ppm):</span><span>${report.tds_ppm}</span></div>`;
-                    html += `<div class="data-item"><span>Conductivity (μS/cm):</span><span>${report.conductivity}</span></div>`;
-                    html += `<div class="data-item"><span>Turbidity (NTU):</span><span>${report.turbidity}</span></div>`;
-                    html += `<div class="data-item"><span>Temperature (°C):</span><span>${report.temperature}</span></div>`;
-                    html += `<div class="data-item"><span>Laboratory:</span><span>${report.testing_laboratory}</span></div>`;
-                    html += `<div class="data-item"><span>Next Test:</span><span>${report.next_test_due_date}</span></div>`;
-                    html += `</div>`;
-                    
-                    if (report.recommended_treatment) {
-                        html += `<p style="margin-top: 0.5rem;"><strong>Recommended Treatment:</strong> ${report.recommended_treatment}</p>`;
-                    }
-                    
-                    if (report.notes) {
-                        html += `<p style="margin-top: 0.5rem; font-style: italic; color: #7f8c8d;"><strong>Notes:</strong> ${report.notes}</p>`;
-                    }
-                    
-                    // Add bacteriological test results
-                    html += `<div style="margin-top: 0.5rem; padding: 0.5rem; background: #f8f9fa; border-radius: 4px;">`;
-                    html += `<strong>Bacteriological Results:</strong><br>`;
-                    html += `E. coli: ${report.ecoli_count} CFU/100ml | Coliforms: ${report.coliform_count} CFU/100ml`;
-                    html += `</div>`;
-                    
-                    html += '</div>';
-                });
+                if (reports.length === 0) {
+                    html += '<div style="padding: 1rem; text-align: center; color: #7f8c8d;">No water quality reports found for this feature.</div>';
+                } else {
+                    reports.forEach((report, index) => {
+                        html += `<div style="border: 1px solid #ddd; padding: 1rem; margin: 0.5rem 0; border-radius: 4px; ${index === 0 ? 'border-left: 4px solid #3498db;' : ''}">`;
+                        html += `<h5 style="color: ${getQualityColor(report.overall_quality)}; margin: 0 0 0.5rem 0;">${report.test_date} - ${report.overall_quality.toUpperCase()}</h5>`;
+                        
+                        html += `<div class="data-grid">`;
+                        html += `<div class="data-item"><span>pH Level:</span><span>${report.ph_level}</span></div>`;
+                        html += `<div class="data-item"><span>TDS (ppm):</span><span>${report.tds_ppm}</span></div>`;
+                        html += `<div class="data-item"><span>Conductivity (μS/cm):</span><span>${report.conductivity}</span></div>`;
+                        html += `<div class="data-item"><span>Turbidity (NTU):</span><span>${report.turbidity}</span></div>`;
+                        html += `<div class="data-item"><span>Temperature (°C):</span><span>${report.temperature}</span></div>`;
+                        html += `<div class="data-item"><span>Laboratory:</span><span>${report.testing_laboratory}</span></div>`;
+                        if (report.next_test_due_date) {
+                            html += `<div class="data-item"><span>Next Test:</span><span>${report.next_test_due_date}</span></div>`;
+                        }
+                        html += `</div>`;
+                        
+                        if (report.recommended_treatment) {
+                            html += `<p style="margin-top: 0.5rem;"><strong>Recommended Treatment:</strong> ${report.recommended_treatment}</p>`;
+                        }
+                        
+                        if (report.notes) {
+                            html += `<p style="margin-top: 0.5rem; font-style: italic; color: #7f8c8d;"><strong>Notes:</strong> ${report.notes}</p>`;
+                        }
+                        
+                        // Add bacteriological test results
+                        html += `<div style="margin-top: 0.5rem; padding: 0.5rem; background: #f8f9fa; border-radius: 4px;">`;
+                        html += `<strong>Bacteriological Results:</strong><br>`;
+                        html += `E. coli: ${report.ecoli_count || 0} CFU/100ml | Coliforms: ${report.coliform_count || 0} CFU/100ml`;
+                        html += `</div>`;
+                        
+                        html += '</div>';
+                    });
+                }
                 
                 html += '</div>';
                 detailsDiv.innerHTML = html;
-            }, 500);
+                
+            } catch (error) {
+                console.error('Error fetching water quality data:', error);
+                detailsDiv.innerHTML = '<div class="error-message">Error loading water quality data. Please try again.</div>';
+            }
         }
 
         async function getMaintenanceHistory(featureId) {
             const detailsDiv = document.getElementById('feature-details');
             detailsDiv.innerHTML = '<div class="loading" style="display: block;">🔧 Loading maintenance history...</div>';
             
-            // Simulate loading delay for realism
-            setTimeout(() => {
-                // Generate sample maintenance data based on feature type
-                const featureType = window.currentFeature?.feature_type || 'well';
-                const sampleData = generateMaintenanceData(featureId, featureType);
+            try {
+                const response = await fetch(`api.php?action=maintenance&feature_id=${encodeURIComponent(featureId)}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const activities = await response.json();
                 
                 let html = '<div class="feature-details">';
                 html += `<h4>🔧 Maintenance History: ${featureId}</h4>`;
-                html += '<div style="background: #fff3cd; padding: 0.5rem; border-radius: 4px; margin-bottom: 1rem; font-size: 0.9em;">🛠️ Sample data for demonstration purposes</div>';
+                html += '<div style="background: #fff3cd; padding: 0.5rem; border-radius: 4px; margin-bottom: 1rem; font-size: 0.9em;">🛠️ Real database data</div>';
                 
-                sampleData.forEach((activity, index) => {
-                    html += `<div style="border: 1px solid #ddd; padding: 1rem; margin: 0.5rem 0; border-radius: 4px; ${index === 0 ? 'border-left: 4px solid #e67e22;' : ''}">`;
-                    html += `<h5 style="color: ${getMaintenanceColor(activity.activity_status)}; margin: 0 0 0.5rem 0;">${activity.activity_date} - ${activity.activity_type.replace('_', ' ').toUpperCase()}</h5>`;
-                    
-                    html += `<div class="data-grid">`;
-                    html += `<div class="data-item"><span>Status:</span><span style="color: ${getMaintenanceColor(activity.activity_status)}">${activity.activity_status.replace('_', ' ').toUpperCase()}</span></div>`;
-                    html += `<div class="data-item"><span>Cost:</span><span>$${activity.cost.toLocaleString()}</span></div>`;
-                    html += `<div class="data-item"><span>Technician:</span><span>${activity.technician}</span></div>`;
-                    html += `<div class="data-item"><span>Duration:</span><span>${activity.duration} hours</span></div>`;
-                    html += `<div class="data-item"><span>Priority:</span><span style="color: ${activity.priority === 'high' ? '#e74c3c' : activity.priority === 'medium' ? '#f39c12' : '#27ae60'}">${activity.priority.toUpperCase()}</span></div>`;
-                    if (activity.next_maintenance_date) {
-                        html += `<div class="data-item"><span>Next Maintenance:</span><span>${activity.next_maintenance_date}</span></div>`;
-                    }
-                    html += `</div>`;
-                    
-                    if (activity.description) {
-                        html += `<p style="margin-top: 0.5rem;"><strong>Description:</strong> ${activity.description}</p>`;
-                    }
-                    
-                    if (activity.parts_replaced && activity.parts_replaced.length > 0) {
-                        html += `<p style="margin-top: 0.5rem;"><strong>Parts Replaced:</strong> ${activity.parts_replaced.join(', ')}</p>`;
-                    }
-                    
-                    if (activity.equipment_used && activity.equipment_used.length > 0) {
-                        html += `<p style="margin-top: 0.5rem;"><strong>Equipment Used:</strong> ${activity.equipment_used.join(', ')}</p>`;
-                    }
-                    
-                    if (activity.notes) {
-                        html += `<p style="margin-top: 0.5rem; font-style: italic; color: #7f8c8d;"><strong>Notes:</strong> ${activity.notes}</p>`;
-                    }
-                    
-                    // Add effectiveness rating
-                    html += `<div style="margin-top: 0.5rem; padding: 0.5rem; background: #f8f9fa; border-radius: 4px;">`;
-                    html += `<strong>Effectiveness Rating:</strong> ${activity.effectiveness_rating}/5 stars`;
-                    html += `</div>`;
-                    
-                    html += '</div>';
-                });
+                if (activities.length === 0) {
+                    html += '<div style="padding: 1rem; text-align: center; color: #7f8c8d;">No maintenance activities found for this feature.</div>';
+                } else {
+                    activities.forEach((activity, index) => {
+                        html += `<div style="border: 1px solid #ddd; padding: 1rem; margin: 0.5rem 0; border-radius: 4px; ${index === 0 ? 'border-left: 4px solid #e67e22;' : ''}">`;
+                        html += `<h5 style="color: ${getMaintenanceColor(activity.activity_status)}; margin: 0 0 0.5rem 0;">${activity.activity_date} - ${activity.activity_type.replace('_', ' ').toUpperCase()}</h5>`;
+                        
+                        html += `<div class="data-grid">`;
+                        html += `<div class="data-item"><span>Status:</span><span style="color: ${getMaintenanceColor(activity.activity_status)}">${activity.activity_status.replace('_', ' ').toUpperCase()}</span></div>`;
+                        html += `<div class="data-item"><span>Cost:</span><span>$${parseFloat(activity.cost).toLocaleString()}</span></div>`;
+                        html += `<div class="data-item"><span>Technician:</span><span>${activity.technician}</span></div>`;
+                        html += `<div class="data-item"><span>Duration:</span><span>${activity.duration_hours} hours</span></div>`;
+                        html += `<div class="data-item"><span>Priority:</span><span style="color: ${activity.priority === 'high' ? '#e74c3c' : activity.priority === 'medium' ? '#f39c12' : '#27ae60'}">${activity.priority.toUpperCase()}</span></div>`;
+                        if (activity.next_maintenance_date) {
+                            html += `<div class="data-item"><span>Next Maintenance:</span><span>${activity.next_maintenance_date}</span></div>`;
+                        }
+                        html += `</div>`;
+                        
+                        if (activity.description) {
+                            html += `<p style="margin-top: 0.5rem;"><strong>Description:</strong> ${activity.description}</p>`;
+                        }
+                        
+                        if (activity.parts_replaced && activity.parts_replaced.length > 0) {
+                            html += `<p style="margin-top: 0.5rem;"><strong>Parts Replaced:</strong> ${activity.parts_replaced.join(', ')}</p>`;
+                        }
+                        
+                        if (activity.equipment_used && activity.equipment_used.length > 0) {
+                            html += `<p style="margin-top: 0.5rem;"><strong>Equipment Used:</strong> ${activity.equipment_used.join(', ')}</p>`;
+                        }
+                        
+                        if (activity.notes) {
+                            html += `<p style="margin-top: 0.5rem; font-style: italic; color: #7f8c8d;"><strong>Notes:</strong> ${activity.notes}</p>`;
+                        }
+                        
+                        // Add effectiveness rating
+                        if (activity.effectiveness_rating) {
+                            html += `<div style="margin-top: 0.5rem; padding: 0.5rem; background: #f8f9fa; border-radius: 4px;">`;
+                            html += `<strong>Effectiveness Rating:</strong> ${activity.effectiveness_rating}/5 stars`;
+                            html += `</div>`;
+                        }
+                        
+                        html += '</div>';
+                    });
+                }
                 
                 html += '</div>';
                 detailsDiv.innerHTML = html;
-            }, 600);
+                
+            } catch (error) {
+                console.error('Error fetching maintenance data:', error);
+                detailsDiv.innerHTML = '<div class="error-message">Error loading maintenance data. Please try again.</div>';
+            }
         }
 
-        // Function to fetch and display construction details for ponds
+        // Function to fetch and display construction details for all infrastructure types
         async function getConstructionDetails(featureId) {
             const detailsDiv = document.getElementById('feature-details');
             detailsDiv.innerHTML = '<div class="loading">🏗️ Loading construction details...</div>';
             
-            // Simulate loading delay for realism
-            setTimeout(() => {
-                // Generate sample construction data based on feature type
-                const featureType = window.currentFeature?.feature_type || 'pond';
-                const sampleData = generateConstructionData(featureId, featureType);
+            try {
+                const response = await fetch(`api.php?action=construction_details&feature_id=${encodeURIComponent(featureId)}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const construction = await response.json();
                 
                 let html = '<div class="feature-details">';
                 html += `<h4 style="color: #8e44ad; margin-bottom: 1rem;">🏗️ Construction Details: ${featureId}</h4>`;
-                html += '<div style="background: #f3e5f5; padding: 0.5rem; border-radius: 4px; margin-bottom: 1rem; font-size: 0.9em;">🏗️ Sample data for demonstration purposes</div>';
+                html += '<div style="background: #f3e5f5; padding: 0.5rem; border-radius: 4px; margin-bottom: 1rem; font-size: 0.9em;">🏗️ Real database data</div>';
                 
                 html += '<div style="border: 1px solid #ddd; padding: 1rem; margin: 0.5rem 0; border-radius: 4px; border-left: 4px solid #8e44ad;">';
                 
-                html += `<h5 style="color: #8e44ad; margin: 0 0 0.5rem 0;">Contractor: ${sampleData.contractor_name}</h5>`;
+                html += `<h5 style="color: #8e44ad; margin: 0 0 0.5rem 0;">Contractor: ${construction.contractor_name}</h5>`;
                 
                 html += `<div class="data-grid">`;
-                html += `<div class="data-item"><span>Construction Method:</span><span>${sampleData.construction_method}</span></div>`;
-                if (sampleData.lining_material) {
-                    html += `<div class="data-item"><span>Lining Material:</span><span>${sampleData.lining_material}</span></div>`;
+                html += `<div class="data-item"><span>Construction Method:</span><span>${construction.construction_method}</span></div>`;
+                if (construction.lining_material) {
+                    html += `<div class="data-item"><span>Lining Material:</span><span>${construction.lining_material}</span></div>`;
                 }
-                if (sampleData.diameter_m) {
-                    html += `<div class="data-item"><span>Diameter:</span><span>${sampleData.diameter_m} meters</span></div>`;
+                if (construction.diameter_m) {
+                    html += `<div class="data-item"><span>Diameter:</span><span>${construction.diameter_m} meters</span></div>`;
                 }
-                if (sampleData.length_m && sampleData.width_m) {
-                    html += `<div class="data-item"><span>Dimensions:</span><span>${sampleData.length_m}m × ${sampleData.width_m}m</span></div>`;
+                if (construction.length_m && construction.width_m) {
+                    html += `<div class="data-item"><span>Dimensions:</span><span>${construction.length_m}m × ${construction.width_m}m</span></div>`;
                 }
-                html += `<div class="data-item"><span>Depth:</span><span>${sampleData.depth_m} meters</span></div>`;
-                html += `<div class="data-item"><span>Construction Cost:</span><span>$${sampleData.construction_cost.toLocaleString()}</span></div>`;
-                html += `<div class="data-item"><span>Start Date:</span><span>${sampleData.construction_start_date}</span></div>`;
-                html += `<div class="data-item"><span>End Date:</span><span>${sampleData.construction_end_date}</span></div>`;
-                html += `<div class="data-item"><span>Duration:</span><span>${sampleData.construction_duration_days} days</span></div>`;
-                html += `<div class="data-item"><span>Warranty Period:</span><span>${sampleData.warranty_period_months} months</span></div>`;
-                html += `<div class="data-item"><span>Quality Certificate:</span><span>${sampleData.quality_certificate_number}</span></div>`;
+                html += `<div class="data-item"><span>Depth:</span><span>${construction.depth_m} meters</span></div>`;
+                html += `<div class="data-item"><span>Construction Cost:</span><span>$${parseFloat(construction.construction_cost).toLocaleString()}</span></div>`;
+                html += `<div class="data-item"><span>Start Date:</span><span>${construction.construction_start_date}</span></div>`;
+                html += `<div class="data-item"><span>End Date:</span><span>${construction.construction_end_date}</span></div>`;
+                html += `<div class="data-item"><span>Duration:</span><span>${construction.construction_duration_days} days</span></div>`;
+                html += `<div class="data-item"><span>Warranty Period:</span><span>${construction.warranty_period_months} months</span></div>`;
+                html += `<div class="data-item"><span>Quality Certificate:</span><span>${construction.quality_certificate_number}</span></div>`;
                 html += `</div>`;
                 
-                if (sampleData.materials_used && sampleData.materials_used.length > 0) {
-                    html += `<p style="margin-top: 0.5rem;"><strong>Materials Used:</strong> ${sampleData.materials_used.join(', ')}</p>`;
+                if (construction.materials_used && construction.materials_used.length > 0) {
+                    html += `<p style="margin-top: 0.5rem;"><strong>Materials Used:</strong> ${construction.materials_used.join(', ')}</p>`;
                 }
                 
-                if (sampleData.equipment_used && sampleData.equipment_used.length > 0) {
-                    html += `<p style="margin-top: 0.5rem;"><strong>Equipment Used:</strong> ${sampleData.equipment_used.join(', ')}</p>`;
+                if (construction.equipment_used && construction.equipment_used.length > 0) {
+                    html += `<p style="margin-top: 0.5rem;"><strong>Equipment Used:</strong> ${construction.equipment_used.join(', ')}</p>`;
                 }
                 
-                if (sampleData.environmental_compliance) {
-                    html += `<p style="margin-top: 0.5rem;"><strong>Environmental Compliance:</strong> ${sampleData.environmental_compliance}</p>`;
+                if (construction.environmental_compliance) {
+                    html += `<p style="margin-top: 0.5rem;"><strong>Environmental Compliance:</strong> ${construction.environmental_compliance}</p>`;
                 }
                 
-                if (sampleData.additional_notes) {
-                    html += `<p style="margin-top: 0.5rem; font-style: italic; color: #7f8c8d;"><strong>Notes:</strong> ${sampleData.additional_notes}</p>`;
+                if (construction.additional_notes) {
+                    html += `<p style="margin-top: 0.5rem; font-style: italic; color: #7f8c8d;"><strong>Notes:</strong> ${construction.additional_notes}</p>`;
                 }
                 
                 // Add project timeline
                 html += `<div style="margin-top: 0.5rem; padding: 0.5rem; background: #f8f9fa; border-radius: 4px;">`;
-                html += `<strong>Project Status:</strong> ${sampleData.project_status}<br>`;
-                html += `<strong>Quality Rating:</strong> ${sampleData.quality_rating}/5 stars<br>`;
-                html += `<strong>Final Inspection:</strong> ${sampleData.final_inspection_date}`;
+                html += `<strong>Project Status:</strong> ${construction.project_status}<br>`;
+                if (construction.quality_rating) {
+                    html += `<strong>Quality Rating:</strong> ${construction.quality_rating}/5 stars<br>`;
+                }
+                if (construction.final_inspection_date) {
+                    html += `<strong>Final Inspection:</strong> ${construction.final_inspection_date}`;
+                }
                 html += `</div>`;
                 
                 html += '</div>';
                 html += '</div>';
                 detailsDiv.innerHTML = html;
-            }, 700);
+                
+            } catch (error) {
+                console.error('Error fetching construction data:', error);
+                detailsDiv.innerHTML = '<div class="error-message">Error loading construction details. Please try again.</div>';
+            }
         }
 
         // Auto-zoom to Chad extent
